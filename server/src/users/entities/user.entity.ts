@@ -1,5 +1,11 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -33,10 +39,18 @@ export class User {
   avatar?: string;
 
   @Field({ defaultValue: 'member' })
-  @Column({ default: 'member' })
+  @Column({ enum: ['admin', 'member'], type: 'enum', default: 'member' })
   role!: string;
 
   @Field({ defaultValue: true })
   @Column({ default: true })
   status!: boolean;
+
+  @Field()
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field()
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
