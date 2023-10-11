@@ -14,15 +14,36 @@ type User {
   status: Boolean!
 }
 
+type Product {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Category {
+  id: Int!
+  name: String!
+  slug: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
+  products: [Product!]!
+  product(id: Int!): Product!
+  categories: [Category!]!
+  category(id: Int!): Category!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: Int!): Category!
 }
 
 input CreateUserInput {
@@ -33,5 +54,25 @@ input CreateUserInput {
 input UpdateUserInput {
   """Example field (placeholder)"""
   exampleField: Int
+  id: Int!
+}
+
+input CreateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  name: String
   id: Int!
 }

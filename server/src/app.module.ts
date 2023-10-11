@@ -7,6 +7,11 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { ProductsModule } from './modules/products/products.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { Category } from './modules/categories/entities/category.entity';
+import { User } from './users/entities/user.entity';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -14,20 +19,25 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({ envFilePath: '.env' }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
+      host: process.env.DATABASE_HOST || 'localhost',
+      port: process.env.DATABASE_PORT ? +process.env.DATABASE_PORT : 3306,
       username: process.env.DATABASE_USER,
       database: process.env.DATABASE_NAME,
       password: process.env.DATABASE_PASSWORD,
+      // entities: ['dist/**/*.entity{.ts,.js}'],
+      entities: [Category, User],
+      // logging: true,
+      // autoLoadEntities: true,
       synchronize: true,
-      logging: true,
-      autoLoadEntities: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: 'schema.gql',
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
     }),
     UsersModule,
+    ProductsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
