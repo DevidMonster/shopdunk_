@@ -33,7 +33,7 @@ import { ProductImagesModule } from './product_images/product_images.module';
       // entities: ['dist/**/*.entity{.ts,.js}'],
       entities: [Category, User],
       // logging: true,
-      // autoLoadEntities: true,
+      autoLoadEntities: true,
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({

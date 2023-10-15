@@ -9,4 +9,8 @@ export class CreateCategoryInput {
   @Field(() => String)
   name ?: string;
 
+  @Field(() => Number)
+  parentId ?: number;
+
+
 }
