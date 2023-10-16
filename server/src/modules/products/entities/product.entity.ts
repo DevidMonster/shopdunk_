@@ -6,10 +6,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from 'src/modules/categories/entities/category.entity';
 
 @ObjectType()
 @Entity()
@@ -49,4 +52,9 @@ export class Product {
   @Field(() => [ProductSkus])
   @OneToMany(() => ProductSkus, (productSkus) => productSkus.product)
   productSkus?: ProductSkus[];
+
+  @Field(() => [Category])
+  @ManyToMany(() => Category, (category) => category.products)
+  @JoinTable()
+  categories: Category[];
 }
