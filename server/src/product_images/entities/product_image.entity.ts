@@ -22,5 +22,5 @@ export class ProductImage {
   @ManyToOne(() => ProductSkus, (ProductSkus) => ProductSkus.images, {
     nullable: true,
   })
-  ProductSkus: ProductSkus;
+  productSkus: ProductSkus;
 }
