@@ -73,11 +73,26 @@ type Product {
   productSkus: [ProductSkus!]!
 }
 
+type Product {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Category {
+  id: Int!
+  name: String!
+  slug: String!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
   products: [Product!]!
   product(id: Int!): Product!
+<<<<<<< HEAD
+  categories: [Category!]!
+  category(id: Int!): Category!
+=======
   options: [Option!]!
   option(id: Int!): Option!
   optionValues: [OptionValue!]!
@@ -87,6 +102,7 @@ type Query {
   skuValue(id: Int!): SkuValue!
   productImages: [ProductImage!]!
   productImage(id: Int!): ProductImage!
+>>>>>>> f9ac8a893df398704efd430b1bb5557487ba63f0
 }
 
 type Mutation {
@@ -94,6 +110,13 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
   createProduct(createProductInput: CreateProductInput!): Product!
+<<<<<<< HEAD
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: Int!): Category!
+=======
   createOption(createOptionInput: CreateOptionInput!): Option!
   createOptionValue(createOptionValueInput: CreateOptionValueInput!): OptionValue!
   createProductSkus(createProductSkusInput: CreateProductSkusInput!): ProductSkus!
@@ -101,6 +124,7 @@ type Mutation {
   createProductImage(createProductImageInput: CreateProductImageInput!): ProductImage!
   updateProductImage(updateProductImageInput: UpdateProductImageInput!): ProductImage!
   removeProductImage(id: Int!): ProductImage!
+>>>>>>> f9ac8a893df398704efd430b1bb5557487ba63f0
 }
 
 input CreateUserInput {
@@ -115,6 +139,8 @@ input UpdateUserInput {
 }
 
 input CreateProductInput {
+<<<<<<< HEAD
+=======
   name: String!
   description: String!
   price: Int! = 0
@@ -151,12 +177,29 @@ input CreateSkuValueInput {
 }
 
 input CreateProductImageInput {
+>>>>>>> f9ac8a893df398704efd430b1bb5557487ba63f0
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
+<<<<<<< HEAD
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input UpdateCategoryInput {
+  name: String
+  id: Int!
+=======
 input UpdateProductImageInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+>>>>>>> f9ac8a893df398704efd430b1bb5557487ba63f0
 }
