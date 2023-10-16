@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Option } from 'src/options/entities/option.entity';
-import { SkuValue } from 'src/sku_values/entities/sku_value.entity';
+import { Option } from 'src/modules/options/entities/option.entity';
+import { SkuValue } from 'src/modules/sku_values/entities/sku_value.entity';
 import {
   Column,
   Entity,

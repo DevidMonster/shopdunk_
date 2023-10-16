@@ -3,9 +3,9 @@ import { CreateSkuValueInput } from './dto/create-sku_value.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SkuValue } from './entities/sku_value.entity';
 import { Repository } from 'typeorm';
-import { Option } from 'src/options/entities/option.entity';
-import { OptionValue } from 'src/option_values/entities/option_value.entity';
-import { ProductSkus } from 'src/product_skus/entities/product_skus.entity';
+import { Option } from 'src/modules/options/entities/option.entity';
+import { OptionValue } from 'src/modules/option_values/entities/option_value.entity';
+import { ProductSkus } from 'src/modules/product_skus/entities/product_skus.entity';
 // import { UpdateSkuValueInput } from './dto/update-sku_value.input';
 
 @Injectable()

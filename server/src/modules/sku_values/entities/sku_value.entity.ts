@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { OptionValue } from 'src/option_values/entities/option_value.entity';
-import { Option } from 'src/options/entities/option.entity';
-import { ProductSkus } from 'src/product_skus/entities/product_skus.entity';
+import { OptionValue } from 'src/modules/option_values/entities/option_value.entity';
+import { Option } from 'src/modules/options/entities/option.entity';
+import { ProductSkus } from 'src/modules/product_skus/entities/product_skus.entity';
 import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()

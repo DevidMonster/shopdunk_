@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { SkuValuesService } from './sku_values.service';
 import { SkuValuesResolver } from './sku_values.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Product } from 'src/products/entities/product.entity';
-import { ProductSkus } from 'src/product_skus/entities/product_skus.entity';
-import { OptionValue } from 'src/option_values/entities/option_value.entity';
-import { Option } from 'src/options/entities/option.entity';
-import { ProductSkusService } from 'src/product_skus/product_skus.service';
+import { Product } from 'src/modules/products/entities/product.entity';
+import { ProductSkus } from 'src/modules/product_skus/entities/product_skus.entity';
+import { OptionValue } from 'src/modules/option_values/entities/option_value.entity';
+import { Option } from 'src/modules/options/entities/option.entity';
+import { ProductSkusService } from 'src/modules/product_skus/product_skus.service';
 import { SkuValue } from './entities/sku_value.entity';
 
 @Module({

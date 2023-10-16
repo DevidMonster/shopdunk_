@@ -24,10 +24,10 @@ export class Category {
   children: Category[];
 
   @TreeParent()
-  // @Field(() => Category, { nullable: true })
+  @Field(() => Category, { nullable: true })
   parent: Category;
 
-  @Field()
+  // @Field()
   @DeleteDateColumn()
   deletedArt : Date;
 

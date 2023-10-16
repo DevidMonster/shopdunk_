@@ -28,32 +28,6 @@ export class CategoriesService {
     return this.categoryRepository.findTrees();
   }
 
-  async getCategoryHierarchy(category: Category) {
-    // const children = await categories.filter((c) => c.parent.id === category.id);
-    // if (children.length === 0) {
-    //   return category;
-    // }
-    // category.children = children;
-    // children.forEach((c) => this.getCategoryHierarchy(c, categories));
-    // return category;
-    const children = await this.categoryRepository.find({
-      where: { parent: category === null ?  null  : { id: category.id }},
-      relations: ['children'],
-    })
-    
-    if(children.length === 0) {
-      return [category]
-    }
-
-    let result: Category[] = [category];
-    for(const child of children) {
-      const childHierarchy = await this.getCategoryHierarchy(child);
-      result = result.concat(childHierarchy);
-    }
-
-    return result;
-  }
-
 
   async findOne(id: number) {
     const product = await this.categoryRepository.findOneBy({ id: id });

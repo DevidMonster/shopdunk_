@@ -23,13 +23,6 @@ export class CategoriesResolver {
     return this.categoriesService.findOne(id);
   }
 
-
-  @Query(() => Category, { name: 'categoryHierarchy' })
-  getCategoryHierarchy() {
-    return this.categoriesService.getCategoryHierarchy(null);
-  }
-    
-
   @Mutation(() => Category)
   updateCategory(@Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput) {
     return this.categoriesService.update(updateCategoryInput.id, updateCategoryInput);

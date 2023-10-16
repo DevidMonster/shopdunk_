@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductSkusInput } from './dto/create-product_skus.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from 'src/products/entities/product.entity';
+import { Product } from 'src/modules/products/entities/product.entity';
 import { Repository } from 'typeorm';
 import { ProductSkus } from './entities/product_skus.entity';
 // import { UpdateProductSkusInput } from './dto/update-product_skus.input';

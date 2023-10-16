@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { CreateOptionValueInput } from 'src/option_values/dto/create-option_value.input';
+import { CreateOptionValueInput } from 'src/modules/option_values/dto/create-option_value.input';
 
 @InputType()
 export class CreateOptionInput {

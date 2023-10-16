@@ -4,9 +4,9 @@
 
 type Category {
   children: [Category!]
-  deletedArt: DateTime!
   id: Int!
   name: String!
+  parent: Category
   slug: String!
 }
 
@@ -131,7 +131,6 @@ type ProductSkus {
 type Query {
   categories: [Category!]!
   category(id: Int!): Category!
-  categoryHierarchy: Category!
   option(id: Int!): Option!
   optionValue(id: Int!): OptionValue!
   optionValues: [OptionValue!]!

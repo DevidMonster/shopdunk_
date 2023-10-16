@@ -4,7 +4,7 @@ import { CreateOptionValueInput } from './dto/create-option_value.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OptionValue } from './entities/option_value.entity';
 import { Repository } from 'typeorm';
-import { Option } from 'src/options/entities/option.entity';
+import { Option } from 'src/modules/options/entities/option.entity';
 
 @Injectable()
 export class OptionValuesService {

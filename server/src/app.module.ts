@@ -12,11 +12,11 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { Category } from './modules/categories/entities/category.entity';
 import { User } from './users/entities/user.entity';
 import { join } from 'path';
-import { ProductsModule } from './products/products.module';
-import { OptionsModule } from './options/options.module';
-import { OptionValuesModule } from './option_values/option_values.module';
-import { ProductSkusModule } from './product_skus/product_skus.module';
-import { SkuValuesModule } from './sku_values/sku_values.module';
+import { ProductsModule } from './modules/products/products.module';
+import { OptionsModule } from './modules/options/options.module';
+import { OptionValuesModule } from './modules/option_values/option_values.module';
+import { ProductSkusModule } from './modules/product_skus/product_skus.module';
+import { SkuValuesModule } from './modules/sku_values/sku_values.module';
 import { ProductImagesModule } from './product_images/product_images.module';
 
 @Module({
@@ -30,8 +30,8 @@ import { ProductImagesModule } from './product_images/product_images.module';
       username: process.env.DATABASE_USER,
       database: process.env.DATABASE_NAME,
       password: process.env.DATABASE_PASSWORD,
-      // entities: ['dist/**/*.entity{.ts,.js}'],
-      entities: [Category, User],
+      entities: ['dist/modules/**/*.entity{.ts,.js}'],
+      // entities: [Category, User],
       // logging: true,
       autoLoadEntities: true,
       synchronize: true,
