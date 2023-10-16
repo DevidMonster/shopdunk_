@@ -1,4 +1,4 @@
-import { ProductSkus } from './../../modules/product_skus/entities/product_skus.entity';
+import { ProductSkus } from 'src/modules/product_skus/entities/product_skus.entity';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Product } from 'src/modules/products/entities/product.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
@@ -22,5 +22,5 @@ export class ProductImage {
   @ManyToOne(() => ProductSkus, (ProductSkus) => ProductSkus.images, {
     nullable: true,
   })
-  ProductSkus: ProductSkus;
+  productSkus: ProductSkus;
 }

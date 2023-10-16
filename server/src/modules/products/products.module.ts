@@ -2,7 +2,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductsResolver } from './products.resolver';
-import { ProductImage } from 'src/product_images/entities/product_image.entity';
+import { ProductImage } from '../product_images/entities/product_image.entity';
 import { Option } from 'src/modules/options/entities/option.entity';
 import { OptionValue } from 'src/modules/option_values/entities/option_value.entity';
 import { ProductSkus } from 'src/modules/product_skus/entities/product_skus.entity';
