@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductInput } from './dto/create-product.input';
 // import { UpdateProductInput } from './dto/update-product.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -69,7 +69,7 @@ export class ProductsService {
   }
 
   findAll() {
-    return `This action returns all products`;
+    return this.product.find();
   }
 
   findOne(id: number) {
@@ -80,7 +80,11 @@ export class ProductsService {
   //   return `This action updates a #${id} product`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} product`;
-  // }
+  async remove(id: number) {
+    const product = await this.product.findOne({ where: { id: id } });
+    if(!product){
+      throw new NotFoundException("Product doesn't exist");
+    }
+    return this.product.remove(product);
+  }
 }

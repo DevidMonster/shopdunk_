@@ -30,8 +30,8 @@ export class ProductsResolver {
   //   return this.productsService.update(updateProductInput.id, updateProductInput);
   // }
 
-  // @Mutation(() => Product)
-  // removeProduct(@Args('id', { type: () => Int }) id: number) {
-  //   return this.productsService.remove(id);
-  // }
+  @Mutation(() => Product, { name: 'removeProduct' })
+  removeProduct(@Args('id', { type: () => Int }) id: number) {
+    return this.productsService.remove(id);
+  }
 }

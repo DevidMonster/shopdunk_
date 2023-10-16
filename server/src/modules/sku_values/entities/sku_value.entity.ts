@@ -12,7 +12,7 @@ export class SkuValue {
   id!: number;
 
   @Field(() => ProductSkus)
-  @ManyToOne(() => ProductSkus, (ProductSkus) => ProductSkus.skuValues)
+  @ManyToOne(() => ProductSkus, (ProductSkus) => ProductSkus.skuValues , { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'skuId' })
   sku: ProductSkus;
 
