@@ -18,7 +18,7 @@ export class OptionValue {
   id!: number;
 
   @Field(() => Option)
-  @ManyToOne(() => Option, (option) => option.optionValues)
+  @ManyToOne(() => Option, (option) => option.optionValues, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'optionId' })
   option: Option;
 
@@ -27,6 +27,6 @@ export class OptionValue {
   valueName: string;
 
   @Field(() => [SkuValue])
-  @OneToMany(() => SkuValue, (skuValues) => skuValues.optionValue)
+  @OneToMany(() => SkuValue, (skuValues) => skuValues.optionValue, { cascade: true })
   skuValues: SkuValue[];
 }

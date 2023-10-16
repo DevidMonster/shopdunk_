@@ -47,6 +47,6 @@ export class Product {
   options?: Option[];
 
   @Field(() => [ProductSkus])
-  @OneToMany(() => ProductSkus, (productSkus) => productSkus.product)
+  @OneToMany(() => ProductSkus, (productSkus) => productSkus.product ,  { cascade: true })
   productSkus?: ProductSkus[];
 }
