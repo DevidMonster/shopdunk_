@@ -19,7 +19,7 @@ export class ProductSkus {
   id!: number;
 
   @Field(() => Product)
-  @ManyToOne(() => Product, (product) => product)
+  @ManyToOne(() => Product, (product) => product, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'productId' })
   product: Product;
 
@@ -40,7 +40,7 @@ export class ProductSkus {
   quantity: number;
 
   @Field(() => [SkuValue])
-  @OneToMany(() => SkuValue, (skuValue) => skuValue.sku)
+  @OneToMany(() => SkuValue, (skuValue) => skuValue.sku, { cascade: true })
   skuValues: SkuValue[];
 
   @Field()

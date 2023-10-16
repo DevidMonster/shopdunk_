@@ -41,7 +41,7 @@ export class SkuValuesService {
   }
 
   findAll() {
-    return `This action returns all skuValues`;
+    return this.skuValue.find();
   }
 
   findOne(id: number) {
