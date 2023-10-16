@@ -1,0 +1,186 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Category {
+  children: [Category!]
+  id: Int!
+  name: String!
+  parent: Category
+  slug: String!
+}
+
+input CreateCategoryInput {
+  name: String!
+  parentId: Float!
+}
+
+input CreateOptionInput {
+  optionName: String!
+  optionValues: [CreateOptionValueInput!]!
+  productId: Float
+}
+
+input CreateOptionValueInput {
+  optionId: Float
+  valueName: String!
+}
+
+input CreateProductImageInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateProductInput {
+  description: String!
+  images: [String!]!
+  name: String!
+  options: [CreateOptionInput!]!
+  price: Int! = 0
+  skuValues: [CreateProductSkusInput!]!
+}
+
+input CreateProductSkusInput {
+  images: [String!]!
+  price: Int! = 0
+  productId: Float
+  quantity: Float!
+  sku: String!
+  sku_name: String!
+  status: Boolean!
+}
+
+input CreateSkuValueInput {
+  optionId: Int!
+  skuId: Int!
+  valueId: Int!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  createOption(createOptionInput: CreateOptionInput!): Option!
+  createOptionValue(createOptionValueInput: CreateOptionValueInput!): OptionValue!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  createProductImage(createProductImageInput: CreateProductImageInput!): ProductImage!
+  createProductSkus(createProductSkusInput: CreateProductSkusInput!): ProductSkus!
+  createSkuValue(createSkuValueInput: CreateSkuValueInput!): SkuValue!
+  createUser(createUserInput: CreateUserInput!): User!
+  removeCategory(id: Int!): Category!
+  removeProductImage(id: Int!): ProductImage!
+  removeUser(id: Int!): User!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  updateProductImage(updateProductImageInput: UpdateProductImageInput!): ProductImage!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Option {
+  id: ID!
+  optionName: String!
+  optionValues: [OptionValue!]!
+  product: Product!
+  skuValues: [SkuValue!]!
+}
+
+type OptionValue {
+  id: ID!
+  option: Option!
+  skuValues: [SkuValue!]!
+  valueName: String!
+}
+
+type Product {
+  createdAt: DateTime!
+  description: String!
+  id: ID!
+  images: [ProductImage!]!
+  name: String!
+  options: [Option!]!
+  price: Int!
+  productSkus: [ProductSkus!]!
+  updatedAt: DateTime!
+}
+
+type ProductImage {
+  ProductSkus: ProductSkus!
+  id: ID!
+  imageUrl: String!
+  product: Product!
+}
+
+type ProductSkus {
+  id: ID!
+  images: [ProductImage!]!
+  price: Int!
+  product: Product!
+  quantity: Int!
+  sku: String!
+  skuValues: [SkuValue!]!
+  status: Boolean!
+}
+
+type Query {
+  categories: [Category!]!
+  category(id: Int!): Category!
+  option(id: Int!): Option!
+  optionValue(id: Int!): OptionValue!
+  optionValues: [OptionValue!]!
+  options: [Option!]!
+  product(id: Int!): Product!
+  productImage(id: Int!): ProductImage!
+  productImages: [ProductImage!]!
+  productSkus(id: Int!): ProductSkus!
+  products: [Product!]!
+  skuValue(id: Int!): SkuValue!
+  skuValues: [SkuValue!]!
+  user(id: Int!): User!
+  users: [User!]!
+}
+
+type SkuValue {
+  id: ID!
+  option: Option!
+  optionValue: OptionValue!
+  sku: ProductSkus!
+}
+
+input UpdateCategoryInput {
+  id: Int!
+  name: String!
+  parentId: Float
+}
+
+input UpdateProductImageInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+type User {
+  address: String
+  avatar: String
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  password: String!
+  phoneNumber: String
+  role: String!
+  status: Boolean!
+  updatedAt: DateTime!
+  userName: String!
+}
