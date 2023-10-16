@@ -6,8 +6,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -53,8 +53,8 @@ export class Product {
   @OneToMany(() => ProductSkus, (productSkus) => productSkus.product ,  { cascade: true })
   productSkus?: ProductSkus[];
 
-  @Field(() => [Category])
-  @ManyToMany(() => Category, (category) => category.products)
-  @JoinTable()
-  categories: Category[];
+  @Field(() => Category)
+  @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: 'categoryId' })
+  category: Category;
 }

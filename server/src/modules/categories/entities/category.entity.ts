@@ -43,7 +43,7 @@ export class Category {
   deletedArt: Date;
 
   @Field(() => [Product])
-  @ManyToMany(() => Product, (product) => product.categories)
+  @ManyToMany(() => Product, (product) => product.category)
   @JoinTable()
   products: Product[];
 

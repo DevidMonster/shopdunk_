@@ -13,9 +13,11 @@ export class CategoriesService {
     private categoryRepository: TreeRepository<Category>,
   ) {}
 
-  async create(categoryNew: CreateCategoryInput): Promise<Category> { 
+  async create(categoryNew: CreateCategoryInput): Promise<Category> {
     if (categoryNew.parentId) {
-      const parent = await this.categoryRepository.findOne({ where: { id: categoryNew.parentId } });
+      const parent = await this.categoryRepository.findOne({
+        where: { id: categoryNew.parentId },
+      });
       const newCategory = await this.categoryRepository.create({
         name: categoryNew.name,
         parent: parent,
@@ -27,7 +29,6 @@ export class CategoriesService {
   async findAll() {
     return this.categoryRepository.findTrees();
   }
-
 
   async findOne(id: number) {
     const product = await this.categoryRepository.findOneBy({ id: id });
@@ -53,7 +54,9 @@ export class CategoriesService {
   }
 
   async remove(id: number): Promise<void> {
-    const category = await this.categoryRepository.findOne({ where: { id: id } });
+    const category = await this.categoryRepository.findOne({
+      where: { id: id },
+    });
 
     if (!category) {
       throw new NotFoundException("Category doesn't exist");
