@@ -9,15 +9,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 // import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
-import { Category } from './modules/categories/entities/category.entity';
-import { User } from './users/entities/user.entity';
+// import { Category } from './modules/categories/entities/category.entity';
+// import { User } from './users/entities/user.entity';
 import { join } from 'path';
 import { ProductsModule } from './modules/products/products.module';
 import { OptionsModule } from './modules/options/options.module';
 import { OptionValuesModule } from './modules/option_values/option_values.module';
 import { ProductSkusModule } from './modules/product_skus/product_skus.module';
 import { SkuValuesModule } from './modules/sku_values/sku_values.module';
-import { ProductImagesModule } from './product_images/product_images.module';
+import { ProductImagesModule } from './modules/product_images/product_images.module';
 
 @Module({
   imports: [

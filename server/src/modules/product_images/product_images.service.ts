@@ -4,8 +4,8 @@ import { CreateProductImageInput } from './dto/create-product_image.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductImage } from './entities/product_image.entity';
 import { Repository } from 'typeorm';
-import { Product } from 'src/products/entities/product.entity';
-import { ProductSkus } from 'src/product_skus/entities/product_skus.entity';
+import { Product } from '../products/entities/product.entity';
+import { ProductSkus } from '../product_skus/entities/product_skus.entity';
 
 @Injectable()
 export class ProductImagesService {

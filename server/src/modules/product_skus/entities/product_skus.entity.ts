@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
-import { ProductImage } from 'src/product_images/entities/product_image.entity';
+import { ProductImage } from 'src/modules/product_images/entities/product_image.entity'; 
 import { Product } from 'src/modules/products/entities/product.entity';
 import { SkuValue } from 'src/modules/sku_values/entities/sku_value.entity';
 import {

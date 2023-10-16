@@ -6,7 +6,7 @@ import { Product } from 'src/modules/products/entities/product.entity';
 import { OptionValue } from 'src/modules/option_values/entities/option_value.entity';
 import { SkuValue } from 'src/modules/sku_values/entities/sku_value.entity';
 import { Option } from './entities/option.entity';
-import { ProductImage } from 'src/product_images/entities/product_image.entity';
+import { ProductImage } from '../product_images/entities/product_image.entity';
 import { OptionValuesService } from 'src/modules/option_values/option_values.service';
 
 @Module({
