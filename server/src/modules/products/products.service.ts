@@ -82,7 +82,7 @@ export class ProductsService {
 
   async remove(id: number) {
     const product = await this.product.findOne({ where: { id: id } });
-    if(!product){
+    if (!product) {
       throw new NotFoundException("Product doesn't exist");
     }
     return this.product.remove(product);
