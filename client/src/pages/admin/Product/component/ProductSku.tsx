@@ -8,10 +8,11 @@ interface IProps {
 }
 
 function ProductSku({ skuData, form }: IProps) {
+
     useEffect(() => {
         // Initialize the 'skuValues' field with the required structure
         form.setFieldsValue({
-            skuValues: skuData.map((value) => ({ 'sku_name': value, status: true }))
+            skuValues: skuData.map((value) => ({ 'sku_name': value.skuName, status: value.status || true, price: value.price, quantity: value.quantity, sku: value.sku }))
         });
     }, [skuData, form]);
 
@@ -24,7 +25,7 @@ function ProductSku({ skuData, form }: IProps) {
                         {/* <Form.Item hidden label={skuData[key]} name={[name, 'sku_name']} fieldKey={fieldKey}>
                             <Input />
                         </Form.Item> */}
-                        <h3 className='font-semibold my-3'><span className='text-gray-500'>Variation name: </span>{skuData[key]}</h3>
+                        <h3 className='font-semibold my-3'><span className='text-gray-500'>Variation name: </span>{skuData[key].skuName}</h3>
                         <Form.Item
                             label="SKU"
                             name={[name, "sku"]}
@@ -71,8 +72,8 @@ function ProductSku({ skuData, form }: IProps) {
                         </Form.Item>
                         <UploadImage name={name} />
                     </div>
-    ))
-}
+                ))
+                }
             </Form.List >
         </div >
     );

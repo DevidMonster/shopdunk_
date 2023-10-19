@@ -5,6 +5,4 @@ import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 export class UpdateProductSkusInput extends PartialType(
   CreateProductSkusInput,
 ) {
-  @Field(() => Int)
-  id: number;
 }

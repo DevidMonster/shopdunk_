@@ -50,11 +50,12 @@ export class Product {
   options?: Option[];
 
   @Field(() => [ProductSkus])
-  @OneToMany(() => ProductSkus, (productSkus) => productSkus.product ,  { cascade: true })
+  @OneToMany(() => ProductSkus, (productSkus) => productSkus.product, {
+    cascade: true,
+  })
   productSkus?: ProductSkus[];
 
   @Field(() => Category)
   @ManyToOne(() => Category, (category) => category.products)
-  @JoinColumn({ name: 'categoryId' })
   category: Category;
 }

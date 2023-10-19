@@ -67,7 +67,7 @@ const LayoutAdmin = () => {
             </div>
             <Menu theme='light' defaultSelectedKeys={['1']} mode='inline' items={items} />
             <Button
-               className='absolute right-[-40px] top-[70px] z-[999] md:hidden md:opacity-0 md:invisible'
+               className='absolute right-[-40px] top-[70px] bg-[rgba(190,69,255,0.72)] text-white z-[999] md:hidden md:opacity-0 md:invisible'
                onClick={() => setOpen((prev) => !prev)}
                icon={open ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
                style={{ color: 'white' }}

@@ -1,9 +1,14 @@
-import { Button, message, Form, Upload, Input, InputNumber, UploadFile } from 'antd';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, message, Form, Upload, Input, InputNumber, UploadFile, Select } from 'antd';
 import TextEditor from '../../../component/TextEditor';
 import { useEffect, useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import ProductOption from './component/ProductOption';
 import ProductSku from './component/ProductSku';
+import { useMutation, useQuery } from '@apollo/client';
+import { CREATE_PRODUCT, GET_PRODUCTS } from '../../../api/product';
+import { useNavigate } from 'react-router-dom';
+import { GET_CATEGORIES } from '../../../api/category';
 
 type FieldType = {
     name: string;
@@ -20,18 +25,25 @@ type FieldType = {
 };
 
 const AddProduct: React.FC = () => {
+    const [optionError, setOptionError] = useState('')
     const [optionData, setOptionData] = useState<any[]>([])
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [skuData, setSkuData] = useState<any[]>([])
+    const [createProduct] = useMutation(CREATE_PRODUCT)
+    const { data, loading } = useQuery(GET_CATEGORIES)
     const [form] = Form.useForm()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (optionData.length > 0) {
-            setSkuData(getCartesianProduct(optionData).map((c: any) => typeof c === 'object' && c?.length >= 0 ? c.map((v: any) => v.value).join(' | ') : c.value))
+            setSkuData(getCartesianProduct(optionData).map((c: any) => typeof c === 'object' && c?.length >= 0 ? { skuName: c.map((v: any) => v.value).join(' | ') } : { skuName: c.value }))
+        } else {
+            setSkuData([])
         }
     }, [optionData])
-
-    console.log(optionData);
+    
+    // console.log(skuData);
+    
 
     const getCartesianProduct = (options: any): any[] => {
         const formattedValues: any[] = options?.map((v: any) =>
@@ -43,7 +55,7 @@ const AddProduct: React.FC = () => {
 
     const cartesian = (...a: any) => a.reduce((a: any, b: any) => a.flatMap((d: any) => b.map((e: any) => [d, e].flat())));
 
-    console.log(getCartesianProduct(optionData));
+    // console.log(getCartesianProduct(optionData));
 
     const handleBeforeUpload = (file: UploadFile) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -62,11 +74,34 @@ const AddProduct: React.FC = () => {
         setFileList(fileList);
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = async (values: any) => {
+        const options = form?.getFieldValue('options') 
+        if(!options || options.length === 0) {
+            setOptionError('You need to add a option')
+        }
+        // values.images = []
+        values.skuValues = values?.skuValues?.map((sku: any) => ({ ...sku, images: [] })) || []
         console.log('Success:', values);
+        const response = await createProduct({
+            variables: {
+                createProductInput: {
+                    ...values,
+                }
+            }
+            ,
+            refetchQueries: [{ query: GET_PRODUCTS }]
+        })
+
+        if (response?.data) {
+            navigate('/admin/products')
+        }
     };
 
     const onFinishFailed = (errorInfo: any) => {
+        const options = form?.getFieldValue('options') 
+        if(!options || options.length === 0) {
+            setOptionError('You need to add a option')
+        }
         console.log('Failed:', errorInfo);
     };
 
@@ -79,7 +114,6 @@ const AddProduct: React.FC = () => {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 20 }}
             style={{ width: '90%', margin: '20px 0' }}
-            initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -91,7 +125,23 @@ const AddProduct: React.FC = () => {
             >
                 <Input />
             </Form.Item>
-
+            <Form.Item
+                label="Category"
+                initialValue={1}
+                name={'categoryId'}
+                rules={[{ required: true, message: 'Please choose a category!' }]}
+            >
+                <Select
+                    placeholder="Select a category"
+                    style={{
+                        width: 200,
+                    }}
+                    options={!loading && data?.categories?.map((category: any) => ({
+                        value: category.id,
+                        label: category.name
+                    }))}
+                />
+            </Form.Item>
             <Form.Item<FieldType>
                 label="Price"
                 name="price"
@@ -110,12 +160,10 @@ const AddProduct: React.FC = () => {
                 <TextEditor />
             </Form.Item>
             <Form.Item
-                name="images"
                 label="Images"
                 rules={[{ required: true, message: `bạn phải chọn ảnh` }]}
             >
                 <Upload
-                    name="images"
                     beforeUpload={handleBeforeUpload}
                     customRequest={(option) => {
                         setTimeout(() => option.onSuccess!(option?.file), 0)
@@ -127,7 +175,7 @@ const AddProduct: React.FC = () => {
                     <Button className='border-[0]' icon={<UploadOutlined />}></Button>
                 </Upload>
             </Form.Item>
-            <ProductOption optionData={optionData} setOptionData={setOptionData} form={form} />
+            <ProductOption error={optionError} setOptionData={setOptionData} form={form} />
             <ProductSku form={form} skuData={skuData} />
             <Form.Item className='flex justify-end mt-3'>
                 <Button type="primary" className='bg-[#1677ff]' htmlType="submit">

@@ -52,7 +52,7 @@ const HeaderAdmin = () => {
                   }}
                >
                   <div className='flex-1 flex justify-start gap-2 items-center cursor-pointer p-1 text-center'>
-                     <span className='font-medium text-sm text-[#6b6765] '>Bố là admin</span>
+                     <span className='font-medium text-sm text-[#6b6765] '>Admin</span>
                      <div className={triggerDrop ? 'round-up' : 'round-down'}>
                         {' '}
                         <DownOutlined color='#6b6765' size={1} />

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSkuValueInput } from './dto/create-sku_value.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SkuValue } from './entities/sku_value.entity';
@@ -52,7 +52,17 @@ export class SkuValuesService {
   //   return `This action updates a #${id} skuValue`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} skuValue`;
-  // }
+  async remove(id: number): Promise<SkuValue> {
+    const skuValue = await this.skuValue.findOne({
+      where: { id: id }
+    });
+
+    if (!skuValue) {
+      throw new NotFoundException('No skuValue found');
+    }
+
+    await this.skuValue.remove(skuValue);
+
+    return skuValue;
+  }
 }
