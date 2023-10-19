@@ -11,19 +11,18 @@ export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private categoryRepository: TreeRepository<Category>,
-  ) {}
+  ) { }
 
   async create(categoryNew: CreateCategoryInput): Promise<Category> {
-    if (categoryNew.parentId) {
-      const parent = await this.categoryRepository.findOne({
-        where: { id: categoryNew.parentId },
-      });
-      const newCategory = await this.categoryRepository.create({
-        name: categoryNew.name,
-        parent: parent,
-      });
-      return this.categoryRepository.save(newCategory);
-    }
+    const parent = await this.categoryRepository.findOne({
+      where: { id: categoryNew.parentId },
+    });
+    const newCategory = this.categoryRepository.create({
+      name: categoryNew.name,
+      parent: parent || null,
+    });
+    return await this.categoryRepository.save(newCategory);
+
   }
 
   async findAll() {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOptionInput } from './dto/create-option.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Option } from './entities/option.entity';
@@ -13,7 +13,7 @@ export class OptionsService {
     @InjectRepository(Option) private readonly option: Repository<Option>,
     @InjectRepository(Product) private readonly product: Repository<Product>,
     private readonly optionValueService: OptionValuesService,
-  ) {}
+  ) { }
 
   async create(createOptionInput: CreateOptionInput) {
     const product = await this.product.findOne({
@@ -24,6 +24,8 @@ export class OptionsService {
       optionName: createOptionInput.optionName,
       product: product,
     });
+
+    console.log(option);
 
     const newOption = await this.option.save(option);
 
@@ -54,7 +56,19 @@ export class OptionsService {
   //   return `This action updates a #${id} option`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} option`;
-  // }
+  async remove(id: number): Promise<Option> {
+    const option = await this.option.findOne({ where: { id: id }, relations: { optionValues: true } });
+
+    if (!option) {
+      throw new NotFoundException('No option found');
+    }
+
+    for (const optionValue of option.optionValues) {
+      await this.optionValueService.remove(optionValue.id);
+    }
+
+    await this.option.remove(option);
+
+    return option;
+  }
 }

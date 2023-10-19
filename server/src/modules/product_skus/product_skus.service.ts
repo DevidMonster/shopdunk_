@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductSkusInput } from './dto/create-product_skus.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/modules/products/entities/product.entity';
 import { Repository } from 'typeorm';
 import { ProductSkus } from './entities/product_skus.entity';
+import { SkuValue } from '../sku_values/entities/sku_value.entity';
+import { SkuValuesService } from '../sku_values/sku_values.service';
 // import { UpdateProductSkusInput } from './dto/update-product_skus.input';
 
 @Injectable()
@@ -12,6 +14,7 @@ export class ProductSkusService {
     @InjectRepository(ProductSkus)
     private readonly productSku: Repository<ProductSkus>,
     @InjectRepository(Product) private readonly product: Repository<Product>,
+    private skuValueService: SkuValuesService,
   ) {}
 
   async create(
@@ -46,7 +49,23 @@ export class ProductSkusService {
   //   return `This action updates a #${id} productSkus`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} productSkus`;
-  // }
+  async remove(id: number): Promise<ProductSkus> {
+    const productSku = await this.productSku.findOne({
+      where: { id: id },
+      relations: { skuValues: true },
+    });
+
+    if (!productSku) {
+      throw new NotFoundException('No productSku found');
+    }
+
+    for (const value of productSku.skuValues) {
+      console.log(value);
+      await this.skuValueService.remove(value.id);
+    }
+
+    await this.productSku.remove(productSku);
+
+    return productSku;
+  }
 }

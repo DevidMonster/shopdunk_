@@ -12,6 +12,7 @@ import { Product } from './entities/product.entity';
 import { OptionValuesService } from 'src/modules/option_values/option_values.service';
 import { ProductSkusService } from 'src/modules/product_skus/product_skus.service';
 import { SkuValuesService } from 'src/modules/sku_values/sku_values.service';
+import { Category } from '../categories/entities/category.entity';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SkuValuesService } from 'src/modules/sku_values/sku_values.service';
       OptionValue,
       ProductSkus,
       SkuValue,
+      Category
     ]),
   ],
   providers: [

@@ -40,7 +40,7 @@ export class Category {
 
   // @Field()
   @DeleteDateColumn()
-  deletedArt: Date;
+  deletedAt: Date;
 
   @Field(() => [Product])
   @ManyToMany(() => Product, (product) => product.category)

@@ -31,10 +31,8 @@ function UploadImage({ name }: IProps) {
         <Form.Item
             name={[name, "images"]}
             label="Images"
-            rules={[{ required: true, message: `bạn phải chọn ảnh` }]}
         >
             <Upload
-                name="images"
                 beforeUpload={handleBeforeUpload}
                 customRequest={(option) => {
                     setTimeout(() => option.onSuccess!(option?.file), 0)
