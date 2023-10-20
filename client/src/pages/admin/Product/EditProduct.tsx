@@ -9,6 +9,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { GET_PRODUCT, GET_PRODUCTS, UPDATE_PRODUCT } from '../../../api/product';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GET_CATEGORIES } from '../../../api/category';
+import { uploadImages } from '../../../api/upload';
 
 type FieldType = {
     name: string;
@@ -24,14 +25,14 @@ type FieldType = {
     optionValue: string;
 };
 
-const AddProduct: React.FC = () => {
+const EditProduct: React.FC = () => {
     const [optionError, setOptionError] = useState('')
     const { id } = useParams()
     const [optionData, setOptionData] = useState<any[]>([])
     const [fileList, setFileList] = useState<UploadFile[]>([]);
     const [skuData, setSkuData] = useState<any[]>([])
     const [updateProduct] = useMutation(UPDATE_PRODUCT)
-    const { data: productData, loading: prdLoading } = useQuery(GET_PRODUCT, { variables: { id: parseInt(id) } })
+    const { data: productData, loading: prdLoading } = useQuery(GET_PRODUCT, { variables: { id: parseInt(id!) } })
     const { data, loading } = useQuery(GET_CATEGORIES)
     const [form] = Form.useForm()
     const navigate = useNavigate()
@@ -50,6 +51,16 @@ const AddProduct: React.FC = () => {
                 ...productData.product,
                 categoryId: productData.product.category.id,
             })
+            if (productData?.product?.images && productData?.product?.images.length > 0) {
+                const images = productData?.product?.images?.map((image: { imageUrl: string }, index: number) => ({
+                    uid: index.toString(),
+                    name: 'image.png',
+                    status: 'done',
+                    url: image.imageUrl,
+                }))
+                form?.setFieldsValue({ images: images })
+                setFileList(images)
+            }
             if (productData?.product) {
                 setSkuData([...productData.product.productSkus.map((c: any) => typeof c.skuValues === 'object' && c?.skuValues?.length >= 0 ?
                     {
@@ -58,18 +69,30 @@ const AddProduct: React.FC = () => {
                         price: c?.price,
                         quantity: c?.quantity,
                         sku: c?.sku,
+                        images: c?.images?.map((image: { imageUrl: string }, index: number) => ({
+                            uid: index.toString() + ' sub',
+                            name: 'image.png',
+                            status: 'done',
+                            url: image.imageUrl,
+                        }))
                     } : {
                         skuName: c.optionValue.valueName,
-                        status: productData.product.status,
+                        status: c?.skuValues?.status,
                         price: productData.product.price,
-                        quantity: productData.product.quantity,
-                        sku: productData.product.sku,
+                        quantity: c?.skuValues?.quantity,
+                        sku: c?.skuValues?.sku,
+                        images: c?.images?.map((image: { imageUrl: string }, index: number) => ({
+                            uid: index.toString(),
+                            name: 'image.png',
+                            status: 'done',
+                            url: image.imageUrl,
+                        }))
                     })])
             }
             // setOptionData([...productData.product.options])
         }
     }, [productData, prdLoading, form])
-
+    
     const getCartesianProduct = (options: any): any[] => {
         const formattedValues: any[] = options?.map((v: any) =>
             v?.optionValues?.map((a: any) =>
@@ -96,17 +119,37 @@ const AddProduct: React.FC = () => {
     };
 
     const handleOnChange = ({ fileList }: { fileList: UploadFile[] }) => {
+        form?.setFieldValue('images', fileList)
         setFileList(fileList);
     };
 
     const onFinish = async (values: any) => {
-        const options = form?.getFieldValue('options') 
-        if(!options || options.length === 0) {
+        const options = form?.getFieldValue('options')
+        if (!options || options.length === 0) {
             setOptionError('You need to add a option')
             return;
         }
+        
+        if (fileList.length > 0) {
+            try {
+                const response = await uploadImages(fileList);
+                values.images = response;
+            } catch (error) {
+                console.error("Error uploading image:", error);
+            }
+        }
+        values.skuValues = await Promise.all(values.skuValues.map(async (value: any) => {
+            console.log(value);
+            
+            const res = value?.images?.length > 0 || value?.images !== undefined || value?.images?.fileList ? await uploadImages(value.images?.fileList || value.images) : []
+            return {
+                ...value,
+                images: res
+            }
+        }));
+
         // values.images = []
-        values.skuValues = values?.skuValues?.map((sku: any) => ({ ...sku, images: [] })) || []
+        // values.skuValues = values?.skuValues?.map((sku: any) => ({ ...sku, images: [] })) || []
         values.options = form?.getFieldValue('options')
         console.log('Success:', values);
         const response = await updateProduct({
@@ -126,8 +169,8 @@ const AddProduct: React.FC = () => {
     };
 
     const onFinishFailed = (errorInfo: any) => {
-        const options = form?.getFieldValue('options') 
-        if(!options || options.length === 0) {
+        const options = form?.getFieldValue('options')
+        if (!options || options.length === 0) {
             setOptionError('You need to add a option')
         }
         console.log('Failed:', errorInfo);
@@ -135,7 +178,7 @@ const AddProduct: React.FC = () => {
 
 
     return <div className="bg-white rounded-md my-5 p-5 w-[90%]">
-        <h1 className="text-3xl font-bold">Create new Product</h1>
+        <h1 className="text-3xl font-bold">Update Product</h1>
         <Form
             form={form}
             name="basic"
@@ -187,7 +230,9 @@ const AddProduct: React.FC = () => {
                 <TextEditor />
             </Form.Item>
             <Form.Item
+                name='images'
                 label="Images"
+                initialValue={fileList}
                 rules={[{ required: true, message: `bạn phải chọn ảnh` }]}
             >
                 <Upload
@@ -213,4 +258,4 @@ const AddProduct: React.FC = () => {
     </div>;
 }
 
-export default AddProduct;
+export default EditProduct;

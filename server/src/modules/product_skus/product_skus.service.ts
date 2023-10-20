@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { ProductSkus } from './entities/product_skus.entity';
 import { SkuValue } from '../sku_values/entities/sku_value.entity';
 import { SkuValuesService } from '../sku_values/sku_values.service';
+import { ProductImagesService } from '../product_images/product_images.service';
 // import { UpdateProductSkusInput } from './dto/update-product_skus.input';
 
 @Injectable()
@@ -15,7 +16,8 @@ export class ProductSkusService {
     private readonly productSku: Repository<ProductSkus>,
     @InjectRepository(Product) private readonly product: Repository<Product>,
     private skuValueService: SkuValuesService,
-  ) {}
+    private productImage: ProductImagesService,
+  ) { }
 
   async create(
     createProductSkusInput: CreateProductSkusInput,
@@ -33,6 +35,12 @@ export class ProductSkusService {
     });
 
     const result = await this.productSku.save(productSku);
+
+    await this.productImage.create({
+      urls: createProductSkusInput.images || [],
+      producId: product.id,
+      producSkuId: result.id,
+    });
 
     return result;
   }

@@ -7,6 +7,13 @@ query {
     name
     price
     description
+    images {
+      id
+      imageUrl
+      product {
+          id
+      }
+    }
     options {
       id
       optionName
@@ -16,6 +23,16 @@ query {
       }
     }
     productSkus {
+      images {
+        id
+        imageUrl
+        product {
+            id
+        }
+        productSkus {
+            id
+        }
+      }
       skuValues {
           id
           optionValue {
@@ -39,6 +56,13 @@ query Product($id: Int!) {
         description
         id
         name
+        images {
+          id
+          imageUrl
+          product {
+              id
+          }
+        }
         price
         updatedAt
         category {
@@ -47,6 +71,16 @@ query Product($id: Int!) {
           slug
         }
         productSkus {
+          images {
+            id
+            imageUrl
+            product {
+                id
+            }
+            productSkus {
+                id
+            }
+          }
           skuValues {
               id
               optionValue {

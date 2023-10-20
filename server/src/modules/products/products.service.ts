@@ -11,6 +11,7 @@ import { Option } from 'src/modules/options/entities/option.entity';
 import { SkuValuesService } from 'src/modules/sku_values/sku_values.service';
 import { Category } from '../categories/entities/category.entity';
 import { CreateOptionValueInput } from '../option_values/dto/create-option_value.input';
+import { ProductImagesService } from '../product_images/product_images.service';
 
 @Injectable()
 export class ProductsService {
@@ -20,6 +21,7 @@ export class ProductsService {
     private readonly optionService: OptionsService,
     private readonly productSkuService: ProductSkusService,
     private readonly skuValueService: SkuValuesService,
+    private readonly productImage: ProductImagesService,
   ) { }
 
   async create(createProductInput: CreateProductInput): Promise<Product> {
@@ -35,6 +37,11 @@ export class ProductsService {
     });
 
     const newProduct = await this.product.save(product);
+
+    await this.productImage.create({
+      urls: createProductInput.images || [],
+      producId: newProduct.id
+    });
 
     const optionResults: Option[] = [];
 
@@ -79,10 +86,18 @@ export class ProductsService {
 
   async findAll(): Promise<Product[]> {
     const products = await this.product.find({
+      where: { productSkus: !null },
       relations: {
         options: { optionValues: true },
         category: true,
+        images: {
+          product: true,
+        },
         productSkus: {
+          images: {
+            product: true,
+            productSkus: true,
+          },
           skuValues: {
             option: true,
             optionValue: true,
@@ -92,20 +107,36 @@ export class ProductsService {
       },
     });
 
+
+
     if (!products) {
       throw new NotFoundException('Get products failed');
     }
 
-    return products;
+    const result = await Promise.all(products.map(async (product) => (
+      {
+        ...product,
+        images: await this.productImage.findAllByProductId(product.id)
+      }
+    )))
+
+    return result;
   }
 
   async findOne(id: number): Promise<Product> {
     const product = await this.product.findOne({
-      where: { id: id },
+      where: { id: id, productSkus: !null },
       relations: {
         options: { optionValues: true },
         category: true,
+        images: {
+          product: true,
+        },
         productSkus: {
+          images: {
+            product: true,
+            productSkus: true,
+          },
           skuValues: {
             option: true,
             optionValue: true,
@@ -118,6 +149,8 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException("Product doesn't exist");
     }
+
+    product.images = await this.productImage.findAllByProductId(product.id)
 
     return product;
   }
@@ -155,6 +188,13 @@ export class ProductsService {
       }
     }
 
+    //cập nhật ảnh
+    await this.productImage.removeByProductId(product.id)
+    await this.productImage.create({
+      urls: updateProductInput.images || [],
+      producId: product.id
+    });
+
     const updatedProduct = await this.product.save(product);
 
     if (updateProductInput.options || updateProductInput.skuValues) {
@@ -180,7 +220,6 @@ export class ProductsService {
         });
         optionResults.push(result);
       }
-      console.log(optionResults, 'ssss');
 
       for (const sku of updateProductInput.skuValues) {
         const prdSku = await this.productSkuService.create({

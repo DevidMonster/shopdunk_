@@ -15,7 +15,7 @@ const ProductAdmin = () => {
     const { data, loading } = useQuery(GET_PRODUCTS, { variables: { id: 1 } });
     const [deleteProduct] = useMutation(DELETE_PRODUCT)
 
-    const products = data?.products?.map((item: any) => ({ key: item.key, images: ['https://lh5.googleusercontent.com/x14nnYSvR1c8KkO6Kj1giR4iZcQL0UelyqcGBRFt8fHQg8sRUouMkFc3b_F-kmDLDW-qpDo8KkBpuXGnfUNjy6NZVqwAcBYnngbupNd2scJqGyNpjYTGQZdfY3ktqFJZNsKfXR-YrDmqrcQwOrM4k2M'], ...item })) || [];
+    const products = data?.products?.map((item: any, index: number) => ({ ...item, key: index })) || [];
     
     const {
         token: { colorBgContainer }
@@ -26,8 +26,8 @@ const ProductAdmin = () => {
                 <div className='flex-1 flex justify-center items-center flex-col mt-10 w-[90%]'>
                     <div className='flex justify-between items-center w-[90%]'>
                         <h1 className='text-3xl font-semibold text-[rgba(0,0,0,0.7)]'>Sản phẩm</h1>
-                        <Link to='/manage/add-product'>
-                            <button className='bg-greenPrimary duration-100 hover:bg-greenPri600 text-white text-lg p-2 font-semibold rounded-lg flex justify-start items-center gap-2'>
+                        <Link to='/admin/products_add'>
+                            <button className='bg-greenPrimary duration-100 bg-green-600 text-white text-lg p-2 font-semibold rounded-lg flex justify-start items-center gap-2'>
                                 <PlusCircleOutlined style={{ color: 'white' }} />
                                 Sản phẩm mới
                             </button>
@@ -61,7 +61,7 @@ const ProductAdmin = () => {
                                 dataIndex='images'
                                 key='images'
                                 width={150}
-                                render={(images) => <img src={images[0]} className='w-[3rem] h-[3rem]' />}
+                                render={(images) => <img src={images[0]?.imageUrl} className='w-[3rem] h-[3rem]' />}
                             />
                             <Column title='Tên' dataIndex='name' key='name' width={150} />
                             <Column title='Giá' dataIndex='price' key='price' width={150} />

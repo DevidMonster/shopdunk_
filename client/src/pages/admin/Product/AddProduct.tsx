@@ -9,6 +9,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PRODUCT, GET_PRODUCTS } from '../../../api/product';
 import { useNavigate } from 'react-router-dom';
 import { GET_CATEGORIES } from '../../../api/category';
+import { uploadImages } from '../../../api/upload';
 
 type FieldType = {
     name: string;
@@ -41,9 +42,9 @@ const AddProduct: React.FC = () => {
             setSkuData([])
         }
     }, [optionData])
-    
+
     // console.log(skuData);
-    
+
 
     const getCartesianProduct = (options: any): any[] => {
         const formattedValues: any[] = options?.map((v: any) =>
@@ -69,18 +70,34 @@ const AddProduct: React.FC = () => {
 
         return isJpgOrPng && isLt10M;
     };
-
+    
     const handleOnChange = ({ fileList }: { fileList: UploadFile[] }) => {
-        setFileList(fileList);
+        form?.setFieldValue('images', fileList)
+        setFileList(fileList)
     };
 
     const onFinish = async (values: any) => {
-        const options = form?.getFieldValue('options') 
-        if(!options || options.length === 0) {
+        const options = form?.getFieldValue('options')
+        if (!options || options.length === 0) {
             setOptionError('You need to add a option')
         }
         // values.images = []
-        values.skuValues = values?.skuValues?.map((sku: any) => ({ ...sku, images: [] })) || []
+        // values.skuValues = values?.skuValues?.map((sku: any) => ({ ...sku, images: [] })) || []
+        if (fileList.length > 0) {
+            try {
+              const response = await uploadImages(fileList);
+              values.images = response;
+            } catch (error) {
+              console.error("Error uploading image:", error);
+            }
+        }
+        values.skuValues = await Promise.all(values.skuValues.map(async (value: any) => {
+            const res = value.images?.fileList ? await uploadImages(value.images?.fileList) : []
+            return {
+                ...value,
+                images: res
+            }
+        }));
         console.log('Success:', values);
         const response = await createProduct({
             variables: {
@@ -98,8 +115,8 @@ const AddProduct: React.FC = () => {
     };
 
     const onFinishFailed = (errorInfo: any) => {
-        const options = form?.getFieldValue('options') 
-        if(!options || options.length === 0) {
+        const options = form?.getFieldValue('options')
+        if (!options || options.length === 0) {
             setOptionError('You need to add a option')
         }
         console.log('Failed:', errorInfo);
@@ -160,6 +177,7 @@ const AddProduct: React.FC = () => {
                 <TextEditor />
             </Form.Item>
             <Form.Item
+                name={'images'}
                 label="Images"
                 rules={[{ required: true, message: `bạn phải chọn ảnh` }]}
             >

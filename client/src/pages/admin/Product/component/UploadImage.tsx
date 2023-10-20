@@ -1,13 +1,25 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Upload, UploadFile, message } from "antd";
-import { useState } from "react";
+import { Button, Form, FormInstance, Upload, UploadFile, message } from "antd";
+import { useState, useEffect } from "react";
 
 interface IProps {
+    form: FormInstance<unknown>;
     name: number;
+    initialValue: UploadFile[];
 }
 
-function UploadImage({ name }: IProps) {
+function UploadImage({ form, name, initialValue = [] }: IProps) {
     const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+    useEffect(() => {
+        if (initialValue.length > 0) {
+            const skuValues = form?.getFieldValue('skuValues');
+            form?.setFieldValue('skuValues', skuValues.map((value: any, index: number) => {
+                return index == name ? { ...value, images: initialValue } : value
+            }))
+            setFileList(initialValue)
+        }
+    }, [initialValue])
 
     const handleBeforeUpload = (file: UploadFile) => {
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';

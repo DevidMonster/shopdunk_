@@ -32,7 +32,7 @@ export class ProductSkus {
   price: number;
 
   @Field(() => [ProductImage])
-  @OneToMany(() => ProductImage, (productImage) => productImage.product)
+  @OneToMany(() => ProductImage, (productImage) => productImage.productSkus)
   images: ProductImage[];
 
   @Field(() => Int)
