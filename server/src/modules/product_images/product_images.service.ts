@@ -19,43 +19,67 @@ export class ProductImagesService {
 
   async create(
     createProductImageInput: CreateProductImageInput,
-  ): Promise<ProductImage> {
-    const product = createProductImageInput.producId
-      ? await this.product.findOne({
-          where: { id: createProductImageInput.producId },
-        })
-      : undefined;
+  ): Promise<boolean> {
+    for (const url of createProductImageInput.urls) {
+      const product = createProductImageInput.producId
+        ? await this.product.findOne({
+            where: { id: createProductImageInput.producId },
+          })
+        : null;
 
-    const productSku = createProductImageInput.producSkuId
-      ? await this.productSkus.findOne({
-          where: { id: createProductImageInput.producSkuId },
-        })
-      : undefined;
+      const productSku = createProductImageInput.producSkuId
+        ? await this.productSkus.findOne({
+            where: { id: createProductImageInput.producSkuId },
+          })
+        : null;
 
-    const productImage = this.productImage.create({
-      imageUrl: createProductImageInput.url,
-      product: product,
-      productSkus: productSku,
+      const productImage = this.productImage.create({
+        imageUrl: url,
+        product: product,
+        productSkus: productSku,
+      });
+
+      await this.productImage.save(productImage);
+    }
+    return true;
+  }
+
+  async findAll(): Promise<ProductImage[]> {
+    return await this.productImage.find({
+      relations: { product: true, productSkus: true },
     });
-
-    const result = await this.productImage.save(productImage);
-
-    return result;
   }
 
-  findAll() {
-    return `This action returns all productImages`;
+  async findAllByProductId(id: number): Promise<ProductImage[]> {
+    const query = this.productImage
+      .createQueryBuilder('productImage')
+      .leftJoinAndSelect('productImage.product', 'product')
+      .where('product.id = :id', { id })
+      .andWhere('productImage.productSkus IS NULL'); // Lọc để chỉ lấy productSkus không null
+
+    return await query.getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} productImage`;
+  async findOne(id: number): Promise<ProductImage> {
+    return await this.productImage.findOne({
+      where: { id: id },
+      relations: { product: true, productSkus: true },
+    });
   }
 
   // update(id: number, updateProductImageInput: UpdateProductImageInput) {
   //   return `This action updates a #${id} productImage`;
   // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} productImage`;
-  // }
+  async removeByProductId(id: number) {
+    const productImages = await this.productImage.find({
+      where: { product: { id: id } },
+    });
+
+    for (const productImage of productImages) {
+      await this.productImage.remove(productImage);
+    }
+
+    return true;
+  }
 }

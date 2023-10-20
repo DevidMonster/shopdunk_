@@ -39,7 +39,7 @@ const items: MenuItem[] = [
 
 const LayoutAdmin = () => {
    const [collapsed, setCollapsed] = useState(false);
-   const [open, setOpen] = useState(true);
+   const [open, setOpen] = useState(false);
    const ButtonTrigger = (
       <button className='bg-greenPrimary text-white w-full font-semibold'>{collapsed ? 'Hiện' : 'Ẩn'}</button>
    );
@@ -73,7 +73,7 @@ const LayoutAdmin = () => {
                style={{ color: 'white' }}
             ></Button>
          </Sider>
-         {open ? <div className='fixed top-0 right-0 z-[150] w-screen h-full bg-[rgba(0,0,0,0.1)] md:hidden md:opacity-0 md:invisible'></div> : ''}
+         {open ? <div onClick={() => setOpen(false)} className='fixed top-0 right-0 z-[150] w-screen h-full bg-[rgba(0,0,0,0.1)] md:hidden md:opacity-0 md:invisible'></div> : ''}
          <Layout className={'transition-all '+ (!collapsed ? 'md:pl-[250px]' : 'md:pl-[80px]')}>
             <HeaderAdmin />
             <Content className='min-h-screen overflow-auto flex justify-center w-full'>

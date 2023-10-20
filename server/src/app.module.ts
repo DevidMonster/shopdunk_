@@ -18,11 +18,20 @@ import { OptionValuesModule } from './modules/option_values/option_values.module
 import { ProductSkusModule } from './modules/product_skus/product_skus.module';
 import { SkuValuesModule } from './modules/sku_values/sku_values.module';
 import { ProductImagesModule } from './modules/product_images/product_images.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { FirebaseResolver } from './firebase/firebase.resolver';
+import { FirebaseService } from './firebase/firebase.service';
+import { ImageUploadResponse } from './firebase/entities/file.entity';
+import { FirebaseController } from './firebase/firebase.controller';
 
 @Module({
   imports: [
     AuthModule,
+    ImageUploadResponse,
     ConfigModule.forRoot({ envFilePath: '.env' }),
+    MulterModule.register({
+      dest: './uploads',
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST || 'localhost',
@@ -50,7 +59,8 @@ import { ProductImagesModule } from './modules/product_images/product_images.mod
     SkuValuesModule,
     ProductImagesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, FirebaseController],
+  providers: [AppService, FirebaseResolver, FirebaseService],
+  exports: [FirebaseService],
 })
-export class AppModule {}
+export class AppModule { }

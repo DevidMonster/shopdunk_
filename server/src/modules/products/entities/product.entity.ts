@@ -52,6 +52,7 @@ export class Product {
   @Field(() => [ProductSkus])
   @OneToMany(() => ProductSkus, (productSkus) => productSkus.product, {
     cascade: true,
+    nullable: true,
   })
   productSkus?: ProductSkus[];
 

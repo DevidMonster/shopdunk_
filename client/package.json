@@ -16,6 +16,7 @@
     "antd": "^5.10.0",
     "apollo-remove-typename-mutation-link": "^3.3.9",
     "apollo-utilities": "^1.3.4",
+    "axios": "^1.5.1",
     "omit-deep-lodash": "^1.1.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

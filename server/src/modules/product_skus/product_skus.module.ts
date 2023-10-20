@@ -11,6 +11,7 @@ import { OptionsService } from '../options/options.service';
 import { Option } from '../options/entities/option.entity';
 import { OptionValue } from '../option_values/entities/option_value.entity';
 import { OptionValuesService } from '../option_values/option_values.service';
+import { ProductImagesService } from '../product_images/product_images.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { OptionValuesService } from '../option_values/option_values.service';
     SkuValuesService,
     OptionsService,
     OptionValuesService,
+    ProductImagesService,
   ],
   exports: [ProductSkusService],
 })

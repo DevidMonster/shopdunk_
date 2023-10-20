@@ -13,6 +13,7 @@ import { OptionValuesService } from 'src/modules/option_values/option_values.ser
 import { ProductSkusService } from 'src/modules/product_skus/product_skus.service';
 import { SkuValuesService } from 'src/modules/sku_values/sku_values.service';
 import { Category } from '../categories/entities/category.entity';
+import { ProductImagesService } from '../product_images/product_images.service';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { Category } from '../categories/entities/category.entity';
     OptionsService,
     OptionValuesService,
     SkuValuesService,
+    ProductImagesService,
   ],
 })
 export class ProductsModule {}

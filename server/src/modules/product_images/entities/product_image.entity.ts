@@ -11,7 +11,7 @@ export class ProductImage {
   id!: number;
 
   @Field()
-  @Column()
+  @Column('longtext')
   imageUrl: string;
 
   @Field(() => Product)
