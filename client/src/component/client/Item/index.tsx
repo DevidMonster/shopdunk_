@@ -1,15 +1,9 @@
-import React from "react";
-import { MdArrowForwardIos } from "react-icons/md";
-import { Link } from "react-router-dom";
 
-type Props = {};
-
-const Item = (props: Props) => {
+const Item = () => {
   return (
     <div>
       <div>
         <div>
-          <div className="text-center text-4xl font-semibold my-10"><Link to={`iphone`}>iphone</Link></div>
           <div className="grid grid-cols-4 gap-5">
             <div className="relative border rounded-xl  bg-[#fff] p-5 hover:drop-shadow-xl">
               <img
@@ -108,20 +102,10 @@ const Item = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="text-sky-600 my-10">
-            <Link
-              to={`iphone`}
-              className="mx-auto p-2 w-60 flex justify-center items-center border-[1px] rounded-lg border-sky-600	"
-            >
-              <p> Xem tất cả Iphone </p>
-              <MdArrowForwardIos />
-            </Link>
-          </div>
         </div>
       </div>
-      <div>
+      {/* <div>
         <div>
-          <div className="text-center text-4xl font-semibold my-10"><Link to={`iphone`}>ipad</Link></div>
           <div className="grid grid-cols-4 gap-5">
             <div className="relative border rounded-xl  bg-[#fff] p-5 hover:drop-shadow-xl">
               <img
@@ -230,12 +214,7 @@ const Item = (props: Props) => {
             </Link>
           </div>
         </div>
-      </div>
-      <div className="mt-10">
-        <Link to={``}>
-            <img className="w-full" src="https://shopdunk.com/images/uploaded/Trang%20ch%E1%BB%A7/2.jpeg" alt="" />
-        </Link>
-      </div>
+      </div> */}
     </div>
   );
 };

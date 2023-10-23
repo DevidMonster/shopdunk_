@@ -66,9 +66,15 @@ const Header = () => {
             <input type="text" />
           </div>
           <div className="flex justify-around">
-            <IoIosSearch className="text-[white] text-2xl" />
-            <BsBag className="text-[white]  text-2xl" />
-            <AiOutlineUser className="text-[white]  text-2xl" />
+            <Link to={`login`}>
+              <IoIosSearch className="text-[white] text-2xl" />
+            </Link>
+            <Link to={`login`}>
+              <BsBag className="text-[white]  text-2xl" />
+            </Link>
+            <Link to={`login`}>
+              <AiOutlineUser className="text-[white]  text-2xl" />
+            </Link>
           </div>
         </div>
       </div>
