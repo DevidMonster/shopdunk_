@@ -1,0 +1,23 @@
+/* Thanh cuộn chung */
+::-webkit-scrollbar,
+::-moz-scrollbar {
+  width: 2px; /* Chiều rộng thanh cuộn */
+}
+
+/* Màu nền của thanh cuộn */
+::-webkit-scrollbar-track,
+::-moz-scrollbar-track {
+  background-color: red;
+}
+
+/* Màu của thanh cuộn khi di chuột qua */
+::-webkit-scrollbar-thumb,
+::-moz-scrollbar-thumb {
+  background-color: red;
+}
+
+/* Màu nền của thanh cuộn khi di chuột qua */
+::-webkit-scrollbar-thumb:hover,
+::-moz-scrollbar-thumb:hover {
+  background-color: red;
+}
