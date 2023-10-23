@@ -25,6 +25,15 @@ export class CategoriesService {
 
   }
 
+  async findAllWithNoDefaultCate() {
+    const categories = await this.categoryRepository.find({
+      relations: {
+        parent: true,
+      }
+    })
+    return categories.map((category) => category.parent != null)
+  }
+
   async findAll() {
     return this.categoryRepository.findTrees();
   }

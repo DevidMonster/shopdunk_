@@ -23,7 +23,7 @@ const ProductAdmin = () => {
     return (
         <>
             <Layout style={{ minHeight: '100vh', display: 'flex', position: 'relative', width: '90%' }}>
-                <div className='flex-1 flex justify-center items-center flex-col mt-10 w-[90%]'>
+                <div className='flex-1 flex justify-center items-center flex-col my-10 w-[90%]'>
                     <div className='flex justify-between items-center w-[90%]'>
                         <h1 className='text-3xl font-semibold text-[rgba(0,0,0,0.7)]'>Sản phẩm</h1>
                         <Link to='/admin/products_add'>

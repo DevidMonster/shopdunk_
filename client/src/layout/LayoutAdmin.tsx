@@ -8,12 +8,11 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Layout, Menu, theme } from 'antd';
-import { Outlet } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import images from '../assets/images';
 import HeaderAdmin from '../component/AdminHeader';
 const { Content, Sider } = Layout;
-import { BsPhone } from 'react-icons/bs'
+import { BsMenuApp, BsPhone } from 'react-icons/bs'
 type MenuItem = Required<MenuProps>['items'][number];
 
 function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
@@ -30,6 +29,10 @@ const items: MenuItem[] = [
    getItem('Sản phẩm cửa hàng', '2', <BsPhone />, [
       getItem(<Link to='/admin/products'>Sản phẩm</Link>, '3'),
       getItem(<Link to='/admin/products_add'>Tạo sản phẩm</Link>, '4')
+   ]),
+   getItem('Danh mục', '5', <BsMenuApp />, [
+      getItem(<Link to='/admin/categories'>Danh sách danh mục</Link>, '6'),
+      getItem(<Link to='/admin/categories_add'>Tạo danh mục</Link>, '7')
    ]),
   //  getItem(<Link to='/manage/orders'>Đơn hàng</Link>, 'sub1', <OrderIcon />),
   //  getItem(<Link to='/manage/vouchers'>Mã khuyễn mãi</Link>, 'sub2', <TicketIcon />),

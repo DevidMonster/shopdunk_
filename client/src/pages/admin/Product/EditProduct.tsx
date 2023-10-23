@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, message, Form, Upload, Input, InputNumber, UploadFile, Select } from 'antd';
+import { Button, message, Form, Upload, Input, InputNumber, UploadFile, Select, TreeSelect } from 'antd';
 import TextEditor from '../../../component/TextEditor';
 import { useEffect, useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
@@ -10,6 +10,7 @@ import { GET_PRODUCT, GET_PRODUCTS, UPDATE_PRODUCT } from '../../../api/product'
 import { useNavigate, useParams } from 'react-router-dom';
 import { GET_CATEGORIES } from '../../../api/category';
 import { uploadImages } from '../../../api/upload';
+import { DefaultOptionType } from 'antd/es/select';
 
 type FieldType = {
     name: string;
@@ -36,6 +37,15 @@ const EditProduct: React.FC = () => {
     const { data, loading } = useQuery(GET_CATEGORIES)
     const [form] = Form.useForm()
     const navigate = useNavigate()
+
+    const renderCategories = (categories: { id: number, name: string, children: any[] }[] = []): DefaultOptionType[] | undefined => {
+        if (categories.length === 0) return []
+        return categories.map((category: { id: number; name: string; children: any[]; }) => ({
+            value: category.id,
+            title: category.name,
+            children: category.children.length > 0 ? renderCategories(category.children) : []
+        })) as unknown as DefaultOptionType[] || []
+    }
 
     useEffect(() => {
         if (optionData.length > 0) {
@@ -92,7 +102,7 @@ const EditProduct: React.FC = () => {
             // setOptionData([...productData.product.options])
         }
     }, [productData, prdLoading, form])
-    
+
     const getCartesianProduct = (options: any): any[] => {
         const formattedValues: any[] = options?.map((v: any) =>
             v?.optionValues?.map((a: any) =>
@@ -129,7 +139,7 @@ const EditProduct: React.FC = () => {
             setOptionError('You need to add a option')
             return;
         }
-        
+
         if (fileList.length > 0) {
             try {
                 const response = await uploadImages(fileList);
@@ -140,7 +150,7 @@ const EditProduct: React.FC = () => {
         }
         values.skuValues = await Promise.all(values.skuValues.map(async (value: any) => {
             console.log(value);
-            
+
             const res = value?.images?.length > 0 || value?.images !== undefined || value?.images?.fileList ? await uploadImages(value.images?.fileList || value.images) : []
             return {
                 ...value,
@@ -177,7 +187,7 @@ const EditProduct: React.FC = () => {
     };
 
 
-    return <div className="bg-white rounded-md my-5 p-5 w-[90%]">
+    return <div className="bg-white rounded-md my-10 p-5 w-[90%]">
         <h1 className="text-3xl font-bold">Update Product</h1>
         <Form
             form={form}
@@ -201,15 +211,15 @@ const EditProduct: React.FC = () => {
                 name={'categoryId'}
                 rules={[{ required: true, message: 'Please choose a category!' }]}
             >
-                <Select
+                <TreeSelect
                     placeholder="Select a category"
                     style={{
-                        width: 200,
+                        width: 300,
                     }}
-                    options={!loading && data?.categories?.map((category: any) => ({
-                        value: category.id,
-                        label: category.name
-                    }))}
+                    // treeData={[
+                    //     { title: 'Light', value: 'light', children: [{ title: 'Bamboo', value: 'bamboo' }] },
+                    // ]}
+                    treeData={!loading ? renderCategories(data?.categories) : []}
                 />
             </Form.Item>
             <Form.Item<FieldType>
@@ -250,9 +260,14 @@ const EditProduct: React.FC = () => {
             <ProductOption error={optionError} setOptionData={setOptionData} form={form} />
             <ProductSku form={form} skuData={skuData} />
             <Form.Item className='flex justify-end mt-3'>
-                <Button type="primary" className='bg-[#1677ff]' htmlType="submit">
-                    Submit
-                </Button>
+                <div className='w-[30%] flex gap-3'>
+                    <Button onClick={() => navigate('/admin/products')} type="text" className='border-[1px] border-black' htmlType="button">
+                        Cancel
+                    </Button>
+                    <Button type="primary" className='bg-[#1677ff]' htmlType="submit">
+                        Submit
+                    </Button>
+                </div>
             </Form.Item>
         </Form>
     </div>;

@@ -12,7 +12,7 @@ function ProductSku({ skuData, form }: IProps) {
     useEffect(() => {
         // Initialize the 'skuValues' field with the required structure        
         form.setFieldsValue({
-            skuValues: skuData.map((value) => ({ 'sku_name': value.skuName, status: value.status || true, price: value.price, quantity: value.quantity, sku: value.sku }))
+            skuValues: skuData.map((value) => ({ 'sku_name': value.skuName, status: value.status === false ? false : true, price: value.price, quantity: value.quantity, sku: value.sku }))
         });
     }, [skuData, form]);
 
