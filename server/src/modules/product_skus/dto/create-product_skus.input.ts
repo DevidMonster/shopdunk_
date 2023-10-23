@@ -11,8 +11,8 @@ export class CreateProductSkusInput {
   @Field(() => Int, { defaultValue: 0 })
   price: number;
 
-  @Field(() => [String])
-  images: string[];
+  @Field(() => [String], { defaultValue: [] })
+  images?: string[];
 
   @Field()
   quantity: number;

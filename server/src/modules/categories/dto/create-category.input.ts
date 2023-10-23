@@ -7,10 +7,8 @@ import { BeforeInsert } from 'typeorm';
 export class CreateCategoryInput {
 
   @Field(() => String)
-  name ?: string;
+  name?: string;
 
-  @Field(() => Number)
-  parentId ?: number;
-
-
+  @Field(() => Int, { nullable: true }) 
+  parentId?: number;
 }

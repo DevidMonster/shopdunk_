@@ -8,6 +8,8 @@ import { OptionValue } from 'src/modules/option_values/entities/option_value.ent
 import { Option } from 'src/modules/options/entities/option.entity';
 import { ProductSkusService } from 'src/modules/product_skus/product_skus.service';
 import { SkuValue } from './entities/sku_value.entity';
+import { ProductImage } from '../product_images/entities/product_image.entity';
+import { ProductImagesService } from '../product_images/product_images.service';
 
 @Module({
   imports: [
@@ -16,10 +18,16 @@ import { SkuValue } from './entities/sku_value.entity';
       ProductSkus,
       Option,
       OptionValue,
+      ProductImage,
       SkuValue,
     ]),
   ],
-  providers: [SkuValuesResolver, SkuValuesService, ProductSkusService],
+  providers: [
+    SkuValuesResolver,
+    SkuValuesService,
+    ProductSkusService,
+    ProductImagesService,
+  ],
   exports: [SkuValuesService],
 })
 export class SkuValuesModule {}

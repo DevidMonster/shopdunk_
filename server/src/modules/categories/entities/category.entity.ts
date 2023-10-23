@@ -1,10 +1,21 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import slugify from 'slugify';
-import { BeforeInsert, Column, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Tree, TreeChildren, TreeParent } from 'typeorm';
-
+import { Product } from 'src/modules/products/entities/product.entity';
+import {
+  BeforeInsert,
+  Column,
+  DeleteDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
+} from 'typeorm';
 
 @Entity()
-@Tree("nested-set")
+@Tree('nested-set')
 @ObjectType()
 export class Category {
   @PrimaryGeneratedColumn()
@@ -29,8 +40,12 @@ export class Category {
 
   // @Field()
   @DeleteDateColumn()
-  deletedArt : Date;
+  deletedAt: Date;
 
+  @Field(() => [Product])
+  @ManyToMany(() => Product, (product) => product.category)
+  @JoinTable()
+  products: Product[];
 
 
   // @ManyToOne(() => Category, (parent) => parent.children, { nullable: true })
@@ -40,13 +55,9 @@ export class Category {
   // @OneToMany(() => Category, (child) => child.parent)
   // // @Field(() => [Category], { nullable: true })
   // children: Category[];
-  
 
   @BeforeInsert()
   generateSlug() {
     this.slug = slugify(this.name, { lower: true });
   }
-
-
-
 }

@@ -10,10 +10,13 @@ export class CreateProductInput {
   @Field()
   description: string;
 
+  @Field(() => Int)
+  categoryId: number;
+
   @Field(() => Int, { defaultValue: 0 })
   price: number;
 
-  @Field(() => [String])
+  @Field(() => [String], { defaultValue: [] })
   images?: string[];
 
   @Field(() => [CreateOptionInput])

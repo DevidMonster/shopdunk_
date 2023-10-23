@@ -6,10 +6,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Category } from 'src/modules/categories/entities/category.entity';
 
 @ObjectType()
 @Entity()
@@ -47,6 +50,13 @@ export class Product {
   options?: Option[];
 
   @Field(() => [ProductSkus])
-  @OneToMany(() => ProductSkus, (productSkus) => productSkus.product ,  { cascade: true })
+  @OneToMany(() => ProductSkus, (productSkus) => productSkus.product, {
+    cascade: true,
+    nullable: true,
+  })
   productSkus?: ProductSkus[];
+
+  @Field(() => Category)
+  @ManyToOne(() => Category, (category) => category.products)
+  category: Category;
 }
