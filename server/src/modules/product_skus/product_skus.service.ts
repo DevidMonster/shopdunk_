@@ -68,7 +68,6 @@ export class ProductSkusService {
     }
 
     for (const value of productSku.skuValues) {
-      console.log(value);
       await this.skuValueService.remove(value.id);
     }
 

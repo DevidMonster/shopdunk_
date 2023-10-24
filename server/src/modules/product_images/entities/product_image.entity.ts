@@ -15,7 +15,9 @@ export class ProductImage {
   imageUrl: string;
 
   @Field(() => Product)
-  @ManyToOne(() => Product, (product) => product.images)
+  @ManyToOne(() => Product, (product) => product.images, {
+    onDelete: 'CASCADE',
+  })
   product: Product;
 
   @Field(() => ProductSkus)
