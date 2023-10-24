@@ -201,8 +201,6 @@ export class ProductsService {
       // console.log(product,"==================", updateProductInput);
 
       for (const sku of product.productSkus) {
-        console.log(sku, "++++++++++++");
-
         await this.productSkuService.remove(sku.id);
       }
 

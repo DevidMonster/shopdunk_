@@ -25,8 +25,6 @@ export class OptionsService {
       product: product,
     });
 
-    console.log(option);
-
     const newOption = await this.option.save(option);
 
     for (const optionValue of createOptionInput.optionValues) {
@@ -57,7 +55,10 @@ export class OptionsService {
   // }
 
   async remove(id: number): Promise<Option> {
-    const option = await this.option.findOne({ where: { id: id }, relations: { optionValues: true } });
+    const option = await this.option.findOne({
+      where: { id: id },
+      relations: { optionValues: true },
+    });
 
     if (!option) {
       throw new NotFoundException('No option found');

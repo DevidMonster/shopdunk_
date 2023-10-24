@@ -8,6 +8,7 @@ import Column from 'antd/es/table/Column';
 import { Button, Layout, Popconfirm, message, theme } from 'antd';
 import { useMutation, useQuery } from '@apollo/client';
 import { DELETE_PRODUCT, GET_PRODUCTS } from '../../../api/product';
+import { GET_CATEGORIES } from '../../../api/category';
 
 const ProductAdmin = () => {
     const [valueSearch, setValueSearch] = useState<string>('');
@@ -15,6 +16,7 @@ const ProductAdmin = () => {
     const { data, loading } = useQuery(GET_PRODUCTS, { variables: { id: 1 } });
     const [deleteProduct] = useMutation(DELETE_PRODUCT)
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const products = data?.products?.map((item: any, index: number) => ({ ...item, key: index })) || [];
     
     const {
@@ -77,15 +79,17 @@ const ProductAdmin = () => {
                                 render={(id) => (
                                     <>
                                         <Popconfirm 
-                                            title="Are you sure to delete this product" 
+                                            title="Are you sure to delete this product?" 
                                             onCancel={() => message.error('Cancel')} 
+                                            okButtonProps={{ className: 'bg-blue-400' }}
                                             onConfirm={async () => {
                                                 await deleteProduct({
                                                     variables: {
                                                         id: parseInt(id),
                                                     },
-                                                    refetchQueries: [{ query: GET_PRODUCTS }]
+                                                    refetchQueries: [{ query: GET_PRODUCTS }, { query: GET_CATEGORIES }]
                                                 })
+                                                message.success('Product deleted successfully')
                                             }}
                                         ><Button className='mr-2'>Delete</Button></Popconfirm>
                                         <Link to={'/admin/products/' + id}><Button className='bg-red-500 text-white'>Edit</Button></Link>

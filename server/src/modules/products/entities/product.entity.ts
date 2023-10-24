@@ -34,7 +34,10 @@ export class Product {
   price: number;
 
   @Field(() => [ProductImage])
-  @OneToMany(() => ProductImage, (productImage) => productImage.product)
+  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
+    cascade: true,
+    nullable: true,
+  })
   images?: ProductImage[];
 
   @Field()
@@ -58,5 +61,6 @@ export class Product {
 
   @Field(() => Category)
   @ManyToOne(() => Category, (category) => category.products)
+  @JoinColumn({ name: 'categoryId' })
   category: Category;
 }

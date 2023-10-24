@@ -9,15 +9,8 @@ export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Mutation(() => Category)
-  createCategory(
-    @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
-  ) {
+  createCategory(@Args('createCategoryInput') createCategoryInput: CreateCategoryInput) {
     return this.categoriesService.create(createCategoryInput);
-  }
-
-  @Query(() => [Category], { name: 'categoriesNoDefault' })
-  findAllWithNoDefaultCate() {
-    return this.categoriesService.findAllWithNoDefaultCate();
   }
 
   @Query(() => [Category], { name: 'categories' })
@@ -31,13 +24,8 @@ export class CategoriesResolver {
   }
 
   @Mutation(() => Category)
-  updateCategory(
-    @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
-  ) {
-    return this.categoriesService.update(
-      updateCategoryInput.id,
-      updateCategoryInput,
-    );
+  updateCategory(@Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput) {
+    return this.categoriesService.update(updateCategoryInput.id, updateCategoryInput);
   }
 
   @Mutation(() => Category)

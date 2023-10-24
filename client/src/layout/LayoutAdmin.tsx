@@ -30,10 +30,7 @@ const items: MenuItem[] = [
       getItem(<Link to='/admin/products'>Sản phẩm</Link>, '3'),
       getItem(<Link to='/admin/products_add'>Tạo sản phẩm</Link>, '4')
    ]),
-   getItem('Danh mục', '5', <BsMenuApp />, [
-      getItem(<Link to='/admin/categories'>Danh sách danh mục</Link>, '6'),
-      getItem(<Link to='/admin/categories_add'>Tạo danh mục</Link>, '7')
-   ]),
+   getItem(<Link to='/admin/categories'>Danh sách danh mục</Link>, '5', <BsMenuApp/>),
   //  getItem(<Link to='/manage/orders'>Đơn hàng</Link>, 'sub1', <OrderIcon />),
   //  getItem(<Link to='/manage/vouchers'>Mã khuyễn mãi</Link>, 'sub2', <TicketIcon />),
   //  getItem(<Link to='/manage/accounts'>Tài khoản</Link>, 'sub3', <UserOutlined />),
@@ -77,7 +74,7 @@ const LayoutAdmin = () => {
             ></Button>
          </Sider>
          {open ? <div onClick={() => setOpen(false)} className='fixed top-0 right-0 z-[150] w-screen h-full bg-[rgba(0,0,0,0.1)] md:hidden md:opacity-0 md:invisible'></div> : ''}
-         <Layout className={'transition-all '+ (!collapsed ? 'md:pl-[250px]' : 'md:pl-[80px]')}>
+         <Layout className={'transition-all relative '+ (!collapsed ? 'md:pl-[250px]' : 'md:pl-[80px]')}>
             <HeaderAdmin />
             <Content className='min-h-screen overflow-auto flex justify-center w-full'>
                <Outlet />

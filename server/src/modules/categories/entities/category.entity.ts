@@ -6,8 +6,7 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   Tree,
   TreeChildren,
@@ -30,23 +29,25 @@ export class Category {
   @Field(() => String)
   slug: string;
 
-  @TreeChildren()
+  @TreeChildren({
+    cascade: true,
+  })
   @Field(() => [Category], { nullable: true })
   children: Category[];
 
-  @TreeParent()
+  @TreeParent({
+    onDelete: 'CASCADE',
+  })
   @Field(() => Category, { nullable: true })
   parent: Category;
 
   // @Field()
-  @DeleteDateColumn()
-  deletedAt: Date;
+  // @DeleteDateColumn()
+  // deletedAt: Date;
 
   @Field(() => [Product])
-  @ManyToMany(() => Product, (product) => product.category)
-  @JoinTable()
+  @OneToMany(() => Product, (product) => product.category)
   products: Product[];
-
 
   // @ManyToOne(() => Category, (parent) => parent.children, { nullable: true })
   // @Field(() => Category, { nullable: true })
