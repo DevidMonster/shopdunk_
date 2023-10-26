@@ -29,7 +29,12 @@ export class ProductsResolver {
 
   @Query(() => Product, { name: 'product' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.productsService.findOne(id);
+    return this.productsService.findOne(id, undefined);
+  }
+
+  @Query(() => Product, { name: 'productSlug' })
+  findOneBySlug(@Args('slug') slug: string) {
+    return this.productsService.findOne(undefined, slug);
   }
 
   @Mutation(() => Product)
@@ -42,7 +47,7 @@ export class ProductsResolver {
     );
   }
 
-  @Mutation(() => Product, { name: 'removeProduct' }  )
+  @Mutation(() => Product, { name: 'removeProduct' })
   removeProduct(@Args('id', { type: () => Int }) id: number) {
     return this.productsService.remove(id);
   }

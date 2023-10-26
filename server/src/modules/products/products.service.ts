@@ -32,6 +32,7 @@ export class ProductsService {
     const product = this.product.create({
       name: createProductInput.name,
       price: createProductInput.price,
+      discount: createProductInput.discount,
       description: createProductInput.description,
       category,
     });
@@ -120,12 +121,12 @@ export class ProductsService {
       }
     )))
 
-    return result;
+    return result as Product[];
   }
 
-  async findOne(id: number): Promise<Product> {
+  async findOne(id: number | undefined, slug: string | undefined): Promise<Product> {
     const product = await this.product.findOne({
-      where: { id: id, productSkus: !null },
+      where: id && !slug ? { id: id, productSkus: !null } : { slug: slug, productSkus: !null },
       relations: {
         options: { optionValues: true },
         category: true,
@@ -177,6 +178,7 @@ export class ProductsService {
 
     product.name = updateProductInput.name;
     product.price = updateProductInput.price;
+    product.discount = updateProductInput.discount;
     product.description = updateProductInput.description;
 
     if (updateProductInput.categoryId) {

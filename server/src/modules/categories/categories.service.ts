@@ -34,15 +34,15 @@ export class CategoriesService {
   }
 
   async findOne(id: number) {
-    const product = await this.categoryRepository.findOne({
+    const category = await this.categoryRepository.findOne({
       where: { id: id },
       relations: { products: { images: true } },
     });
 
-    if (!product) {
+    if (!category) {
       throw new Error(`Category #${id} not found`);
     }
-    return product;
+    return category;
     // return `This action returns a #${id} category`;
   }
 

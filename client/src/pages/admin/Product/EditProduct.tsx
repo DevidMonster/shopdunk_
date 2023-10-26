@@ -31,7 +31,7 @@ const EditProduct: React.FC = () => {
     const [optionError, setOptionError] = useState('')
     const { id } = useParams()
     const [optionData, setOptionData] = useState<any[]>([])
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [fileListParent, setFileListParent] = useState<UploadFile[]>([]);
     const [skuData, setSkuData] = useState<any[]>([])
     const [updateProduct] = useMutation(UPDATE_PRODUCT)
     const { data: productData, loading: prdLoading } = useQuery(GET_PRODUCT, { variables: { id: parseInt(id!) } })
@@ -72,7 +72,7 @@ const EditProduct: React.FC = () => {
                     url: image.imageUrl,
                 }))
                 form?.setFieldsValue({ images: images })
-                setFileList(images)
+                setFileListParent(images)
             }
             if (productData?.product) {
                 setSkuData([...productData.product.productSkus.map((c: any) => typeof c.skuValues === 'object' && c?.skuValues?.length >= 0 ?
@@ -134,7 +134,7 @@ const EditProduct: React.FC = () => {
 
     const handleOnChange = ({ fileList }: { fileList: UploadFile[] }) => {
         form?.setFieldValue('images', fileList)
-        setFileList(fileList);
+        setFileListParent(fileList);
     };
 
     const onFinish = async (values: any) => {
@@ -145,17 +145,16 @@ const EditProduct: React.FC = () => {
             return;
         }
 
-        if (fileList.length > 0) {
+        if (fileListParent.length > 0) {
             try {
-                const response = await uploadImages(fileList);
+                const response = await uploadImages(fileListParent);
                 values.images = response;
             } catch (error) {
                 console.error("Error uploading image:", error);
             }
         }
         values.skuValues = await Promise.all(values.skuValues.map(async (value: any) => {
-            console.log(value);
-
+            // console.log(value);
             const res = value?.images?.length > 0 || value?.images !== undefined || value?.images?.fileList ? await uploadImages(value.images?.fileList || value.images) : []
             return {
                 ...value,
@@ -231,13 +230,17 @@ const EditProduct: React.FC = () => {
                         treeData={!loading ? renderCategories(data?.categories) : []}
                     />
                 </Form.Item>
-                <Form.Item<FieldType>
-                    label="Price"
-                    name="price"
-                    rules={[{ required: true, message: 'Please input price!' }, { type: 'number', min: 0, message: 'price is greater than 0' }]}
+                <Form.Item
+                    label="Discount"
+                    name="discount"
+                    rules={[{ required: true, message: 'Please input discount!' }, { type: 'number', min: 0, message: 'discount is greater than 0' }]}
                     hasFeedback
                 >
-                    <InputNumber />
+                    <InputNumber
+                        min={0}
+                        max={100}
+                        formatter={(value) => `${value}%`}
+                    />
                 </Form.Item>
 
                 <Form.Item<FieldType>
@@ -251,7 +254,7 @@ const EditProduct: React.FC = () => {
                 <Form.Item
                     name='images'
                     label="Images"
-                    initialValue={fileList}
+                    initialValue={fileListParent}
                     rules={[{ required: true, message: `bạn phải chọn ảnh` }]}
                 >
                     <Upload
@@ -261,7 +264,7 @@ const EditProduct: React.FC = () => {
                         }}
                         onChange={handleOnChange}
                         listType="picture-circle"
-                        fileList={fileList}
+                        fileList={fileListParent}
                     >
                         <Button className='border-[0]' icon={<UploadOutlined />}></Button>
                     </Upload>

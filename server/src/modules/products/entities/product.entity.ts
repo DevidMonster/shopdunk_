@@ -3,6 +3,7 @@ import { ProductImage } from 'src/modules/product_images/entities/product_image.
 import { Option } from 'src/modules/options/entities/option.entity';
 import { ProductSkus } from 'src/modules/product_skus/entities/product_skus.entity';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -13,6 +14,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Category } from 'src/modules/categories/entities/category.entity';
+import slugify from 'slugify';
 
 @ObjectType()
 @Entity()
@@ -21,7 +23,7 @@ export class Product {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id!: number;
 
-  @Field()
+  @Field(() => String)
   @Column()
   name: string;
 
@@ -32,6 +34,10 @@ export class Product {
   @Field(() => Int)
   @Column({ type: 'float', default: 0 })
   price: number;
+
+  @Field(() => Int)
+  @Column({ type: 'int', default: 0 })
+  discount: number;
 
   @Field(() => [ProductImage])
   @OneToMany(() => ProductImage, (productImage) => productImage.product, {
@@ -63,4 +69,13 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.products)
   @JoinColumn({ name: 'categoryId' })
   category: Category;
+
+  @Column()
+  @Field(() => String)
+  slug: string;
+
+  @BeforeInsert()
+  generateSlug() {
+    this.slug = slugify(this.name, { lower: true });
+  }
 }

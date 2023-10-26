@@ -1,10 +1,29 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { BsBag } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
+import { GET_CATEGORIES } from "../../../api/category";
+import { useQuery } from "@apollo/client";
+import { Dropdown, DropdownProps, Space } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+import { Fragment } from "react";
 
 const Header = () => {
+  const { data, loading } = useQuery(GET_CATEGORIES)
+
+  const renderCategories = (categories: { id: number, name: string, slug: string, children?: { id: number, name: string, slug: string }[] }[]): any[] => {
+    return categories.map((category: { id: number, name: string, slug: string, children?: { id: number, name: string, slug: string }[] }, index: number) => {
+      return {
+        key: index,
+        label: (<Link className="text-sm" to={category.slug}>
+          {category.name}
+        </Link>),
+        children: category?.children!.length > 0 ? renderCategories(category.children!) : undefined,
+      }
+    })
+  }
+
   return (
     <div className="static bg-[#515154] py-2 ">
       <div className="flex justify-around items-center max-w-7xl mx-auto">
@@ -18,47 +37,23 @@ const Header = () => {
           </Link>
         </div>
         <div className="w-full mx-5">
-          <ul className="flex justify-around ">
-            <li>
-              <Link className="text-[#d2d2d7] text-sm" to={`Iphone`}>
-                Iphone
-              </Link>
-            </li>
-            <li>
-              <Link className="text-[#d2d2d7] text-sm" to={`Iphone`}>
-                Ipad
-              </Link>
-            </li>
-            <li>
-              <Link className="text-[#d2d2d7] text-sm" to={`Iphone`}>
-                Mac
-              </Link>
-            </li>
-            <li>
-              <Link className="text-[#d2d2d7] text-sm" to={`Iphone`}>
-                Watch
-              </Link>
-            </li>
-            <li>
-              <Link className="text-[#d2d2d7] text-sm" to={`Iphone`}>
-                Âm thanh
-              </Link>
-            </li>
-            <li>
-              <Link className="text-[#d2d2d7] text-sm" to={`Iphone`}>
-                Phụ kiện
-              </Link>
-            </li>
-            <li>
-              <Link className="text-[#d2d2d7] text-sm" to={`Iphone`}>
-                Tin tức
-              </Link>
-            </li>
-            <li>
-              <Link className="text-[#d2d2d7] text-sm" to={`Iphone`}>
-                Khuyến mại
-              </Link>
-            </li>
+          <ul className="flex gap-9 ">
+            {!loading && data?.categories[0].children.map((category: { id: number, name: string, slug: string, children: { id: number, name: string, slug: string }[] }, index: number) => {
+              const Comp = category.children.length > 0 ? Dropdown : Fragment
+              const items = category.children.length > 0 ? renderCategories(category.children) : []
+              const prop: DropdownProps = category.children.length > 0 ? { menu: { items: items }, placement: "bottomLeft", arrow: true } : {}
+              return (<Comp key={index} {...prop}>
+                <li>
+                  <Space>
+                    <Link className="text-[#d2d2d7] text-sm h-full" to={category.slug}>
+                      {category.name}
+                    </Link>
+                    {category.children.length > 0 && <DownOutlined className="text-white w-[10px]"/>}
+                  </Space>
+                </li>
+              </Comp>)
+            })
+            }
           </ul>
         </div>
         <div className="w-2/12">
@@ -78,7 +73,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
