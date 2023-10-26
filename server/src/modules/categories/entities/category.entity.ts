@@ -4,7 +4,6 @@ import { Product } from 'src/modules/products/entities/product.entity';
 import {
   BeforeInsert,
   Column,
-  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,

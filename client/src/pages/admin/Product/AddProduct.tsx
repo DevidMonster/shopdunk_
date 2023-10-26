@@ -18,6 +18,8 @@ type FieldType = {
 
     description: string;
 
+    discount: number;
+
     price: number;
 
     image: string;
@@ -188,6 +190,19 @@ const AddProduct: React.FC = () => {
                             hasFeedback
                         >
                             <InputNumber />
+                        </Form.Item>
+                        <Form.Item<FieldType>
+                            label="Discount"
+                            name="discount"
+                            initialValue={0}
+                            rules={[{ required: true, message: 'Please input discount!' }, { type: 'number', min: 0, message: 'discount is greater than 0' }]}
+                            hasFeedback
+                        >
+                            <InputNumber
+                                min={0}
+                                max={100}
+                                formatter={(value) => `${value}%`}
+                            />
                         </Form.Item>
 
                         <Form.Item<FieldType>

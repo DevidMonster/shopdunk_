@@ -1,12 +1,15 @@
-import React from "react";
 import { AiFillYoutube } from "react-icons/ai";
 import { BiLogoFacebook } from "react-icons/bi";
 import { SiZalo } from "react-icons/si";
 import { Link } from "react-router-dom";
 
-type Props = {};
+type Props = {
+  something: boolean;
+};
 
 const Footer = (props: Props) => {
+  console.log(props);
+  
   return (
     <footer className="bg-[#1d1d1f] pt-10 pb-8">
       <div className="max-w-7xl mx-auto">
