@@ -1,10 +1,21 @@
-import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Button, Form, Input, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { loginApi } from "../../../../api/auth";
+import { saveTokenAndUser } from "../../../../slice/auth.slice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
-  const onFinish = (values: any) => {
+  const dispatch = useDispatch()
+  const naviagte = useNavigate()
+
+  const onFinish = async (values: any) => {
     console.log("Success:", values);
+    const { data } = await loginApi(values);
+    if(data?.data) {
+      dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data }))
+      naviagte('/')
+      message.success('login success')
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -30,10 +41,10 @@ const Login = () => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-          <div>Tên đăng nhập</div>
+          <div>Email</div>
           <Form.Item
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            name="email"
+            rules={[{ required: true, message: "Please input your email!" }, { type: "email", message: 'Invalid email'}]}
           >
             <Input className="h-10" />
           </Form.Item>
@@ -45,14 +56,14 @@ const Login = () => {
             <Input.Password className="h-10" />
           </Form.Item>
 
-          <Form.Item name="remember" valuePropName="checked">
+          {/* <Form.Item name="remember" valuePropName="checked">
             <div className="flex justify-between">
               <Checkbox>Nhớ mật khẩu</Checkbox>
               <Link className="text-blue-600" to={`/`}>
                 Quên mật khẩu ?
               </Link>
             </div>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item>
             <Button

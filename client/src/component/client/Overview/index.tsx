@@ -59,7 +59,7 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
         <div className="text-2xl font-semibold">{productName}</div>
         <div className="flex justify-start items-center">
           <div className="mr-2 my-4">
-            <Rate allowHalf defaultValue={5} />
+            <Rate allowHalf/>
           </div>
           <div className="flex items-center text-blue-600">
             1 Đánh giá | <AiOutlinePlusCircle className="mx-2" /> So sánh

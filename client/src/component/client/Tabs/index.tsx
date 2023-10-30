@@ -1,10 +1,13 @@
-import React from "react";
 import { Tabs } from "antd";
 import type { TabsProps } from "antd";
 import Comment from "../Comment";
 import Description from "../Category-Description";
 
-const TabsItem = () => {
+type IProps = {
+  description: string;
+}
+
+const TabsItem = ({ description }: IProps) => {
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -15,7 +18,7 @@ const TabsItem = () => {
       label: "Mô tả sản phẩm",
       children: (
         <div>
-          <Description />
+          <Description description={description}/>
         </div>
       ),
     },
