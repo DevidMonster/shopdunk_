@@ -6,6 +6,7 @@ query {
     id
     name
     price
+    discount
     description
     images {
       id
@@ -64,6 +65,64 @@ query Product($id: Int!) {
           }
         }
         price
+        discount
+        updatedAt
+        category {
+          id
+          name
+          slug
+        }
+        productSkus {
+          images {
+            id
+            imageUrl
+            product {
+                id
+            }
+            productSkus {
+                id
+            }
+          }
+          skuValues {
+              id
+              optionValue {
+                  valueName
+              }
+          }
+          id
+          price
+          quantity
+          sku
+          status
+      }
+        options {
+            id
+            optionName
+            optionValues {
+                id
+                valueName
+            }
+        }
+    }
+}
+`;
+
+export const GET_PRODUCT_SLUG = gql`
+query ProductSlug($slug: String!) {
+  productSlug(slug: $slug) {
+        createdAt
+        description
+        id
+        name
+        images {
+          id
+          imageUrl
+          product {
+              id
+          }
+        }
+        price
+        discount
         updatedAt
         category {
           id
@@ -111,6 +170,7 @@ mutation CreateProduct ($createProductInput: CreateProductInput!) {
         id
         description
         price
+        discount
         name
         createdAt
     }
@@ -123,6 +183,7 @@ mutation UpdateProduct ($updateProductInput: UpdateProductInput!) {
         id
         description
         price
+        discount
         name
         createdAt
     }
@@ -136,6 +197,7 @@ mutation RemoveProduct($id: Int!) {
       description
       name
       price
+      discount
       updatedAt
   }
 }

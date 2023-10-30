@@ -19,7 +19,9 @@ export class Option {
   id!: number;
 
   @Field(() => Product)
-  @ManyToOne(() => Product, (product) => product.options, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Product, (product) => product.options, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'productId' })
   product: Product;
 
@@ -28,10 +30,12 @@ export class Option {
   optionName: string;
 
   @Field(() => [OptionValue])
-  @OneToMany(() => OptionValue, (optionValue) => optionValue.option , { cascade: true })
+  @OneToMany(() => OptionValue, (optionValue) => optionValue.option, {
+    cascade: true,
+  })
   optionValues: OptionValue[];
 
   @Field(() => [SkuValue])
-  @OneToMany(() => SkuValue, (skuValue) => skuValue.option , { cascade: true })
+  @OneToMany(() => SkuValue, (skuValue) => skuValue.option, { cascade: true })
   skuValues: SkuValue[];
 }

@@ -1,26 +1,65 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import { Rate } from "antd";
 import { AiOutlineDown, AiOutlinePlusCircle } from "react-icons/ai";
 import { Button, Form, Radio, Rate } from "antd";
 import { BsFillCheckCircleFill, BsGift } from "react-icons/bs";
+import { useEffect, useState } from "react";
 
 // const formItemLayout = {
 //   labelCol: { span: 6 },
 //   wrapperCol: { span: 14 },
 // };
 
-const OverView = () => {
+type IProps = {
+  productSkus: any[],
+  productOptions: any[],
+  productName: string,
+  productDiscount: number,
+  onChangeImages: (images: string[]) => void
+}
+
+const OverView = ({ onChangeImages, productSkus = [], productOptions = [], productName = '', productDiscount = 0 }: IProps) => {
+  const [form] = Form.useForm()
+  const [currentSku, setCurrentSku] = useState({
+    price: 0,
+  })
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };
 
+  useEffect(() => {
+    if (productOptions.length > 0 && productSkus.length > 0) {
+      const obj: any = {};
+      productOptions.forEach((option: { optionName: string, optionValues: any[] }) => {
+        obj[option.optionName] = option.optionValues[0].valueName
+      })
+      form.setFieldsValue(obj)
+      onChangeImages(productSkus[0].images)
+      setCurrentSku(productSkus[0])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productOptions, productSkus])
+
+  const CurrentSku = () => {
+    // console.log(productSkus.map((sku: any) => sku?.skuValues?.map((value: any) => value.optionValue.valueName).join(' | '),), Object.values(form?.getFieldsValue(true)).join(' | '))
+    const skuValues = productSkus.map((sku: any) => sku?.skuValues?.map((value: any) => value.optionValue.valueName).join(' | '),)
+    skuValues.forEach((value: any, index: number) => {
+      if (
+        value == Object.values(form?.getFieldsValue(true)).join(' | ')
+      ) {
+        onChangeImages(productSkus[index].images)
+        setCurrentSku(productSkus[index])
+      }
+    })
+  }
+
   return (
     <div>
       <div>
-        <div className="text-2xl font-semibold">iphone 15</div>
+        <div className="text-2xl font-semibold">{productName}</div>
         <div className="flex justify-start items-center">
           <div className="mr-2 my-4">
-            <Rate allowHalf defaultValue={5} />
+            <Rate allowHalf/>
           </div>
           <div className="flex items-center text-blue-600">
             1 Đánh giá | <AiOutlinePlusCircle className="mx-2" /> So sánh
@@ -30,81 +69,42 @@ const OverView = () => {
       <hr />
       <div>
         <div className="flex items-end my-4">
-          <div className="text-2xl text-blue-600 mr-3">16.600.300 VNĐ</div>
-          <del className="text-xl text-gray-400">24.000.000 VNĐ</del>
+          {productDiscount > 0 ? (
+            <>
+              <div className="text-2xl text-blue-600 mr-3">{(productDiscount / 100 * currentSku.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
+              <del className="text-xl text-gray-400">{currentSku.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</del>
+            </>
+          ) : (
+            <div className="text-2xl text-blue-600 mr-3">{currentSku.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
+          )}
         </div>
         <div>
           <Form
+            form={form}
+            layout="vertical"
             name="validate_other"
             onFinish={onFinish}
-            initialValues={{
-              "input-number": 3,
-              "checkbox-group": ["A", "B"],
-              rate: 3.5,
-              "color-picker": null,
-            }}
             style={{ maxWidth: 600 }}
           >
-            <div className="mb-3">Dung lượng</div>
-            <Form.Item name="radio-group">
-              <Radio.Group>
-                <Radio.Button
-                  className="mr-3 px-4 rounded-md font-medium text-gray-400"
-                  value="128GB"
-                >
-                  128GB
-                </Radio.Button>
-                <Radio.Button
-                  className="mr-3 px-4 rounded-md font-medium text-gray-400"
-                  value="256GB"
-                >
-                  256GB
-                </Radio.Button>
-                <Radio.Button
-                  className="mr-3 px-4 rounded-md font-medium text-gray-400"
-                  value="512GB"
-                >
-                  512GB
-                </Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-
-            <div className="mb-3">Màu sắc</div>
-            <Form.Item name="color">
-              <Radio.Group>
-                <Radio.Button className="hidden"></Radio.Button>
-                <Radio.Button
-                  className="mr-3 rounded-full font-medium p-[2px]"
-                  value="black"
-                >
-                  <div className="border rounded-full bg-black p-3"></div>
-                </Radio.Button>
-                <Radio.Button
-                  className="mr-3 rounded-full font-medium p-[2px]"
-                  value="pink"
-                >
-                  <div className="border rounded-full bg-pink-500 p-3"></div>
-                </Radio.Button>
-                <Radio.Button
-                  className="mr-3 rounded-full font-medium p-[2px]"
-                  value="red"
-                >
-                  <div className="border rounded-full bg-red-500 p-3"></div>
-                </Radio.Button>
-                <Radio.Button
-                  className="mr-3 rounded-full rounded-r-full font-medium p-[2px]"
-                  value="gray"
-                >
-                  <div className="border rounded-full bg-gray-500 p-3"></div>
-                </Radio.Button>
-                <Radio.Button
-                  className="hidden mr-3 rounded-full rounded-r-full font-medium p-[2px]"
-                  value="gray"
-                >
-                  <div className="border rounded-full bg-gray-500 p-3"></div>
-                </Radio.Button>
-              </Radio.Group>
-            </Form.Item>
+            {productOptions.length > 0 ?
+              (
+                productOptions.map((option: any, index: number) => (
+                  <Form.Item initialValue={option.optionValues[0]} label={option.optionName} key={index} name={option.optionName}>
+                    <Radio.Group onChange={CurrentSku}>
+                      {option.optionName.toLowerCase() == "color" || option.optionName.toLowerCase() == "màu sắc"
+                        ? option.optionValues.map((value: any, index: number) => (
+                          <Radio.Button style={{ background: value.valueName.toLowerCase() }} className={`before:bg-transparent mr-2 rounded-full w-[32px] h-[32px] border-[2px]`} key={index + 'sub'} value={value.valueName}></Radio.Button>
+                        ))
+                        :
+                        option.optionValues.map((value: any, index: number) => (
+                          <Radio.Button key={index + 'sub'} value={value.valueName}>{value.valueName}</Radio.Button>
+                        ))
+                      }
+                    </Radio.Group>
+                  </Form.Item>
+                ))
+              )
+              : <></>}
 
             <Form.Item>
               <div className="border font-semibold p-4">

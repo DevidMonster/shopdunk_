@@ -16,6 +16,9 @@ export class CreateProductInput {
   @Field(() => Int, { defaultValue: 0 })
   price: number;
 
+  @Field(() => Int, { defaultValue: 0 })
+  discount: number;
+
   @Field(() => [String], { defaultValue: [] })
   images?: string[];
 

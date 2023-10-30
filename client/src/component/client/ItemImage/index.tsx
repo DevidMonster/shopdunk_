@@ -10,53 +10,34 @@ import "swiper/css/thumbs";
 
 import "./index.css";
 
+import Swiperz from 'swiper';
 // import required modules
+
+type IProps = {
+  images: any[]
+}
+
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
-const ItemImage = () => {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+const ItemImage = ({ images = [] }: IProps) => {
+  const [thumbsSwiper, setThumbsSwiper] = useState<Swiperz | null>(null);
   return (
     <>
       <Swiper
         style={{
-        //   "--swiper-navigation-color": "#fff",
-        //   "--swiper-pagination-color": "#fff",
+          //   "--swiper-navigation-color": "#fff",
+          //   "--swiper-pagination-color": "#fff",
         }}
         spaceBetween={10}
         navigation={true}
-        thumbs={{ swiper: thumbsSwiper }}
+        thumbs={{ swiper: thumbsSwiper && !thumbsSwiper['destroyed'] ? thumbsSwiper : null }}
         modules={[FreeMode, Navigation, Thumbs]}
-        className="mySwiper2"
+        className="mySwiper2 border-1 rounded-[5px] overflow-hidden"
       >
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-        </SwiperSlide>
+        {images.length > 0 && images.map((image: { imageUrl: string }, index: number) => (
+          <SwiperSlide key={index}>
+            <img src={image.imageUrl} alt="ảnh sản phẩm"/>
+          </SwiperSlide>
+        ))}
       </Swiper>
       <Swiper
         // onSwiper={setThumbsSwiper}
@@ -68,36 +49,11 @@ const ItemImage = () => {
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-5.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-6.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-7.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-8.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-9.jpg" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-10.jpg" />
-        </SwiperSlide>
+        {images.length > 0 && images.map((image: { imageUrl: string }, index: number) => (
+          <SwiperSlide key={index}>
+            <img src={image.imageUrl} alt="ảnh sản phẩm"/>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </>
   );

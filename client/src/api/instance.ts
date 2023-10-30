@@ -13,8 +13,10 @@ const cleanTypenameLink = new ApolloLink((operation, forward) => {
   const keysToOmit = ['__typename']
 
   const def = getMainDefinition(operation.query)
-  if (def && def.operation === 'mutation') {
-    operation.variables = omitDeep(operation.variables, keysToOmit)
+  if (def && 'operation' in def) {
+    if(def.operation === 'mutation') {
+      operation.variables = omitDeep(operation.variables, keysToOmit)
+    }
   }
   return forward ? forward(operation) : null
 })
