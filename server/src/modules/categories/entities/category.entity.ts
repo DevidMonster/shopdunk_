@@ -47,7 +47,6 @@ export class Category {
   @JoinTable()
   products: Product[];
 
-
   // @ManyToOne(() => Category, (parent) => parent.children, { nullable: true })
   // @Field(() => Category, { nullable: true })
   // parent: Category;

@@ -8,8 +8,7 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Layout, Menu, theme } from 'antd';
-import { Outlet } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link , Outlet} from 'react-router-dom';
 import images from '../assets/images';
 import HeaderAdmin from '../component/AdminHeader';
 const { Content, Sider } = Layout;
