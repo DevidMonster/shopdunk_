@@ -74,7 +74,7 @@ const AddProduct: React.FC = () => {
     // console.log(getCartesianProduct(optionData));
 
     const handleBeforeUpload = (file: UploadFile) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
         if (!isJpgOrPng) {
             message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
         }

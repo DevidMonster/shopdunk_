@@ -61,7 +61,7 @@ const ProductDetail = () => {
                 <Item />
               </div>
               <div className="py-10">
-                <TabsItem />
+                <TabsItem description={data?.productSlug?.description}/>
               </div>
             </div>
           </>

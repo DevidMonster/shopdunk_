@@ -34,12 +34,12 @@ const EditProduct: React.FC = () => {
     const [fileListParent, setFileListParent] = useState<UploadFile[]>([]);
     const [skuData, setSkuData] = useState<any[]>([])
     const [updateProduct] = useMutation(UPDATE_PRODUCT)
-    const { data: productData, loading: prdLoading } = useQuery(GET_PRODUCT, { variables: { id: parseInt(id!) } })
+    const { data: productData, loading: prdLoading, refetch } = useQuery(GET_PRODUCT, { variables: { id: parseInt(id!) } })
     const { data, loading } = useQuery(GET_CATEGORIES)
     const [isLoading, setIsLoading] = useState(false)
     const [form] = Form.useForm()
     const navigate = useNavigate()
-
+    
     const renderCategories = (categories: { id: number, name: string, children: any[] }[] = []): DefaultOptionType[] | undefined => {
         if (categories.length === 0) return []
         return categories.map((category: { id: number; name: string; children: any[]; }) => ({
@@ -65,6 +65,8 @@ const EditProduct: React.FC = () => {
                 categoryId: productData.product.category.id,
             })
             if (productData?.product?.images && productData?.product?.images.length > 0) {
+                console.log('data', productData.product);
+                
                 const images = productData?.product?.images?.map((image: { imageUrl: string }, index: number) => ({
                     uid: index.toString(),
                     name: 'image.png',
@@ -72,6 +74,8 @@ const EditProduct: React.FC = () => {
                     url: image.imageUrl,
                 }))
                 form?.setFieldsValue({ images: images })
+                console.log(images);
+                
                 setFileListParent(images)
             }
             if (productData?.product) {
@@ -120,7 +124,7 @@ const EditProduct: React.FC = () => {
     // console.log(getCartesianProduct(optionData));
 
     const handleBeforeUpload = (file: UploadFile) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg';
         if (!isJpgOrPng) {
             message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
         }
@@ -179,6 +183,7 @@ const EditProduct: React.FC = () => {
         setIsLoading(false)
         if (response?.data) {
             message.success('Updated product')
+            form?.resetFields()
             navigate('/admin/products')
             return
         }
@@ -230,6 +235,14 @@ const EditProduct: React.FC = () => {
                         treeData={!loading ? renderCategories(data?.categories) : []}
                     />
                 </Form.Item>
+                <Form.Item<FieldType>
+                    label="Price"
+                    name="price"
+                    rules={[{ required: true, message: 'Please input price!' }, { type: 'number', min: 0, message: 'price is greater than 0' }]}
+                    hasFeedback
+                >
+                    <InputNumber />
+                </Form.Item>
                 <Form.Item
                     label="Discount"
                     name="discount"
@@ -273,7 +286,10 @@ const EditProduct: React.FC = () => {
                 <ProductSku form={form} skuData={skuData} />
                 <Form.Item className='flex justify-end mt-3'>
                     <div className='w-[30%] flex gap-3'>
-                        <Button onClick={() => navigate('/admin/products')} type="text" className='border-[1px] border-black' htmlType="button">
+                        <Button onClick={() => {
+                            form?.resetFields()
+                            navigate('/admin/products')}
+                        } type="text" className='border-[1px] border-black' htmlType="button">
                             Cancel
                         </Button>
                         <Button type="primary" className='bg-[#1677ff]' htmlType="submit">

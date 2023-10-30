@@ -1,10 +1,21 @@
-import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
-import { Link } from "react-router-dom";
+import { Button, Form, Input, message } from "antd";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { signupApi } from "../../../../api/auth";
+import { saveTokenAndUser } from "../../../../slice/auth.slice";
 
 const Register = () => {
-  const onFinish = (values: any) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const onFinish = async (values: any) => {
     console.log("Success:", values);
+    const { data } = await signupApi(values);
+    if(data?.data) {
+      dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data }))
+      navigate('/')
+      message.success('signup success')
+    } 
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -32,8 +43,15 @@ const Register = () => {
         >
           <div>Tên đăng nhập</div>
           <Form.Item
-            name="username"
+            name="userName"
             rules={[{ required: true, message: "Please input your username!" }]}
+          >
+            <Input className="h-10" />
+          </Form.Item>
+          <div>Email</div>
+          <Form.Item
+            name="email"
+            rules={[{ required: true, message: "Please input your email!" }, { type: "email", message: 'Invalid email'}]}
           >
             <Input className="h-10" />
           </Form.Item>
@@ -44,30 +62,27 @@ const Register = () => {
           >
             <Input.Password className="h-10" />
           </Form.Item>
-
-          <Form.Item name="remember" valuePropName="checked">
-            <div className="flex justify-between">
-              <Checkbox>Nhớ mật khẩu</Checkbox>
-              <Link className="text-blue-600" to={`/`}>
-                Quên mật khẩu ?
-              </Link>
-            </div>
+          <div>Nhập lại mật khẩu</div>
+          <Form.Item
+            name="confirmPassword"
+            rules={[{ required: true, message: "Please repeat your password!" }]}
+          >
+            <Input.Password className="h-10" />
           </Form.Item>
-
           <Form.Item>
             <Button
               className="w-full bg-blue-600 text-white py-3 h-12 font-semibold"
               type="default"
               htmlType="submit"
             >
-              Đăng nhập
+              Đăng ký
             </Button>
           </Form.Item>
 
           <div className="flex">
-            <div>Bạn Chưa Có Tài Khoản?</div>
-            <Link className="ml-2 text-blue-600" to={`register`}>
-              Tạo tài khoản ngay
+            <div>Bạn đã Có Tài Khoản?</div>
+            <Link className="ml-2 text-blue-600" to={`/login`}>
+              Đăng nhập ngay
             </Link>
           </div>
         </Form>

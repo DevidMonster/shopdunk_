@@ -57,7 +57,9 @@ export class ProductImagesService {
       .where('product.id = :id', { id })
       .andWhere('productImage.productSkus IS NULL'); // Lọc để chỉ lấy productSkus không null
 
-    return await query.getMany();
+    const images = await query.getMany();
+
+    return images;
   }
 
   async findOne(id: number): Promise<ProductImage> {

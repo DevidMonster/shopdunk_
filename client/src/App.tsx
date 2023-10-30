@@ -12,9 +12,21 @@ import ProductDetail from "./pages/client/ProductDetail";
 import LoginPage from "./pages/client/Login";
 import RegisterPage from "./pages/client/Register";
 import NotFoundPage from "./pages/admin/NotFoundPage";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getToken } from "./api/auth";
+import { saveTokenAndUser } from "./slice/auth.slice";
 // import "./App.css";
 
 function App() {
+  const dispatch = useDispatch()
+  const getTokenAndUser = async() => {
+    const { data } = await getToken()
+    dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data}))
+  }
+  useEffect(() => {
+    getTokenAndUser()
+  }, [])
   return (
     <>
       <Routes>

@@ -43,14 +43,21 @@ export class AuthService {
     try {
       const refreshToken = req.cookies.refreshToken;
       if (!refreshToken) {
-        throw new UnauthorizedException('You need to login');
+        return res.send({
+          accessToken: '',
+          data: {}
+        });
       }
       const decode = this.jwtService.decode(refreshToken) as { id: number };
       const accessToken = await this.createToken(decode.id, '10m');
       this.setTokenToCookie(res, 'accessToken', accessToken, 10 * 60);
 
+      const user = await this.user.findOne({ where: { id: decode.id } });
+      delete user.password;
+
       return res.send({
         accessToken,
+        data: user
       });
     } catch (error) {
       throw new UnauthorizedException(`${error.message}`);
@@ -142,10 +149,10 @@ export class AuthService {
 
     delete user.password;
 
-    return {
+    return res.send({
       message: 'Signup success',
       accessToken,
       data: user,
-    };
+    });
   }
 }
