@@ -31,12 +31,12 @@ const Category = ({ categoryType = '' }: IProps) => {
       <div className=" w-[80%]">
         {Object.keys(categories).length > 0 ? (
           <ul className="py-5 flex w-[100%] overflow-x-auto">
-            <li className="min-w-[7%] scroll-ml-10  mr-[40px] border-b-2 pb-2 border-transparent hover:text-blue-500 hover:border-blue-500 	">
+            <li className={`${categoryType.toLowerCase().match(categories?.name.toLowerCase()) ? 'text-blue-500 border-blue-500' : ''} min-w-[7%] scroll-ml-10  mr-[40px] border-b-2 pb-2 border-transparent hover:text-blue-500 hover:border-blue-500`}>
               <Link to={'/' + categories?.slug}>Tất cả</Link>
             </li>
             {
               categories.children.map((category: any, index: number) => (
-                <li key={index} className="min-w-[7%] scroll-ml-10  mr-[40px] border-b-2 pb-2 border-transparent hover:text-blue-500 hover:border-blue-500 	">
+                <li key={index} className={`${categoryType.toLowerCase().match(category.name.toLowerCase()) ? 'text-blue-500 border-blue-500' : ''}  min-w-[7%] scroll-ml-10  mr-[40px] border-b-2 pb-2 border-transparent hover:text-blue-500 hover:border-blue-500`}>
                   <Link to={'/' + category.slug}>{category.name}</Link>
                 </li>
               ))

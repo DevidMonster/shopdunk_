@@ -20,7 +20,7 @@ type IProps = {
 
 const OverView = ({ onChangeImages, productSkus = [], productOptions = [], productName = '', productDiscount = 0 }: IProps) => {
   const [form] = Form.useForm()
-  const [currentSku, setCurrentSku] = useState({
+  const [currentSku, setCurrentSku] = useState<any>({
     price: 0,
   })
   const onFinish = (values: any) => {
@@ -34,13 +34,12 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
         obj[option.optionName] = option.optionValues[0].valueName
       })
       form.setFieldsValue(obj)
-      onChangeImages(productSkus[0].images)
-      setCurrentSku(productSkus[0])
+      handleCurrentSku()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productOptions, productSkus])
 
-  const CurrentSku = () => {
+  const handleCurrentSku = () => {
     // console.log(productSkus.map((sku: any) => sku?.skuValues?.map((value: any) => value.optionValue.valueName).join(' | '),), Object.values(form?.getFieldsValue(true)).join(' | '))
     const skuValues = productSkus.map((sku: any) => sku?.skuValues?.map((value: any) => value.optionValue.valueName).join(' | '),)
     skuValues.forEach((value: any, index: number) => {
@@ -55,11 +54,14 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
 
   return (
     <div>
-      <div>
+      <div className="relative">
+        {currentSku.quantity === 0 && <div className="z-[9999] flex justify-center items-center absolute top-0 left-[-105%] w-[calc(100vw*0.42)] h-[calc(100vw*0.42)] bg-[rgba(0,0,0,0.2)]">
+          <p className="text-white font-bold text-[50px]">Hết hàng</p>
+        </div>}
         <div className="text-2xl font-semibold">{productName}</div>
         <div className="flex justify-start items-center">
           <div className="mr-2 my-4">
-            <Rate allowHalf/>
+            <Rate allowHalf />
           </div>
           <div className="flex items-center text-blue-600">
             1 Đánh giá | <AiOutlinePlusCircle className="mx-2" /> So sánh
@@ -90,7 +92,7 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
               (
                 productOptions.map((option: any, index: number) => (
                   <Form.Item initialValue={option.optionValues[0]} label={option.optionName} key={index} name={option.optionName}>
-                    <Radio.Group onChange={CurrentSku}>
+                    <Radio.Group onChange={handleCurrentSku}>
                       {option.optionName.toLowerCase() == "color" || option.optionName.toLowerCase() == "màu sắc"
                         ? option.optionValues.map((value: any, index: number) => (
                           <Radio.Button style={{ background: value.valueName.toLowerCase() }} className={`before:bg-transparent mr-2 rounded-full w-[32px] h-[32px] border-[2px]`} key={index + 'sub'} value={value.valueName}></Radio.Button>
@@ -158,9 +160,10 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
             {/* <Form.Item> */}
             <div>
               <Button
-                className="w-full h-16 border rounded-xl text-xl bg-blue-600 text-white  py-3"
+                className={`${currentSku.quantity === 0 ? 'bg-gray-400' : ''} w-full h-16 border rounded-xl text-xl bg-blue-600 text-white  py-3`}
                 type="default"
                 htmlType="submit"
+                disabled={currentSku.quantity === 0}
               >
                 <div className="font-semibold my-auto">Mua ngay</div>
               </Button>
