@@ -1,7 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
-import { Repository, TreeRepository } from 'typeorm';
+import {
+  FindOneOptions,
+  FindOptionsWhere,
+  Repository,
+  TreeRepository,
+} from 'typeorm';
 import { Category } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import slugify from 'slugify';
@@ -33,11 +38,67 @@ export class CategoriesService {
     });
   }
 
-  async findOne(id: number) {
-    const category = await this.categoryRepository.findOne({
-      where: { id: id },
+  async findOne(
+    id: number | undefined,
+    slug: string | undefined,
+    parentId: number | undefined,
+  ) {
+    const whereCloud:
+      | FindOptionsWhere<Category>
+      | FindOptionsWhere<Category>[] = {};
+
+    if (id) {
+      whereCloud.id = id;
+    }
+
+    if (slug) {
+      whereCloud.slug = slug;
+    }
+
+    if (parentId) {
+      whereCloud.parent = { id: parentId };
+      const categoriesRoot = await this.categoryRepository.find({
+        where: whereCloud,
+        relations: { products: { images: true } },
+      });
+      const categories = categoriesRoot.map(async (root) => {
+        const category = await this.categoryRepository.findDescendantsTree(
+          root,
+          {
+            relations: ['products', 'products.images'],
+          },
+        );
+
+        const products = [...category.products];
+        if (category?.children) {
+          category.children.map((child: Category) =>
+            child.products.map((product: Product) => products.push(product)),
+          ),
+            (category.products = products);
+        }
+        return category;
+      });
+
+      return categories;
+    }
+
+    const categoryRoot = await this.categoryRepository.findOne({
+      where: whereCloud,
       relations: { products: { images: true } },
     });
+
+    const category = await this.categoryRepository.findDescendantsTree(
+      categoryRoot,
+      {
+        relations: ['products', 'products.images'],
+      },
+    );
+    const products = [...category.products];
+
+    category.children.map((child: Category) =>
+      child.products.map((product: Product) => products.push(product)),
+    ),
+      (category.products = products);
 
     if (!category) {
       throw new Error(`Category #${id} not found`);
@@ -60,7 +121,7 @@ export class CategoriesService {
         const parent = await this.categoryRepository.findOne({
           where: { id: updateCategoryInput.parentId },
         });
-        category.parent = parent
+        category.parent = parent;
       }
     }
 

@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../../component/client/Nav";
 import Login from "../../component/client/Auth/Login";
 

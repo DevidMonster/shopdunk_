@@ -1,61 +1,78 @@
-import React from "react";
 import Banner from "../../component/client/Banner";
 import Sub from "../../component/client/Subscribe";
 import Navbar from "../../component/client/Nav";
 import Item from "../../component/client/Item";
 import Category from "../../component/client/Category";
-import { Pagination } from "antd";
-import { Link } from "react-router-dom";
+import { Pagination, Spin } from "antd";
+import { Link, useParams } from "react-router-dom";
 import Topic from "../../component/client/Topic";
 import Description from "../../component/client/Category-Description";
 import Comment from "../../component/client/Comment";
 import FeedBack from "../../component/client/Feedback";
+import { useQuery } from "@apollo/client";
+import { GET_CATEGORIE_SLUG } from "../../api/category";
+import { useEffect, useState } from "react";
 
 const Product = () => {
+  const { category } = useParams()
+  const [currentCategory, setCurrentCategory] = useState<any>({})
+  const { data, loading } = useQuery(GET_CATEGORIE_SLUG, { variables: { slug: category } })
+  console.log(data);
+
+  useEffect(() => {
+    if(!loading && data?.categorySlug) {
+      setCurrentCategory(data?.categorySlug)
+    }
+  }, [data, loading])
+
   return (
     <div>
-      <div className="">
-        <div className="bg-white ">
-          <div className="max-w-7xl mx-auto">
-            <Navbar />
+      {Object.keys(currentCategory).length > 0 ? (
+        <div className="">
+          <div className="bg-white ">
+            <div className="max-w-7xl mx-auto">
+              <Navbar />
+            </div>
           </div>
-        </div>
-        <div className="bg-slate-50">
-          <div className="max-w-7xl mx-auto">
-            <div>
+          <div className="bg-slate-50">
+            <div className="max-w-7xl mx-auto">
               <div>
-                <div className="text-center text-4xl font-semibold mb-5">
-                  iphone
-                </div>
                 <div>
-                  <Banner />
+                  <div className="text-center text-4xl font-semibold mb-5">
+                    {currentCategory?.name}
+                  </div>
+                  <div>
+                    <Banner />
+                  </div>
+                  <div className="my-3">
+                    <Category categoryType={currentCategory?.name} />
+                  </div>
+                  <div>
+                    <Item items={currentCategory?.products}/>
+                  </div>
                 </div>
-                <div className="my-3">
-                  <Category />
-                </div>
-                <div>
-                  <Item />
+                <div className="text-center py-10">
+                  <Pagination defaultCurrent={1} total={50} />
                 </div>
               </div>
-              <div className="text-center py-10">
-                <Pagination defaultCurrent={1} total={50} />
+              <div>
+                <Topic />
               </div>
-            </div>
-            <div>
-              <Topic />
-            </div>
-            <div className="mt-10">
-              <Description />
-            </div>
-            <div className="my-10">
-              <FeedBack />
-            </div>
-            <div className="pb-10">
-              <Comment />
+              <div className="mt-10">
+                <Description description="" />
+              </div>
+              <div className="my-10">
+                <FeedBack somthing="" />
+              </div>
+              <div className="pb-10">
+                <Comment />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Spin />
+      )}
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getToken } from "./api/auth";
 import { saveTokenAndUser } from "./slice/auth.slice";
+import ScrollToTop from "./component/ScrollToTop";
 // import "./App.css";
 
 function App() {
@@ -29,13 +30,14 @@ function App() {
   }, [])
   return (
     <>
+      <ScrollToTop/>
       <Routes>
         <Route path="/auth"></Route>
         <Route path="/" element={<LayoutClient />}>
           <Route index element={<Home />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
-          <Route path="products" element={<Product />} />
+          <Route path=":category" element={<Product />} />
           <Route path="products/:id" element={<ProductDetail />} />
         </Route>
         <Route path="/admin" element={<LayoutAdmin />}>

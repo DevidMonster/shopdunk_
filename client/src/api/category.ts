@@ -10,6 +10,7 @@ query Categories {
       description
       id
       name
+      slug
       images {
         id
         imageUrl
@@ -22,7 +23,10 @@ query Categories {
         products {
           description
           id
+          price
+          discount
           name
+          slug
           images {
             id
             imageUrl
@@ -35,7 +39,10 @@ query Categories {
             products {
               description
               id
+              price
+              discount
               name
+              slug
               images {
                 id
                 imageUrl
@@ -48,7 +55,10 @@ query Categories {
                 products {
                   description
                   id
+                  price
+                  discount
                   name
+                  slug
                   images {
                     id
                     imageUrl
@@ -61,7 +71,10 @@ query Categories {
                     products {
                       description
                       id
+                      price
+                      discount
                       name
+                      slug
                       images {
                         id
                         imageUrl
@@ -75,16 +88,19 @@ query Categories {
 }
 `;
 
-export const GET_CATEGORIE = gql`
-query Category ($id: Int!) {
-  category(id: $id) {
+export const GET_CATEGORIE_PARENT = gql`
+query CategoryParent ($parentId: Int!) { 
+  categoryParent(parentId: $parentId) {
     id
     name
     slug
     products {
       description
       id
+      price
+      discount
       name
+      slug
       images {
         id
         imageUrl
@@ -97,7 +113,10 @@ query Category ($id: Int!) {
         products {
           description
           id
+          price
+          discount
           name
+          slug
           images {
             id
             imageUrl
@@ -110,7 +129,10 @@ query Category ($id: Int!) {
             products {
               description
               id
+              price
+              discount
               name
+              slug
               images {
                 id
                 imageUrl
@@ -123,7 +145,10 @@ query Category ($id: Int!) {
                 products {
                   description
                   id
+                  price
+                  discount
                   name
+                  slug
                   images {
                     id
                     imageUrl
@@ -136,7 +161,190 @@ query Category ($id: Int!) {
                   products {
                     description
                     id
+                    price
+                    discount
                     name
+                    slug
+                    images {
+                      id
+                      imageUrl
+                    }
+                  }
+                }
+            }
+        }
+    }
+  }
+}
+`
+
+export const GET_CATEGORIE_SLUG = gql`
+query CategorySlug ($slug: String!) { 
+  categorySlug(slug: $slug) {
+    id
+    name
+    slug
+    products {
+      description
+      id
+      price
+      discount
+      name
+      slug
+      images {
+        id
+        imageUrl
+      }
+    }
+    children {
+        id
+        name
+        slug
+        products {
+          description
+          id
+          price
+          discount
+          name
+          slug
+          images {
+            id
+            imageUrl
+          }
+        }
+        children {
+            id
+            name
+            slug
+            products {
+              description
+              id
+              price
+              discount
+              name
+              slug
+              images {
+                id
+                imageUrl
+              }
+            }
+            children {
+                id
+                name
+                slug
+                products {
+                  description
+                  id
+                  price
+                  discount
+                  name
+                  slug
+                  images {
+                    id
+                    imageUrl
+                  }
+                }
+                children {
+                  id
+                  name
+                  slug
+                  products {
+                    description
+                    id
+                    price
+                    discount
+                    name
+                    slug
+                    images {
+                      id
+                      imageUrl
+                    }
+                  }
+                }
+            }
+        }
+    }
+  }
+}
+`
+
+export const GET_CATEGORIE = gql`
+query Category ($id: Int!) {
+  category(id: $id) {
+    id
+    name
+    slug
+    products {
+      description
+      id
+      price
+      discount
+      name
+      slug
+      images {
+        id
+        imageUrl
+      }
+    }
+    children {
+        id
+        name
+        slug
+        products {
+          description
+          id
+          price
+          discount
+          name
+          slug
+          images {
+            id
+            imageUrl
+          }
+        }
+        children {
+            id
+            name
+            slug
+            products {
+              description
+              id
+              price
+              discount
+              name
+              slug
+              images {
+                id
+                imageUrl
+              }
+            }
+            children {
+                id
+                name
+                slug
+                products {
+                  description
+                  id
+                  price
+                  discount
+                  name
+                  slug
+                  images {
+                    id
+                    imageUrl
+                  }
+                }
+                children {
+                  id
+                  name
+                  slug
+                  products {
+                    description
+                    id
+                    price
+                    discount
+                    name
+                    slug
                     images {
                       id
                       imageUrl
