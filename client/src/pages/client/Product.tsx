@@ -1,10 +1,10 @@
 import Banner from "../../component/client/Banner";
-import Sub from "../../component/client/Subscribe";
+// import Sub from "../../component/client/Subscribe";
 import Navbar from "../../component/client/Nav";
 import Item from "../../component/client/Item";
 import Category from "../../component/client/Category";
 import { Pagination, Spin } from "antd";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Topic from "../../component/client/Topic";
 import Description from "../../component/client/Category-Description";
 import Comment from "../../component/client/Comment";
