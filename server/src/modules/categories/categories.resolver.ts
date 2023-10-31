@@ -9,7 +9,9 @@ export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Mutation(() => Category)
-  createCategory(@Args('createCategoryInput') createCategoryInput: CreateCategoryInput) {
+  createCategory(
+    @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
+  ) {
     return this.categoriesService.create(createCategoryInput);
   }
 
@@ -20,12 +22,27 @@ export class CategoriesResolver {
 
   @Query(() => Category, { name: 'category' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.categoriesService.findOne(id);
+    return this.categoriesService.findOne(id, undefined, undefined);
+  }
+
+  @Query(() => Category, { name: 'categorySlug' })
+  findOneBySlug(@Args('slug') slug: string) {
+    return this.categoriesService.findOne(undefined, slug, undefined);
+  }
+
+  @Query(() => [Category], { name: 'categoryParent' })
+  findOneByParent(@Args('parentId', { type: () => Int }) parentId: number) {
+    return this.categoriesService.findOne(undefined, undefined, parentId);
   }
 
   @Mutation(() => Category)
-  updateCategory(@Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput) {
-    return this.categoriesService.update(updateCategoryInput.id, updateCategoryInput);
+  updateCategory(
+    @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
+  ) {
+    return this.categoriesService.update(
+      updateCategoryInput.id,
+      updateCategoryInput,
+    );
   }
 
   @Mutation(() => Category)
