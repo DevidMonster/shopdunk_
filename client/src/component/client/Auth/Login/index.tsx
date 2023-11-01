@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginApi } from "../../../../api/auth";
 import { saveTokenAndUser } from "../../../../slice/auth.slice";
 import { useDispatch } from "react-redux";
+import { setCartName, setItem } from "../../../../slice/cart.slice";
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -13,6 +14,8 @@ const Login = () => {
     const { data } = await loginApi(values);
     if(data?.data) {
       dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data }))
+      dispatch(setCartName(data.data.email || 'cart'))
+      dispatch(setItem())
       naviagte('/')
       message.success('login success')
     }

@@ -37,7 +37,7 @@ const ProductDetail = () => {
     <div className="bg-[#f8f9fa]">
       <div className="max-w-7xl mx-auto">
         <div>
-          <Navbar />
+          <Navbar title={data?.productSlug.name}/>
         </div>
         {!loading && data?.productSlug ? (
           <>
@@ -58,7 +58,7 @@ const ProductDetail = () => {
             <div>
               <div className="text-3xl font-semibold mb-5">Gợi ý phụ kiện đi kèm</div>
               <div>
-                <Item />
+                <Item items={[]}/>
               </div>
               <div className="py-10">
                 <TabsItem description={data?.productSlug?.description}/>
