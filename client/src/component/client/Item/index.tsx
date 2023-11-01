@@ -33,7 +33,7 @@ const Item = ({ items = [] }: IProps) => {
                     <div className="flex item?s-end">
                       {item?.discount > 0 ? (
                         <>
-                          <div className="text-sky-600 font-bold">{(item?.discount / 100 * item?.price)?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
+                          <div className="text-sky-600 font-bold">{(item?.price - (item?.discount / 100 * item?.price))?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
                           <del className="mx-3 text-sm text-[#aaa]">{item?.price?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</del>
                           <div className="text-sm text-[#aaa]">-{item?.discount}%</div>
                         </>

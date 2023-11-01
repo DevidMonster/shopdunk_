@@ -58,7 +58,7 @@ const Home = () => {
                     </div>
                     <div className="text-sky-600 my-10">
                       <Link
-                        to={category.name}
+                        to={category.slug}
                         className="mx-auto p-2 w-60 flex justify-center items-center border-[1px] rounded-lg border-sky-600	"
                       >
                         <p> Xem tất cả {category.name} </p>

@@ -3,7 +3,11 @@ import React from 'react'
 import { Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+type IProps = {
+  title: string,
+}
+
+const Navbar = ({ title= '' }: IProps) => {
   return (
     <Breadcrumb 
     className='py-4'
@@ -12,7 +16,7 @@ const Navbar = () => {
         title: <Link className='text-black' to="/">Trang chủ</Link>,
       },
       {
-        title: <Link className='text-black' to="">Iphone</Link>,
+        title: <Link className='text-black' to="">{title}</Link>,
       },
     ]}
   />

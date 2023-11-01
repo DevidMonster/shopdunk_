@@ -17,16 +17,22 @@ import { useEffect } from "react";
 import { getToken } from "./api/auth";
 import { saveTokenAndUser } from "./slice/auth.slice";
 import ScrollToTop from "./component/ScrollToTop";
+import { setCartName, setItem } from "./slice/cart.slice";
 // import "./App.css";
 
 function App() {
   const dispatch = useDispatch()
   const getTokenAndUser = async() => {
     const { data } = await getToken()
-    dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data}))
+    if(data) {
+      dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data}))
+      dispatch(setCartName(data.data.email || 'cart'))
+    }
+    dispatch(setItem())
   }
   useEffect(() => {
     getTokenAndUser()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return (
     <>

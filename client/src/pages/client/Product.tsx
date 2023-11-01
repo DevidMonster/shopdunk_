@@ -20,7 +20,7 @@ const Product = () => {
   console.log(data);
 
   useEffect(() => {
-    if(!loading && data?.categorySlug) {
+    if (!loading && data?.categorySlug) {
       setCurrentCategory(data?.categorySlug)
     }
   }, [data, loading])
@@ -31,7 +31,7 @@ const Product = () => {
         <div className="">
           <div className="bg-white ">
             <div className="max-w-7xl mx-auto">
-              <Navbar />
+              <Navbar title={currentCategory.name} />
             </div>
           </div>
           <div className="bg-slate-50">
@@ -48,11 +48,19 @@ const Product = () => {
                     <Category categoryType={currentCategory?.name} />
                   </div>
                   <div>
-                    <Item items={currentCategory?.products}/>
+                    {currentCategory?.products.length === 0 ? (
+                      <div className="flex justify-center items-center h-28">
+                        <p>No Item</p>
+                      </div>
+                    ) : (
+                      <>
+                        <Item items={currentCategory?.products} />
+                        <div className="text-center py-10">
+                          <Pagination defaultCurrent={1} total={50} />
+                        </div>
+                      </>
+                    )}
                   </div>
-                </div>
-                <div className="text-center py-10">
-                  <Pagination defaultCurrent={1} total={50} />
                 </div>
               </div>
               <div>

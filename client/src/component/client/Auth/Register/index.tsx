@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signupApi } from "../../../../api/auth";
 import { saveTokenAndUser } from "../../../../slice/auth.slice";
+import { setCartName, setItem } from "../../../../slice/cart.slice";
 
 const Register = () => {
   const dispatch = useDispatch()
@@ -13,6 +14,8 @@ const Register = () => {
     const { data } = await signupApi(values);
     if(data?.data) {
       dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data }))
+      dispatch(setCartName(data.data.email || 'cart'))
+      dispatch(setItem())
       navigate('/')
       message.success('signup success')
     } 
