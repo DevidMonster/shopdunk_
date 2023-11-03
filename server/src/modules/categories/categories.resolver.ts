@@ -3,6 +3,7 @@ import { CategoriesService } from './categories.service';
 import { Category } from './entities/category.entity';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
+import { ResponseCategory } from './dto/response-category';
 
 @Resolver(() => Category)
 export class CategoriesResolver {
@@ -25,9 +26,17 @@ export class CategoriesResolver {
     return this.categoriesService.findOne(id, undefined, undefined);
   }
 
-  @Query(() => Category, { name: 'categorySlug' })
-  findOneBySlug(@Args('slug') slug: string) {
-    return this.categoriesService.findOne(undefined, slug, undefined);
+  @Query(() => ResponseCategory, { name: 'categorySlug' })
+  findOneBySlug(
+    @Args('slug') slug: string,
+    @Args('page', { nullable: true, type: () => Int }) page?: number,
+  ) {
+    return this.categoriesService.findOne(
+      undefined,
+      slug,
+      undefined,
+      page === null ? 1 : page,
+    );
   }
 
   @Query(() => [Category], { name: 'categoryParent' })

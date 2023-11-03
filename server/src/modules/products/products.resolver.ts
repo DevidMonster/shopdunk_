@@ -3,6 +3,7 @@ import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
+import { ResponseProduct } from './dto/response-product';
 // import { Role } from 'src/types/role.enum';
 // import { Roles } from 'src/decorators/roles/roles.decorator';
 // import { UseGuards } from '@nestjs/common';
@@ -11,7 +12,7 @@ import { UpdateProductInput } from './dto/update-product.input';
 
 @Resolver(() => Product)
 export class ProductsResolver {
-  constructor(private readonly productsService: ProductsService) { }
+  constructor(private readonly productsService: ProductsService) {}
 
   // @Roles(Role.Admin)
   // @UseGuards(AuthenticationGuard)
@@ -22,9 +23,15 @@ export class ProductsResolver {
     return this.productsService.create(createProductInput);
   }
 
-  @Query(() => [Product], { name: 'products' })
-  findAll() {
-    return this.productsService.findAll();
+  @Query(() => ResponseProduct, { name: 'products' })
+  findAll(
+    @Args('q', { nullable: true }) q?: string,
+    @Args('page', { nullable: true, type: () => Int }) page?: number,
+  ) {
+    return this.productsService.findAll(
+      !!q ? q : undefined,
+      page === null ? 1 : page,
+    );
   }
 
   @Query(() => Product, { name: 'product' })

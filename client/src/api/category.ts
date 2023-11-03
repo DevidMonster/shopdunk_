@@ -179,11 +179,14 @@ query CategoryParent ($parentId: Int!) {
 `
 
 export const GET_CATEGORIE_SLUG = gql`
-query CategorySlug ($slug: String!) { 
-  categorySlug(slug: $slug) {
+query CategorySlug ($slug: String!, $page: Int!) { 
+  categorySlug(slug: $slug, page: $page) {
     id
     name
     slug
+    currentPage
+    totalPages
+    pageSize
     products {
       description
       id

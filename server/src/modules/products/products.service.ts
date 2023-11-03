@@ -4,7 +4,7 @@ import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
 import { OptionsService } from 'src/modules/options/options.service';
 import { ProductSkusService } from 'src/modules/product_skus/product_skus.service';
 import { Option } from 'src/modules/options/entities/option.entity';
@@ -12,6 +12,7 @@ import { SkuValuesService } from 'src/modules/sku_values/sku_values.service';
 import { Category } from '../categories/entities/category.entity';
 import { CreateOptionValueInput } from '../option_values/dto/create-option_value.input';
 import { ProductImagesService } from '../product_images/product_images.service';
+import { ResponseProduct } from './dto/response-product';
 
 @Injectable()
 export class ProductsService {
@@ -22,7 +23,7 @@ export class ProductsService {
     private readonly productSkuService: ProductSkusService,
     private readonly skuValueService: SkuValuesService,
     private readonly productImage: ProductImagesService,
-  ) { }
+  ) {}
 
   async create(createProductInput: CreateProductInput): Promise<Product> {
     const category = await this.category.findOne({
@@ -41,7 +42,7 @@ export class ProductsService {
 
     await this.productImage.create({
       urls: createProductInput.images || [],
-      producId: newProduct.id
+      producId: newProduct.id,
     });
 
     const optionResults: Option[] = [];
@@ -85,9 +86,27 @@ export class ProductsService {
     return newProduct;
   }
 
-  async findAll(): Promise<Product[]> {
+  async findAll(
+    q: string,
+    page: number = 1,
+    pageSize: number = 12,
+  ): Promise<ResponseProduct> {
+    const whereOption: FindOptionsWhere<Product> | FindOptionsWhere<Product>[] =
+      {
+        productSkus: !null,
+      };
+
+    if (q) {
+      whereOption.name = Like(`%${q}%`);
+    }
+
+    const totalProducts = await this.product.count({ where: whereOption });
+    const totalPages = Math.ceil(totalProducts / pageSize); // Tính số trang
+
     const products = await this.product.find({
-      where: { productSkus: !null },
+      where: whereOption,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
       relations: {
         options: { optionValues: true },
         category: true,
@@ -108,25 +127,34 @@ export class ProductsService {
       },
     });
 
-
-
     if (!products) {
       throw new NotFoundException('Get products failed');
     }
 
-    const result = await Promise.all(products.map(async (product) => (
-      {
+    const result = await Promise.all(
+      products.map(async (product) => ({
         ...product,
-        images: await this.productImage.findAllByProductId(product.id)
-      }
-    )))
+        images: await this.productImage.findAllByProductId(product.id),
+      })),
+    );
 
-    return result as Product[];
+    return {
+      data: [...result] as Product[],
+      currentPage: page,
+      totalPages,
+      pageSize,
+    };
   }
 
-  async findOne(id: number | undefined, slug: string | undefined): Promise<Product> {
+  async findOne(
+    id: number | undefined,
+    slug: string | undefined,
+  ): Promise<Product> {
     const product = await this.product.findOne({
-      where: id && !slug ? { id: id, productSkus: !null } : { slug: slug, productSkus: !null },
+      where:
+        id && !slug
+          ? { id: id, productSkus: !null }
+          : { slug: slug, productSkus: !null },
       relations: {
         options: { optionValues: true },
         category: true,
@@ -151,7 +179,7 @@ export class ProductsService {
       throw new NotFoundException("Product doesn't exist");
     }
 
-    product.images = await this.productImage.findAllByProductId(product.id)
+    product.images = await this.productImage.findAllByProductId(product.id);
 
     return product;
   }
@@ -191,10 +219,10 @@ export class ProductsService {
     }
 
     //cập nhật ảnh
-    await this.productImage.removeByProductId(product.id)
+    await this.productImage.removeByProductId(product.id);
     await this.productImage.create({
       urls: updateProductInput.images || [],
-      producId: product.id
+      producId: product.id,
     });
 
     const updatedProduct = await this.product.save(product);

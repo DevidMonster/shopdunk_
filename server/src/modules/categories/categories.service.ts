@@ -1,12 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
-import {
-  FindOneOptions,
-  FindOptionsWhere,
-  Repository,
-  TreeRepository,
-} from 'typeorm';
+import { FindOptionsWhere, TreeRepository } from 'typeorm';
 import { Category } from './entities/category.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import slugify from 'slugify';
@@ -42,6 +37,8 @@ export class CategoriesService {
     id: number | undefined,
     slug: string | undefined,
     parentId: number | undefined,
+    page: number = 1,
+    pageSize: number = 12,
   ) {
     const whereCloud:
       | FindOptionsWhere<Category>
@@ -73,8 +70,8 @@ export class CategoriesService {
         if (category?.children) {
           category.children.map((child: Category) =>
             child.products.map((product: Product) => products.push(product)),
-          ),
-            (category.products = products);
+          );
+          category.products = products;
         }
         return category;
       });
@@ -97,13 +94,28 @@ export class CategoriesService {
 
     category.children.map((child: Category) =>
       child.products.map((product: Product) => products.push(product)),
-    ),
-      (category.products = products);
+    );
+
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const pageData = products.slice(startIndex, endIndex);
+
+    const totalPages = Math.ceil(products.length / pageSize);
+
+    category.products = pageData;
 
     if (!category) {
       throw new Error(`Category #${id} not found`);
     }
-    return category;
+
+    const response = {
+      ...category,
+      currentPage: page,
+      totalPages,
+      pageSize,
+    };
+
+    return response;
     // return `This action returns a #${id} category`;
   }
 

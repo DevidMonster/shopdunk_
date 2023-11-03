@@ -18,6 +18,10 @@ import { getToken } from "./api/auth";
 import { saveTokenAndUser } from "./slice/auth.slice";
 import ScrollToTop from "./component/ScrollToTop";
 import { setCartName, setItem } from "./slice/cart.slice";
+import UserList from "./pages/admin/User/UserList";
+import EditUser from "./pages/admin/User/EditUser";
+import AddUser from "./pages/admin/User/AddUser";
+import SearchResultPage from "./pages/client/SearchResultPage";
 // import "./App.css";
 
 function App() {
@@ -45,6 +49,7 @@ function App() {
           <Route path="register" element={<RegisterPage />} />
           <Route path=":category" element={<Product />} />
           <Route path="products/:id" element={<ProductDetail />} />
+          <Route path="search" element={<SearchResultPage />} />
         </Route>
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<DashBoard />}></Route>
@@ -53,6 +58,9 @@ function App() {
           <Route path="products/:id" element={<EditProduct />}></Route>
           <Route path="products_add" element={<AddProduct />}></Route>
           <Route path="categories" element={<CategoriesList />}></Route>
+          <Route path="users" element={<UserList />}></Route>
+          <Route path="users/edit/:id" element={<EditUser />}></Route>
+          <Route path="users/add" element={<AddUser />}></Route>
         </Route>
         <Route path="*" element={<NotFoundPage/>}></Route>
       </Routes>
