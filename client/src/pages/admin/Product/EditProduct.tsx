@@ -34,7 +34,7 @@ const EditProduct: React.FC = () => {
     const [fileListParent, setFileListParent] = useState<UploadFile[]>([]);
     const [skuData, setSkuData] = useState<any[]>([])
     const [updateProduct] = useMutation(UPDATE_PRODUCT)
-    const { data: productData, loading: prdLoading, refetch } = useQuery(GET_PRODUCT, { variables: { id: parseInt(id!) } })
+    const { data: productData, loading: prdLoading } = useQuery(GET_PRODUCT, { variables: { id: parseInt(id!) } })
     const { data, loading } = useQuery(GET_CATEGORIES)
     const [isLoading, setIsLoading] = useState(false)
     const [form] = Form.useForm()

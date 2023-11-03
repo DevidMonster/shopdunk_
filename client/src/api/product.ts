@@ -1,51 +1,57 @@
 import { gql } from "@apollo/client";
 
 export const GET_PRODUCTS = gql`
-query {
-  products {
-    id
-    name
-    price
-    discount
-    description
-    images {
+query Products($q: String!, $page: Int) {
+  products(q: $q, page: $page) {
+    currentPage
+    pageSize
+    totalPages
+    data {
       id
-      imageUrl
-      product {
-          id
-      }
-    }
-    options {
-      id
-      optionName
-      optionValues {
-        id
-        valueName
-      }
-    }
-    productSkus {
+      name
+      slug
+      price
+      discount
+      description
       images {
         id
         imageUrl
         product {
             id
         }
-        productSkus {
-            id
+      }
+      options {
+        id
+        optionName
+        optionValues {
+          id
+          valueName
         }
       }
-      skuValues {
+      productSkus {
+        images {
           id
-          optionValue {
-              valueName
+          imageUrl
+          product {
+              id
           }
+          productSkus {
+              id
+          }
+        }
+        skuValues {
+            id
+            optionValue {
+                valueName
+            }
+        }
+        id
+        price
+        quantity
+        sku
+        status
       }
-      id
-      price
-      quantity
-      sku
-      status
-  }
+    }
   }
 }
 `;

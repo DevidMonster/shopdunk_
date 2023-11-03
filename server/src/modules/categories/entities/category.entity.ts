@@ -16,6 +16,8 @@ import {
 @Tree('nested-set')
 @ObjectType()
 export class Category {
+  [x: string]: any;
+
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;

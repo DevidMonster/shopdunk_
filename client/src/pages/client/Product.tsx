@@ -3,8 +3,8 @@ import Banner from "../../component/client/Banner";
 import Navbar from "../../component/client/Nav";
 import Item from "../../component/client/Item";
 import Category from "../../component/client/Category";
-import { Pagination, Spin } from "antd";
-import { useParams } from "react-router-dom";
+import { Pagination, PaginationProps, Spin } from "antd";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Topic from "../../component/client/Topic";
 import Description from "../../component/client/Category-Description";
 import Comment from "../../component/client/Comment";
@@ -14,16 +14,25 @@ import { GET_CATEGORIE_SLUG } from "../../api/category";
 import { useEffect, useState } from "react";
 
 const Product = () => {
+  const [ page ] = useSearchParams()
   const { category } = useParams()
+  const [currentPage, setCurrentPage] = useState<number>(1)
   const [currentCategory, setCurrentCategory] = useState<any>({})
-  const { data, loading } = useQuery(GET_CATEGORIE_SLUG, { variables: { slug: category } })
-  console.log(data);
+  const { data, loading, refetch } = useQuery(GET_CATEGORIE_SLUG, { variables: { slug: category, page: currentPage } })
+  const navigate = useNavigate()
+
+  const onChange: PaginationProps['onChange'] = (page) => {
+    setCurrentPage(page);
+    refetch({ slug: category, page: page })
+    navigate('/'+category+'?page='+page)
+  };
 
   useEffect(() => {
     if (!loading && data?.categorySlug) {
       setCurrentCategory(data?.categorySlug)
+      setCurrentPage(parseInt(page.get('page')!) || 1)
     }
-  }, [data, loading])
+  }, [data, loading, page])
 
   return (
     <div>
@@ -56,7 +65,7 @@ const Product = () => {
                       <>
                         <Item items={currentCategory?.products} />
                         <div className="text-center py-10">
-                          <Pagination defaultCurrent={1} total={50} />
+                          <Pagination onChange={onChange} pageSize={currentCategory?.pageSize} defaultCurrent={currentCategory?.currentPage} total={currentCategory?.totalPages} />
                         </div>
                       </>
                     )}
