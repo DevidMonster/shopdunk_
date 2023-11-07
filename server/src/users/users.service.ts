@@ -42,10 +42,11 @@ export class UsersService {
 
   async updateUser(id: number, userInfo: UpdateUserInput): Promise<User> {
     const user = await this.user.findOne({ where: { id } });
-    userInfo.password = user.password;
 
-    if (userInfo.password !== null) {
+    if (userInfo.password) {
       userInfo.password = await bcrypt.hash(userInfo.password, 10);
+    } else {
+      userInfo.password = user.password;
     }
     await this.user.update(id, userInfo);
 
@@ -58,7 +59,14 @@ export class UsersService {
       throw new HttpException('Password is not match', HttpStatus.BAD_REQUEST);
     }
     delete userInfo.confirmPassword;
-    const user = this.user.create({ ...userInfo, password: hashPassword });
+    const user = this.user.create({
+      ...userInfo,
+      password: hashPassword,
+      avatar:
+        userInfo.avatar !== null || userInfo.avatar
+          ? userInfo.avatar
+          : 'https://firebasestorage.googleapis.com/v0/b/cloud-app-b7625.appspot.com/o/product_images%2Ft%E1%BA%A3i%20xu%E1%BB%91ng.png?alt=media&token=b03a15d3-3ad1-45ae-a982-75503482d8ec&_gl=1*182p1sq*_ga*MjAxMjA3Nzc0MS4xNjkzOTgzNjYw*_ga_CW55HF8NVT*MTY5ODY0MDU2Ny4xMy4xLjE2OTg2NDA2MzUuNTYuMC4w',
+    });
 
     await this.user.save(user);
 

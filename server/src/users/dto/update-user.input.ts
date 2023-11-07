@@ -19,15 +19,15 @@ export class UpdateUserInput {
   @Field({ nullable: true })
   password?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   phoneNumber?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   address?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsString()
   avatar?: string;
 
