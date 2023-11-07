@@ -1,61 +1,95 @@
-import React from "react";
 import Banner from "../../component/client/Banner";
-import Sub from "../../component/client/Subscribe";
+// import Sub from "../../component/client/Subscribe";
 import Navbar from "../../component/client/Nav";
 import Item from "../../component/client/Item";
 import Category from "../../component/client/Category";
-import { Pagination } from "antd";
-import { Link } from "react-router-dom";
+import { Pagination, PaginationProps, Spin } from "antd";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Topic from "../../component/client/Topic";
 import Description from "../../component/client/Category-Description";
 import Comment from "../../component/client/Comment";
 import FeedBack from "../../component/client/Feedback";
+import { useQuery } from "@apollo/client";
+import { GET_CATEGORIE_SLUG } from "../../api/category";
+import { useEffect, useState } from "react";
 
 const Product = () => {
+  const [ page ] = useSearchParams()
+  const { category } = useParams()
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [currentCategory, setCurrentCategory] = useState<any>({})
+  const { data, loading, refetch } = useQuery(GET_CATEGORIE_SLUG, { variables: { slug: category, page: currentPage } })
+  const navigate = useNavigate()
+
+  const onChange: PaginationProps['onChange'] = (page) => {
+    setCurrentPage(page);
+    refetch({ slug: category, page: page })
+    navigate('/'+category+'?page='+page)
+  };
+
+  useEffect(() => {
+    if (!loading && data?.categorySlug) {
+      setCurrentCategory(data?.categorySlug)
+      setCurrentPage(parseInt(page.get('page')!) || 1)
+    }
+  }, [data, loading, page])
+
   return (
     <div>
-      <div className="">
-        <div className="bg-white ">
-          <div className="max-w-7xl mx-auto">
-            <Navbar />
+      {Object.keys(currentCategory).length > 0 ? (
+        <div className="">
+          <div className="bg-white ">
+            <div className="max-w-7xl mx-auto">
+              <Navbar title={currentCategory.name} />
+            </div>
           </div>
-        </div>
-        <div className="bg-slate-50">
-          <div className="max-w-7xl mx-auto">
-            <div>
+          <div className="bg-slate-50">
+            <div className="max-w-7xl mx-auto">
               <div>
-                <div className="text-center text-4xl font-semibold mb-5">
-                  iphone
-                </div>
                 <div>
-                  <Banner />
-                </div>
-                <div className="my-3">
-                  <Category />
-                </div>
-                <div>
-                  <Item />
+                  <div className="text-center text-4xl font-semibold mb-5">
+                    {currentCategory?.name}
+                  </div>
+                  <div>
+                    <Banner />
+                  </div>
+                  <div className="my-3">
+                    <Category categoryType={currentCategory?.name} />
+                  </div>
+                  <div>
+                    {currentCategory?.products.length === 0 ? (
+                      <div className="flex justify-center items-center h-28">
+                        <p>No Item</p>
+                      </div>
+                    ) : (
+                      <>
+                        <Item items={currentCategory?.products} />
+                        <div className="text-center py-10">
+                          <Pagination onChange={onChange} pageSize={currentCategory?.pageSize} defaultCurrent={currentCategory?.currentPage} total={currentCategory?.totalPages} />
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="text-center py-10">
-                <Pagination defaultCurrent={1} total={50} />
+              <div>
+                <Topic />
               </div>
-            </div>
-            <div>
-              <Topic />
-            </div>
-            <div className="mt-10">
-              <Description />
-            </div>
-            <div className="my-10">
-              <FeedBack />
-            </div>
-            <div className="pb-10">
-              <Comment />
+              <div className="mt-10">
+                <Description description="" />
+              </div>
+              <div className="my-10">
+                <FeedBack somthing="" />
+              </div>
+              <div className="pb-10">
+                <Comment />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Spin />
+      )}
     </div>
   );
 };

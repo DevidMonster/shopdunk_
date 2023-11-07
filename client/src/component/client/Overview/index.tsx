@@ -4,6 +4,8 @@ import { AiOutlineDown, AiOutlinePlusCircle } from "react-icons/ai";
 import { Button, Form, Radio, Rate } from "antd";
 import { BsFillCheckCircleFill, BsGift } from "react-icons/bs";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../../slice/cart.slice";
 
 // const formItemLayout = {
 //   labelCol: { span: 6 },
@@ -20,11 +22,30 @@ type IProps = {
 
 const OverView = ({ onChangeImages, productSkus = [], productOptions = [], productName = '', productDiscount = 0 }: IProps) => {
   const [form] = Form.useForm()
-  const [currentSku, setCurrentSku] = useState({
+  const dispatch = useDispatch()
+  const [currentSku, setCurrentSku] = useState<any>({
     price: 0,
   })
   const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+    console.log("Received values of form: ", {
+      id: currentSku.id,
+      name: productName,
+      image: currentSku.images[0]?.imageUrl,
+      price: currentSku.price,
+      option: { ...values },
+      quantity: 1,
+      maxQuantity: currentSku.quantity,
+    });
+    const item = {
+      id: currentSku.id,
+      name: productName,
+      image: currentSku.images[0]?.imageUrl,
+      price: productDiscount === 0 ? currentSku.price : currentSku.price - (productDiscount / 100 * currentSku.price),
+      option: { ...values },
+      quantity: 1,
+      maxQuantity: currentSku.quantity,
+    }
+    dispatch(addItem(item))
   };
 
   useEffect(() => {
@@ -34,13 +55,12 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
         obj[option.optionName] = option.optionValues[0].valueName
       })
       form.setFieldsValue(obj)
-      onChangeImages(productSkus[0].images)
-      setCurrentSku(productSkus[0])
+      handleCurrentSku()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productOptions, productSkus])
 
-  const CurrentSku = () => {
+  const handleCurrentSku = () => {
     // console.log(productSkus.map((sku: any) => sku?.skuValues?.map((value: any) => value.optionValue.valueName).join(' | '),), Object.values(form?.getFieldsValue(true)).join(' | '))
     const skuValues = productSkus.map((sku: any) => sku?.skuValues?.map((value: any) => value.optionValue.valueName).join(' | '),)
     skuValues.forEach((value: any, index: number) => {
@@ -55,11 +75,14 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
 
   return (
     <div>
-      <div>
+      <div className="relative">
+        {currentSku.quantity === 0 && <div className="z-[999] flex justify-center items-center absolute top-0 left-[-105%] w-[calc(100vw*0.42)] h-[calc(100vw*0.42)] bg-[rgba(0,0,0,0.2)]">
+          <p className="text-white font-bold text-[50px]">Hết hàng</p>
+        </div>}
         <div className="text-2xl font-semibold">{productName}</div>
         <div className="flex justify-start items-center">
           <div className="mr-2 my-4">
-            <Rate allowHalf/>
+            <Rate allowHalf />
           </div>
           <div className="flex items-center text-blue-600">
             1 Đánh giá | <AiOutlinePlusCircle className="mx-2" /> So sánh
@@ -71,7 +94,7 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
         <div className="flex items-end my-4">
           {productDiscount > 0 ? (
             <>
-              <div className="text-2xl text-blue-600 mr-3">{(productDiscount / 100 * currentSku.price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
+              <div className="text-2xl text-blue-600 mr-3">{(currentSku.price - (productDiscount / 100 * currentSku.price)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
               <del className="text-xl text-gray-400">{currentSku.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</del>
             </>
           ) : (
@@ -90,7 +113,7 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
               (
                 productOptions.map((option: any, index: number) => (
                   <Form.Item initialValue={option.optionValues[0]} label={option.optionName} key={index} name={option.optionName}>
-                    <Radio.Group onChange={CurrentSku}>
+                    <Radio.Group onChange={handleCurrentSku}>
                       {option.optionName.toLowerCase() == "color" || option.optionName.toLowerCase() == "màu sắc"
                         ? option.optionValues.map((value: any, index: number) => (
                           <Radio.Button style={{ background: value.valueName.toLowerCase() }} className={`before:bg-transparent mr-2 rounded-full w-[32px] h-[32px] border-[2px]`} key={index + 'sub'} value={value.valueName}></Radio.Button>
@@ -158,17 +181,18 @@ const OverView = ({ onChangeImages, productSkus = [], productOptions = [], produ
             {/* <Form.Item> */}
             <div>
               <Button
-                className="w-full h-16 border rounded-xl text-xl bg-blue-600 text-white  py-3"
+                className={`${currentSku.quantity === 0 ? 'bg-gray-400' : ''} w-full h-16 border rounded-xl text-xl bg-blue-600 text-white  py-3`}
                 type="default"
                 htmlType="submit"
+                disabled={currentSku.quantity === 0}
               >
                 <div className="font-semibold my-auto">Mua ngay</div>
               </Button>
               <div className="grid grid-cols-2 gap-3 mt-3">
-                <Button className="font-semibold text-blue-600 border-blue-600 border-[2px] my-auto h-16 py-3 text-xl">
+                <Button disabled={currentSku.quantity === 0} className="font-semibold text-blue-600 border-blue-600 border-[2px] my-auto h-16 py-3 text-xl">
                   Trả góp
                 </Button>
-                <Button className="font-semibold text-blue-600 border-blue-600 border-[2px] my-auto h-16 py-3 text-xl">
+                <Button disabled={currentSku.quantity === 0} className="font-semibold text-blue-600 border-blue-600 border-[2px] my-auto h-16 py-3 text-xl">
                   Thu cũ đổi mới
                 </Button>
               </div>

@@ -13,11 +13,11 @@ import { GET_CATEGORIES } from '../../../api/category';
 const ProductAdmin = () => {
     const [valueSearch, setValueSearch] = useState<string>('');
     const [collapsed, setCollapsed] = useState(true);
-    const { data, loading } = useQuery(GET_PRODUCTS, { variables: { id: 1 } });
+    const { data, loading } = useQuery(GET_PRODUCTS, { variables: { q: '' } });
     const [deleteProduct] = useMutation(DELETE_PRODUCT)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const products = data?.products?.map((item: any, index: number) => ({ ...item, key: index })) || [];
+    const products = data?.products?.data?.map((item: any, index: number) => ({ ...item, key: index })) || [];
     
     const {
         token: { colorBgContainer }

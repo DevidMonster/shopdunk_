@@ -4,7 +4,8 @@ import {
   //  NotificationOutlined,
   //  UserOutlined,
    MenuFoldOutlined,
-   MenuUnfoldOutlined
+   MenuUnfoldOutlined,
+   UsergroupAddOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Layout, Menu, theme } from 'antd';
@@ -29,6 +30,10 @@ const items: MenuItem[] = [
    getItem('Sản phẩm cửa hàng', '2', <BsPhone />, [
       getItem(<Link to='/admin/products'>Sản phẩm</Link>, '3'),
       getItem(<Link to='/admin/products_add'>Tạo sản phẩm</Link>, '4')
+   ]),
+   getItem('Tài khoản', '12', <UsergroupAddOutlined />, [
+      getItem(<Link to='/admin/users'>Tài khoản</Link>, '13'),
+      getItem(<Link to='/admin/users/add'>Tạo tài khoản</Link>, '14')
    ]),
    getItem(<Link to='/admin/categories'>Danh sách danh mục</Link>, '5', <BsMenuApp/>),
   //  getItem(<Link to='/manage/orders'>Đơn hàng</Link>, 'sub1', <OrderIcon />),

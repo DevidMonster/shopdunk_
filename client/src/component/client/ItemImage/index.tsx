@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -17,7 +17,7 @@ type IProps = {
   images: any[]
 }
 
-import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper/modules";
 const ItemImage = ({ images = [] }: IProps) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<Swiperz | null>(null);
   return (
@@ -30,12 +30,14 @@ const ItemImage = ({ images = [] }: IProps) => {
         spaceBetween={10}
         navigation={true}
         thumbs={{ swiper: thumbsSwiper && !thumbsSwiper['destroyed'] ? thumbsSwiper : null }}
-        modules={[FreeMode, Navigation, Thumbs]}
+        modules={[FreeMode, Navigation, Thumbs, Autoplay]}
+        autoplay={{delay: 4000, waitForTransition: true}}
+        loop
         className="mySwiper2 border-1 rounded-[5px] overflow-hidden"
       >
         {images.length > 0 && images.map((image: { imageUrl: string }, index: number) => (
           <SwiperSlide key={index}>
-            <img src={image.imageUrl} alt="ảnh sản phẩm"/>
+            <img className="w-full h-full" src={image.imageUrl} alt="ảnh sản phẩm"/>
           </SwiperSlide>
         ))}
       </Swiper>
@@ -46,8 +48,11 @@ const ItemImage = ({ images = [] }: IProps) => {
         slidesPerView={4}
         freeMode={true}
         watchSlidesProgress={true}
-        modules={[FreeMode, Navigation, Thumbs]}
+        modules={[FreeMode, Navigation, Thumbs, Autoplay]}
+        autoplay={{delay: 4000, waitForTransition: true}}
+        loop
         className="mySwiper"
+        slideActiveClass="border-active"
       >
         {images.length > 0 && images.map((image: { imageUrl: string }, index: number) => (
           <SwiperSlide key={index}>

@@ -1,26 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import { BsBag } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
 import { GET_CATEGORIES } from "../../../api/category";
 import { useQuery } from "@apollo/client";
-import { Button, Dropdown, DropdownProps, Popover, Space } from "antd";
+import { Badge, Button, Drawer, Dropdown, DropdownProps, Popover, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearToken } from "../../../api/auth";
 import { deleteTokenAndUser } from "../../../slice/auth.slice";
+import { setCartName, setItem } from "../../../slice/cart.slice";
+import ItemsInCart from "../ItemsInCart";
+import SearchModal from "../SearchModal";
 
 const Header = () => {
   const { data, loading } = useQuery(GET_CATEGORIES)
   const user = useSelector((state: { authReducer: { user: any, accessToken: string } }) => state.authReducer.user)
   const dispatch = useDispatch()
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
   const handleLogout = async () => {
     await clearToken()
     dispatch(deleteTokenAndUser())
+    dispatch(setCartName('cart'))
+    dispatch(setItem())
+    navigate('/')
   }
 
+  const items = useSelector((state: { cartReducer: { items: any[] } }) => state.cartReducer.items)
   const renderCategories = (categories: { id: number, name: string, slug: string, children?: { id: number, name: string, slug: string }[] }[]): any[] => {
     return categories.map((category: { id: number, name: string, slug: string, children?: { id: number, name: string, slug: string }[] }, index: number) => {
       return {
@@ -70,12 +88,14 @@ const Header = () => {
             <input type="text" />
           </div>
           <div className="flex justify-around">
-            <Link to={`login`}>
-              <IoIosSearch className="text-[white] text-2xl" />
-            </Link>
-            <Link to={`login`}>
-              <BsBag className="text-[white]  text-2xl" />
-            </Link>
+            <SearchModal><IoIosSearch className="text-[rgb(255,255,255)] text-2xl" /></SearchModal>
+            <Badge count={items.length} size="small">
+              <button onClick={showDrawer}>
+                <BsBag className="text-[white]  text-2xl" />
+              </button>              </Badge>
+            <Drawer title={"Items in cart (" + items.length + ")"} placement="right" onClose={onClose} open={open}>
+              <ItemsInCart items={items} />
+            </Drawer>
             {Object.keys(user).length > 0 ? (
               <Popover arrow={false} content={() => (
                 <>
