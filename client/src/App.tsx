@@ -22,6 +22,7 @@ import UserList from "./pages/admin/User/UserList";
 import EditUser from "./pages/admin/User/EditUser";
 import AddUser from "./pages/admin/User/AddUser";
 import SearchResultPage from "./pages/client/SearchResultPage";
+import AccountDetail from "./pages/client/AccountDetait";
 // import "./App.css";
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
           <Route path=":category" element={<Product />} />
           <Route path="products/:id" element={<ProductDetail />} />
           <Route path="search" element={<SearchResultPage />} />
+          <Route path="account/:id" element={<AccountDetail />} />
         </Route>
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<DashBoard />}></Route>

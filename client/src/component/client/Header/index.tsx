@@ -87,7 +87,7 @@ const Header = () => {
           <div className="hidden">
             <input type="text" />
           </div>
-          <div className="flex justify-around">
+          <div className="flex justify-around items-center">
             <SearchModal><IoIosSearch className="text-[rgb(255,255,255)] text-2xl" /></SearchModal>
             <Badge count={items.length} size="small">
               <button onClick={showDrawer}>
@@ -98,9 +98,10 @@ const Header = () => {
             </Drawer>
             {Object.keys(user).length > 0 ? (
               <Popover arrow={false} content={() => (
-                <>
+                <div className="flex flex-col gap-2">
+                  <Link to={'/account/'+user?.id}><Button type="link">Tài khoản</Button></Link>
                   <Button className="text-red-500" onClick={handleLogout}>Đăng xuất</Button>
-                </>
+                </div>
               )}>
                 <div className="w-[30px] h-[30px] border-[1.5px] border-gray-400 rounded-full overflow-hidden">
                   <img className="w-full h-full" src={user.avatar || 'https://firebasestorage.googleapis.com/v0/b/cloud-app-b7625.appspot.com/o/product_images%2Ft%E1%BA%A3i%20xu%E1%BB%91ng.png?alt=media&token=b03a15d3-3ad1-45ae-a982-75503482d8ec&_gl=1*182p1sq*_ga*MjAxMjA3Nzc0MS4xNjkzOTgzNjYw*_ga_CW55HF8NVT*MTY5ODY0MDU2Ny4xMy4xLjE2OTg2NDA2MzUuNTYuMC4w'}></img>
