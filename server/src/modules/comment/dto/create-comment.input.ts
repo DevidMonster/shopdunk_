@@ -14,4 +14,7 @@ export class CreateCommentInput {
 
   @Field({ nullable: true })
   productId: number;
+
+  @Field(() => Int, { nullable: true })
+  parent_comment?: number;
 }
