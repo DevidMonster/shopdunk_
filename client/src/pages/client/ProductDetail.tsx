@@ -11,13 +11,16 @@ import { useParams } from "react-router-dom";
 import { Spin } from "antd";
 
 const ProductDetail = () => {
-  const { id } = useParams()
-  const [images, setImages] = useState<string[]>([])
-  const { data, loading } = useQuery(GET_PRODUCT_SLUG, { variables: { slug: id } })
+  const { id } = useParams();
+  const [images, setImages] = useState<string[]>([]);
+  const { data, loading } = useQuery(GET_PRODUCT_SLUG, {
+    variables: { slug: id },
+  });
 
   const handleSetSkuImages = (images: string[]) => {
-    setImages([...data?.productSlug.images as string, ...images])
-  }
+    setImages([...(data?.productSlug.images as string), ...images]);
+  };
+  // console.log("data", data);
 
   // Hàm để tìm và đẩy các đối tượng có id là 1 xuống cuối mảng
   // function moveObjectWithOptionColorToEnd(arr: any[]) {
@@ -37,7 +40,7 @@ const ProductDetail = () => {
     <div className="bg-[#f8f9fa]">
       <div className="max-w-7xl mx-auto">
         <div>
-          <Navbar title={data?.productSlug.name}/>
+          <Navbar title={data?.productSlug.name} />
         </div>
         {!loading && data?.productSlug ? (
           <>
@@ -56,17 +59,20 @@ const ProductDetail = () => {
               </div>
             </div>
             <div>
-              <div className="text-3xl font-semibold mb-5">Gợi ý phụ kiện đi kèm</div>
+              <div className="text-3xl font-semibold mb-5">
+                Gợi ý phụ kiện đi kèm
+              </div>
               <div>
-                <Item items={[]}/>
+                <Item items={[]} />
               </div>
               <div className="py-10">
-                <TabsItem description={data?.productSlug?.description}/>
+                <TabsItem dataProduct={data?.productSlug} />
               </div>
             </div>
           </>
-        ) : <Spin />}
-
+        ) : (
+          <Spin />
+        )}
       </div>
     </div>
   );

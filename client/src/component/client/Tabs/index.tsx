@@ -4,10 +4,10 @@ import Comment from "../Comment";
 import Description from "../Category-Description";
 
 type IProps = {
-  description: string;
-}
+  dataProduct: any;
+};
 
-const TabsItem = ({ description }: IProps) => {
+const TabsItem = ({ dataProduct }: IProps) => {
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -18,14 +18,14 @@ const TabsItem = ({ description }: IProps) => {
       label: "Mô tả sản phẩm",
       children: (
         <div>
-          <Description description={description}/>
+          <Description description={dataProduct?.description} />
         </div>
       ),
     },
     {
       key: "2",
-      label: "So sánh Iphone",
-      children: "Content of Tab Pane 2",
+      label: "So sánh ",
+      children: "",
     },
     {
       key: "3",
@@ -42,7 +42,7 @@ const TabsItem = ({ description }: IProps) => {
       label: "Hỏi đáp",
       children: (
         <div>
-          <Comment />
+          <Comment dataProductID={dataProduct?.id} />
         </div>
       ),
     },

@@ -23,6 +23,8 @@ import { FirebaseResolver } from './firebase/firebase.resolver';
 import { FirebaseService } from './firebase/firebase.service';
 import { ImageUploadResponse } from './firebase/entities/file.entity';
 import { FirebaseController } from './firebase/firebase.controller';
+import { FeedbackModule } from './modules/feedback/feedback.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -49,6 +51,11 @@ import { FirebaseController } from './firebase/firebase.controller';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true,
+      },
     }),
     UsersModule,
     ProductsModule,
@@ -58,9 +65,11 @@ import { FirebaseController } from './firebase/firebase.controller';
     ProductSkusModule,
     SkuValuesModule,
     ProductImagesModule,
+    FeedbackModule,
+    CommentModule,
   ],
   controllers: [AppController, FirebaseController],
   providers: [AppService, FirebaseResolver, FirebaseService],
   exports: [FirebaseService],
 })
-export class AppModule { }
+export class AppModule {}
