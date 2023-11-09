@@ -23,6 +23,12 @@ import EditUser from "./pages/admin/User/EditUser";
 import AddUser from "./pages/admin/User/AddUser";
 import SearchResultPage from "./pages/client/SearchResultPage";
 import AccountDetail from "./pages/client/AccountDetait";
+import Cart from "./pages/client/Cart";
+import ShoppingCart from "./pages/client/ShoppingCart";
+import BranchList from "./pages/admin/Branch/BranchList";
+import AddBranch from "./pages/admin/Branch/AddBranch";
+import EditBranch from "./pages/admin/Branch/EditBranch";
+import OrderList from "./pages/admin/Order/OrderList";
 // import "./App.css";
 
 function App() {
@@ -48,10 +54,12 @@ function App() {
           <Route index element={<Home />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
-          <Route path=":category" element={<Product />} />
           <Route path="products/:id" element={<ProductDetail />} />
           <Route path="search" element={<SearchResultPage />} />
-          <Route path="account/:id" element={<AccountDetail />} />
+          <Route path="account" element={<AccountDetail />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="shoppingCart/completed/:id" element={<ShoppingCart link="/account"/>} />
+          <Route path=":category" element={<Product />} />
         </Route>
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<DashBoard />}></Route>
@@ -63,6 +71,11 @@ function App() {
           <Route path="users" element={<UserList />}></Route>
           <Route path="users/edit/:id" element={<EditUser />}></Route>
           <Route path="users/add" element={<AddUser />}></Route>
+          <Route path="branch" element={<BranchList />}></Route>
+          <Route path="branch/add" element={<AddBranch />}></Route>
+          <Route path="branch/edit/:id" element={<EditBranch />}></Route>
+          <Route path="order" element={<OrderList />}></Route>
+          <Route path="order/:id" element={<ShoppingCart link="/admin/order"/>}></Route>
         </Route>
         <Route path="*" element={<NotFoundPage/>}></Route>
       </Routes>

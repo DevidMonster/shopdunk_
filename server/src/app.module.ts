@@ -23,6 +23,9 @@ import { FirebaseResolver } from './firebase/firebase.resolver';
 import { FirebaseService } from './firebase/firebase.service';
 import { ImageUploadResponse } from './firebase/entities/file.entity';
 import { FirebaseController } from './firebase/firebase.controller';
+import { BranchModule } from './branch/branch.module';
+import { OrdersModule } from './orders/orders.module';
+import { OrderDetailsModule } from './order_details/order_details.module';
 
 @Module({
   imports: [
@@ -58,6 +61,9 @@ import { FirebaseController } from './firebase/firebase.controller';
     ProductSkusModule,
     SkuValuesModule,
     ProductImagesModule,
+    BranchModule,
+    OrdersModule,
+    OrderDetailsModule,
   ],
   controllers: [AppController, FirebaseController],
   providers: [AppService, FirebaseResolver, FirebaseService],

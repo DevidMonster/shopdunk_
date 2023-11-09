@@ -99,7 +99,7 @@ const Header = () => {
             {Object.keys(user).length > 0 ? (
               <Popover arrow={false} content={() => (
                 <div className="flex flex-col gap-2">
-                  <Link to={'/account/'+user?.id}><Button type="link">Tài khoản</Button></Link>
+                  <Link to={'/account'}><Button type="link">Tài khoản</Button></Link>
                   <Button className="text-red-500" onClick={handleLogout}>Đăng xuất</Button>
                 </div>
               )}>

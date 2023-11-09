@@ -5,8 +5,10 @@ import {
   //  UserOutlined,
    MenuFoldOutlined,
    MenuUnfoldOutlined,
-   UsergroupAddOutlined
+   UsergroupAddOutlined,
+   ShopOutlined
 } from '@ant-design/icons';
+import { RiBillLine } from 'react-icons/ri';
 import type { MenuProps } from 'antd';
 import { Button, Layout, Menu, theme } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
@@ -36,6 +38,11 @@ const items: MenuItem[] = [
       getItem(<Link to='/admin/users/add'>Tạo tài khoản</Link>, '14')
    ]),
    getItem(<Link to='/admin/categories'>Danh sách danh mục</Link>, '5', <BsMenuApp/>),
+   getItem(<Link to='/admin/order'>Đơn hàng</Link>, '52', <RiBillLine />),
+   getItem('Chi nhánh', '120', <ShopOutlined />, [
+      getItem(<Link to='/admin/branch'>Các chi nhánh</Link>, '130'),
+      getItem(<Link to='/admin/branch/add'>Tạo chi nhánh</Link>, '140')
+   ]),
   //  getItem(<Link to='/manage/orders'>Đơn hàng</Link>, 'sub1', <OrderIcon />),
   //  getItem(<Link to='/manage/vouchers'>Mã khuyễn mãi</Link>, 'sub2', <TicketIcon />),
   //  getItem(<Link to='/manage/accounts'>Tài khoản</Link>, 'sub3', <UserOutlined />),

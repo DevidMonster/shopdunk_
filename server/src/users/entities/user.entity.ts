@@ -1,10 +1,12 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { Order } from 'src/orders/entities/order.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @ObjectType()
@@ -45,6 +47,10 @@ export class User {
   @Field({ defaultValue: true })
   @Column({ default: true })
   status!: boolean;
+
+  @Field(() => [Order])
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   @Field()
   @CreateDateColumn()
