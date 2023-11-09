@@ -6,8 +6,6 @@ import { Repository, TreeRepository } from 'typeorm';
 import { Comment } from './entities/comment.entity';
 import { Product } from '../products/entities/product.entity';
 import { log } from 'console';
-import { async } from 'rxjs';
-
 @Injectable()
 export class CommentService {
   constructor(
@@ -56,6 +54,7 @@ export class CommentService {
       where: { productId: id },
       relations: ['product'],
     });
+    log('allComment', allComment);
     if (allComment.length === 0) {
       throw new Error('Comment not found');
     }
@@ -67,8 +66,6 @@ export class CommentService {
       }
     });
     const cmtByProduct = await Promise.all(cmtByProductPromises);
-
-    console.log('cmtByProduct', await cmtByProduct);
     return cmtByProduct;
   }
 

@@ -16,7 +16,6 @@ import {
 
 @Entity()
 @Tree('closure-table')
-@Check(`"level" <= 2`)
 @ObjectType()
 export class Comment {
   // @Field(() => Int, { description: 'Example field (placeholder)' })
@@ -69,9 +68,10 @@ export class Comment {
     if (this.parent_comment) {
       if (this.parent_comment.parent_comment !== null) {
         this.level = this.parent_comment.level + 1;
-        if (this.level >= 2) {
-          this.level = 2;
-        }
+        // if (this.level >= 2) {
+        //   this.level = 2;
+        //   this.parent_comment = this.parent_comment.parent_comment;
+        // }
       } else {
         this.parent_comment = null;
       }
