@@ -1,19 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { message } from 'antd';
 export type ICartSlice = {
-   name: string;
-   email: string;
-   address: string;
-   phoneNumber: string;
    items: any[];
    totalPrice: number;
    cartName: string;
 };
 const initialState: ICartSlice = {
-   name: '',
-   email: '',
-   address: '',
-   phoneNumber: '',
    items: [],
    totalPrice: 0,
    cartName: 'cart'
@@ -22,6 +14,11 @@ const cartSlice = createSlice({
    name: 'cart',
    initialState,
    reducers: {
+      resetCart: (state) => {
+         state.items = []
+         localStorage.setItem(state.cartName, JSON.stringify([]))
+         state.totalPrice = 0
+      },
       setCartName: (state, action) => {
          state.cartName = action.payload || 'cart';
       },
@@ -105,10 +102,9 @@ const cartSlice = createSlice({
             0
          );
          state.items = nextCartItems;
-         message.success('Cập nhật sản phẩm thành công');
       }
    }
 });
-export const { addItem, removeFromCart, updateItem, removeAllProductFromCart, setItem, setCartName } =
+export const { resetCart, addItem, removeFromCart, updateItem, removeAllProductFromCart, setItem, setCartName } =
    cartSlice.actions;
 export default cartSlice.reducer;

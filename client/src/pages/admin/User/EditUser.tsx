@@ -55,7 +55,7 @@ function EditUser() {
         const response = fileList.length > 0 ? await uploadImages(fileList) : [data?.user?.avatar];
         await updateUser({
             variables: {
-                updateUserInput: { id: parseInt(id!), ...values, password: !values.passWord ? null : values.passWord, avatar: response[0] }
+                updateUserInput: { id: parseInt(id!), ...values, avatar: response[0] }
             }, refetchQueries: [{ query: GET_USERS }, { query: GET_USER, variables: { id: parseInt(id!) } }]
         });
         message.success('update success')

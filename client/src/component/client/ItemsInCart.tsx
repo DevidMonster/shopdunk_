@@ -15,7 +15,7 @@ function ItemsInCart({ items = [] }: IProps) {
     }
     return (
         <div>
-            {items.map((item: any, index: number) => (
+            {items.length > 0 ? items.map((item: any, index: number) => (
                 <div className="flex items-center justify-between mb-2" key={index}>
                     <div className="flex gap-2 items-center">
                         <img className="w-[60px] h-[60px]" src={item.image} alt={item.name} />
@@ -29,7 +29,11 @@ function ItemsInCart({ items = [] }: IProps) {
                         </Button>
                     </div>
                 </div>
-            ))}
+            )) : (
+                <div className="flex justify-center items-center p-2">
+                    <p>Giỏ hàng của bạn đang trống</p>
+                </div>
+            )}
             <div>
                 <Link to={'/cart'}><Button danger size="large" className="w-full">View Cart</Button></Link>
             </div>

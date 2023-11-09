@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Descriptions, Modal, Spin, Tabs, message } from 'antd';
 import { ArrowLeftOutlined, CameraOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
@@ -12,20 +12,23 @@ import { getToken } from '../../api/auth';
 import { useDispatch } from 'react-redux';
 import { saveTokenAndUser } from '../../slice/auth.slice';
 import { setCartName, setItem } from '../../slice/cart.slice';
+import Navbar from '../../component/client/Nav';
+import UserOrderList from '../../component/client/UserOrderHistory';
 
 
 
 function AccountDetail() {
     const [user, setUser] = useState<any>({})
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const getTokenAndUser = async () => {
-        console.log(1);
-        
         const { data } = await getToken()
         if (Object.keys(data?.data).length > 0) {
             setUser(data.data)
             dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data }))
             dispatch(setCartName(data.data.email || 'cart'))
+        } else {
+            navigate('/login')
         }
         dispatch(setItem())
     }
@@ -41,7 +44,6 @@ function AccountDetail() {
     const handleDataChange = (data: any) => {
         setFiles(data);
     };
-    console.log(files, 'file');
 
     const itemsDesc: DescriptionsProps['items'] = [
         {
@@ -81,7 +83,9 @@ function AccountDetail() {
         {
             key: '2',
             label: 'Đơn hàng',
-            children: 'Đơn hàng'
+            children: <div className='bg-white rounded-md p-5'>
+                <UserOrderList userId={parseInt(user?.id) || undefined}/>
+            </div>
         }
     ];
 
@@ -118,11 +122,14 @@ function AccountDetail() {
         console.log(key);
     };
 
-    console.log(files);
-
     return (
         <>
-            <div className='bg-[#f8f9fa] w-full flex justify-start p-5 items-center min-h-screen flex-col'>
+            <div className='bg-[#f8f9fa] w-full flex justify-start items-center min-h-screen flex-col'>
+                <div className="bg-white w-full">
+                    <div className="max-w-7xl mx-auto">
+                        <Navbar title={'account'} />
+                    </div>
+                </div>
                 <div className='w-[90%] rounded-lg mt-5'>
                     {Object.keys(user).length == 0 ? (
                         <Spin />
@@ -166,12 +173,12 @@ function AccountDetail() {
                                     </div>
                                 </div>
                                 <div className='self-end w-full md:w-auto'>
-                                    <EditAccount onRefetch={getTokenAndUser}  id={user?.id}>
+                                    <EditAccount onRefetch={getTokenAndUser} id={user?.id}>
                                         <Button className='text-white w-full bg-blue-400'>Chỉnh sửa tài khoản</Button>
                                     </EditAccount>
                                 </div>
                             </header>
-                            <div className='flex justify-between gap-4'>
+                            <div className='flex justify-between gap-4 flex-wrap'>
                                 <Tabs className='flex-1' defaultActiveKey='1' items={items} onChange={onChange} />
                                 <div className='pt-16'>
                                     <div className='bg-white p-5 w-[400px] rounded-md'>

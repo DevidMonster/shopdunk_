@@ -23,6 +23,9 @@ import { FirebaseResolver } from './firebase/firebase.resolver';
 import { FirebaseService } from './firebase/firebase.service';
 import { ImageUploadResponse } from './firebase/entities/file.entity';
 import { FirebaseController } from './firebase/firebase.controller';
+import { BranchModule } from './branch/branch.module';
+import { OrdersModule } from './orders/orders.module';
+import { OrderDetailsModule } from './order_details/order_details.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { CommentModule } from './modules/comment/comment.module';
 
@@ -65,6 +68,9 @@ import { CommentModule } from './modules/comment/comment.module';
     ProductSkusModule,
     SkuValuesModule,
     ProductImagesModule,
+    BranchModule,
+    OrdersModule,
+    OrderDetailsModule,
     FeedbackModule,
     CommentModule,
   ],
