@@ -26,6 +26,8 @@ import { FirebaseController } from './firebase/firebase.controller';
 import { BranchModule } from './branch/branch.module';
 import { OrdersModule } from './orders/orders.module';
 import { OrderDetailsModule } from './order_details/order_details.module';
+import { FeedbackModule } from './modules/feedback/feedback.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -52,6 +54,11 @@ import { OrderDetailsModule } from './order_details/order_details.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true,
+      },
     }),
     UsersModule,
     ProductsModule,
@@ -64,9 +71,11 @@ import { OrderDetailsModule } from './order_details/order_details.module';
     BranchModule,
     OrdersModule,
     OrderDetailsModule,
+    FeedbackModule,
+    CommentModule,
   ],
   controllers: [AppController, FirebaseController],
   providers: [AppService, FirebaseResolver, FirebaseService],
   exports: [FirebaseService],
 })
-export class AppModule { }
+export class AppModule {}
