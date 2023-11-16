@@ -12,12 +12,7 @@ import ProductDetail from "./pages/client/ProductDetail";
 import LoginPage from "./pages/client/Login";
 import RegisterPage from "./pages/client/Register";
 import NotFoundPage from "./pages/admin/NotFoundPage";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { getToken } from "./api/auth";
-import { saveTokenAndUser } from "./slice/auth.slice";
 import ScrollToTop from "./component/ScrollToTop";
-import { setCartName, setItem } from "./slice/cart.slice";
 import UserList from "./pages/admin/User/UserList";
 import EditUser from "./pages/admin/User/EditUser";
 import AddUser from "./pages/admin/User/AddUser";
@@ -29,22 +24,11 @@ import BranchList from "./pages/admin/Branch/BranchList";
 import AddBranch from "./pages/admin/Branch/AddBranch";
 import EditBranch from "./pages/admin/Branch/EditBranch";
 import OrderList from "./pages/admin/Order/OrderList";
+import Voucher from "./pages/admin/Voucher/Voucher";
 // import "./App.css";
 
 function App() {
-  const dispatch = useDispatch()
-  const getTokenAndUser = async() => {
-    const { data } = await getToken()
-    if(data) {
-      dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data}))
-      dispatch(setCartName(data.data.email || 'cart'))
-    }
-    dispatch(setItem())
-  }
-  useEffect(() => {
-    getTokenAndUser()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
   return (
     <>
       <ScrollToTop/>
@@ -76,6 +60,7 @@ function App() {
           <Route path="branch/edit/:id" element={<EditBranch />}></Route>
           <Route path="order" element={<OrderList />}></Route>
           <Route path="order/:id" element={<ShoppingCart link="/admin/order"/>}></Route>
+          <Route path="voucher" element={<Voucher/>}></Route>
         </Route>
         <Route path="*" element={<NotFoundPage/>}></Route>
       </Routes>

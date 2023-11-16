@@ -52,7 +52,7 @@ export class Comment {
   level: number;
 
   @Field(() => Date, { description: 'Thời gian bình luận' })
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createdAt: Date;
 
   @Field({ nullable: true })
