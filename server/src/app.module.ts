@@ -28,6 +28,7 @@ import { OrdersModule } from './orders/orders.module';
 import { OrderDetailsModule } from './order_details/order_details.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { DiscountCodeModule } from './modules/discount_code/discount_code.module';
 
 @Module({
   imports: [
@@ -73,6 +74,7 @@ import { CommentModule } from './modules/comment/comment.module';
     OrderDetailsModule,
     FeedbackModule,
     CommentModule,
+    DiscountCodeModule,
   ],
   controllers: [AppController, FirebaseController],
   providers: [AppService, FirebaseResolver, FirebaseService],

@@ -4,14 +4,19 @@ import CartTable from "../../component/client/CartTable";
 import CheckoutInfo from "../../component/client/CheckoutInfo";
 import { Button, Checkbox, Form, Input, Spin, message } from "antd";
 import { useEffect, useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_ORDER } from "../../api/order";
 import { resetCart } from "../../slice/cart.slice";
 import { useNavigate } from "react-router-dom";
+import { GET_DISCOUNT_BY_CODE } from "../../api/discount";
 
 function Cart() {
     const cart = useSelector((state: any) => state.cartReducer)
     const user = useSelector((state: any) => state.authReducer.user)
+    const [discountCode, setDiscountCode] = useState<any | null>(null)
+    const [value, setValue] = useState("")
+    const [code, setCode] = useState("")
+    const { data, loading, error } = useQuery(GET_DISCOUNT_BY_CODE, { variables: { code: code } })
     const [isChecked, setIsChecked] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [createOrder] = useMutation(CREATE_ORDER)
@@ -20,14 +25,26 @@ function Cart() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(Object.keys(user).length > 0) {
+        if (code.length > 0 && error?.message) {
+            message.error(error?.message);
+        }
+    }, [error, code]);
+
+    useEffect(() => {
+        if (Object.keys(user).length > 0) {
             form.setFieldsValue({
                 customerName: user.userName,
                 email: user.email,
                 phoneNumber: user.phoneNumber,
             })
         }
-    }, [user])
+    }, [form, user])
+
+    useEffect(() => {
+        if (data?.getDiscountCodeByCode && !loading) {
+            setDiscountCode(data?.getDiscountCodeByCode)
+        }
+    }, [data, loading])
 
     const onFinish = async (values: any) => {
         const items = cart.items.map((item: any) => {
@@ -42,7 +59,7 @@ function Cart() {
         })
         values.userId = Object.keys(user).length > 0 ? parseInt(user.id) : null
         values.items = items
-        values.totalAmount = cart.totalPrice
+        values.totalAmount = discountCode?.code ? cart.totalPrice - (cart.totalPrice * discountCode.discountPercent) / 100 : cart.totalPrice
         setIsLoading(true)
         try {
             const response = await createOrder({
@@ -82,14 +99,31 @@ function Cart() {
                             </div>
                             <div className="bg-white w-[350px] p-4 h-[400px] sticky top-2 rounded-lg shadow-md">
                                 <div className="flex">
-                                    <Input className="flex-1" placeholder="Mã giảm giá" size="large" />
-                                    <Button danger type="primary" size="large">Áp dụng</Button>
+                                    <Input value={value} onChange={(e) => setValue(e.target.value)} className="flex-1" placeholder="Mã giảm giá" size="large" />
+                                    <Button onClick={() => setCode(value)} danger type="primary" size="large">Áp dụng</Button>
                                 </div>
                                 <div className="grid grid-cols-2 gap-y-3 my-5">
                                     <h1 className="text-gray-400">Tổng phụ:</h1>
                                     <p className="font-bold text-right">{cart.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                    {discountCode?.code && (
+                                        <>
+                                            <h1 className="text-gray-400">Áp dụng mã: {discountCode.code}</h1>
+                                            <p className="font-bold text-right">Giảm {discountCode.discountPercent}%
+                                                <Button shape="round" size="small" danger className="mx-2" onClick={() => {
+                                                    setDiscountCode(null)
+                                                    setCode("")
+                                                }}>cancel</Button>
+                                            </p>
+
+                                        </>
+                                    )}
                                     <h1 className="font-bold text-lg">Tổng cộng:</h1>
-                                    <p className="font-bold text-blue-500 text-lg text-right">{cart.totalPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                    <p className="font-bold text-blue-500 text-lg text-right">{
+                                        discountCode?.code ?
+                                            (cart.totalPrice - (cart.totalPrice * discountCode.discountPercent) / 100).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+                                            :
+                                            (cart.totalPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
+                                    }</p>
                                 </div>
                                 <hr />
                                 <div className="py-5">
