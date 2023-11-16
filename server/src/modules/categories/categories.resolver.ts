@@ -4,11 +4,23 @@ import { Category } from './entities/category.entity';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
 import { ResponseCategory } from './dto/response-category';
+import {
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  UseGuards,
+} from '@nestjs/common';
+import { Roles } from 'src/decorators/roles/roles.decorator';
+import { AuthenticationGuard } from 'src/guard/authentication/authentication.guard';
+import { AuthortizationGuard } from 'src/guard/authorization/authorization.guard';
+import { Role } from 'src/types/role.enum';
 
 @Resolver(() => Category)
 export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Roles(Role.Admin)
+  @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Category)
   createCategory(
     @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
@@ -44,6 +56,9 @@ export class CategoriesResolver {
     return this.categoriesService.findOne(undefined, undefined, parentId);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Roles(Role.Admin)
+  @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Category)
   updateCategory(
     @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
@@ -54,6 +69,9 @@ export class CategoriesResolver {
     );
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Roles(Role.Admin)
+  @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Category)
   removeCategory(@Args('id', { type: () => Int }) id: number) {
     return this.categoriesService.remove(id);

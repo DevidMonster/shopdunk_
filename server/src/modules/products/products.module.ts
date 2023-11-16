@@ -14,6 +14,7 @@ import { ProductSkusService } from 'src/modules/product_skus/product_skus.servic
 import { SkuValuesService } from 'src/modules/sku_values/sku_values.service';
 import { Category } from '../categories/entities/category.entity';
 import { ProductImagesService } from '../product_images/product_images.service';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { ProductImagesService } from '../product_images/product_images.service';
       OptionValue,
       ProductSkus,
       SkuValue,
-      Category
+      Category,
+      User,
     ]),
   ],
   providers: [
