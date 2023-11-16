@@ -19,7 +19,7 @@ export class AuthenticationGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
     try {
-      const token = request.headers.authorization.split(' ')[1];
+      const token = request?.cookies?.refreshToken;
       if (!token) {
         throw new UnauthorizedException('You must be logged in');
       }
