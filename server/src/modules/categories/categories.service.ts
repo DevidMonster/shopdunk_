@@ -20,6 +20,7 @@ export class CategoriesService {
     const parent = await this.categoryRepository.findOne({
       where: { id: categoryNew.parentId },
     });
+    
     const newCategory = this.categoryRepository.create({
       name: categoryNew.name,
       parent: parent || null,
