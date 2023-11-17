@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { User } from 'src/users/entities/user.entity';
-import { Request } from 'express';
+import { GqlExecutionContext } from '@nestjs/graphql';
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
   constructor(
@@ -17,9 +17,11 @@ export class AuthenticationGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request: Request = context.switchToHttp().getRequest();
+    const ctx = GqlExecutionContext.create(context);
+    const { req: request } = ctx.getContext();
     try {
-      const token = request.headers.authorization.split(' ')[1];
+      const token = request?.cookies?.refreshToken;
+
       if (!token) {
         throw new UnauthorizedException('You must be logged in');
       }

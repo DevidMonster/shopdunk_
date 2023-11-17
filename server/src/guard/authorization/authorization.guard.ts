@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from 'src/decorators/roles/roles.decorator';
 import { Role } from 'src/types/role.enum';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class AuthortizationGuard implements CanActivate {
@@ -16,7 +17,8 @@ export class AuthortizationGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const ctx = GqlExecutionContext.create(context);
+    const { req: request } = ctx.getContext();
 
     const requiredRoles = this.reflector.getAllAndOverride<Role>(ROLES_KEY, [
       context.getHandler(),
