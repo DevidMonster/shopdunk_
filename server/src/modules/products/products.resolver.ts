@@ -4,11 +4,7 @@ import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { ResponseProduct } from './dto/response-product';
-import {
-  UseInterceptors,
-  ClassSerializerInterceptor,
-  UseGuards,
-} from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles/roles.decorator';
 import { AuthenticationGuard } from 'src/guard/authentication/authentication.guard';
 import { AuthortizationGuard } from 'src/guard/authorization/authorization.guard';
@@ -23,9 +19,6 @@ import { Role } from 'src/types/role.enum';
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
 
-  // @Roles(Role.Admin)
-  // @UseGuards(AuthenticationGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Product)
@@ -56,7 +49,6 @@ export class ProductsResolver {
     return this.productsService.findOne(undefined, slug);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Product)
@@ -69,7 +61,6 @@ export class ProductsResolver {
     );
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Product, { name: 'removeProduct' })

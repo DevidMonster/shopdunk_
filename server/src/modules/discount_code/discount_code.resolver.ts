@@ -2,11 +2,7 @@ import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { DiscountCodeService } from './discount_code.service';
 import { DiscountCode } from './entities/discount_code.entity';
 import { CreateDiscountCodeInput } from './dto/create-discount_code.input';
-import {
-  UseInterceptors,
-  ClassSerializerInterceptor,
-  UseGuards,
-} from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles/roles.decorator';
 import { AuthenticationGuard } from 'src/guard/authentication/authentication.guard';
 import { AuthortizationGuard } from 'src/guard/authorization/authorization.guard';
@@ -16,7 +12,6 @@ import { Role } from 'src/types/role.enum';
 export class DiscountCodeResolver {
   constructor(private readonly discountCodeService: DiscountCodeService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => DiscountCode)
@@ -38,7 +33,6 @@ export class DiscountCodeResolver {
     return this.discountCodeService.getDiscountCodeByCode(code);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Boolean)

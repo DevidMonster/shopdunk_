@@ -3,11 +3,7 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import {
-  UseInterceptors,
-  ClassSerializerInterceptor,
-  UseGuards,
-} from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles/roles.decorator';
 import { AuthenticationGuard } from 'src/guard/authentication/authentication.guard';
 import { AuthortizationGuard } from 'src/guard/authorization/authorization.guard';
@@ -17,7 +13,6 @@ import { Role } from 'src/types/role.enum';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => User)

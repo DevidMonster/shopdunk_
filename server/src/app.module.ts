@@ -29,6 +29,7 @@ import { OrderDetailsModule } from './order_details/order_details.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { DiscountCodeModule } from './modules/discount_code/discount_code.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -37,6 +38,10 @@ import { DiscountCodeModule } from './modules/discount_code/discount_code.module
     ConfigModule.forRoot({ envFilePath: '.env' }),
     MulterModule.register({
       dest: './uploads',
+    }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.SECRET_KEY,
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',

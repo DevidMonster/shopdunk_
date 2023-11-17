@@ -3,11 +3,7 @@ import { BranchService } from './branch.service';
 import { Branch } from './entities/branch.entity';
 import { CreateBranchInput } from './dto/create-branch.input';
 import { UpdateBranchInput } from './dto/update-branch.input';
-import {
-  UseInterceptors,
-  ClassSerializerInterceptor,
-  UseGuards,
-} from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles/roles.decorator';
 import { AuthenticationGuard } from 'src/guard/authentication/authentication.guard';
 import { AuthortizationGuard } from 'src/guard/authorization/authorization.guard';
@@ -17,7 +13,6 @@ import { Role } from 'src/types/role.enum';
 export class BranchResolver {
   constructor(private readonly branchService: BranchService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Branch)
@@ -37,7 +32,6 @@ export class BranchResolver {
     return this.branchService.findOne(id);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Branch)
@@ -47,7 +41,6 @@ export class BranchResolver {
     return this.branchService.update(updateBranchInput.id, updateBranchInput);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Branch)
