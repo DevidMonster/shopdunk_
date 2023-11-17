@@ -9,19 +9,21 @@ import { saveTokenAndUser } from "../slice/auth.slice";
 import { setCartName, setItem } from "../slice/cart.slice";
 
 const LayoutClient = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const getTokenAndUser = async () => {
-    const { data } = await getToken()
+    const { data } = await getToken();
     if (data) {
-      dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data }))
-      dispatch(setCartName(data.data.email || 'cart'))
+      dispatch(
+        saveTokenAndUser({ accessToken: data.accessToken, user: data.data })
+      );
+      dispatch(setCartName(data.data.email || "cart"));
     }
-    dispatch(setItem())
-  }
+    dispatch(setItem());
+  };
   useEffect(() => {
-    getTokenAndUser()
+    getTokenAndUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
   return (
     <div>
       <Header />

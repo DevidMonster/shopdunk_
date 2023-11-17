@@ -54,7 +54,6 @@ export class CommentService {
       where: { productId: id },
       relations: ['product'],
     });
-    log('allComment', allComment);
     if (allComment.length === 0) {
       throw new Error('Comment not found');
     }

@@ -29,6 +29,7 @@ import { OrderDetailsModule } from './order_details/order_details.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { DiscountCodeModule } from './modules/discount_code/discount_code.module';
+import { BannerModule } from './modules/banner/banner.module';
 
 @Module({
   imports: [
@@ -75,6 +76,7 @@ import { DiscountCodeModule } from './modules/discount_code/discount_code.module
     FeedbackModule,
     CommentModule,
     DiscountCodeModule,
+    BannerModule,
   ],
   controllers: [AppController, FirebaseController],
   providers: [AppService, FirebaseResolver, FirebaseService],

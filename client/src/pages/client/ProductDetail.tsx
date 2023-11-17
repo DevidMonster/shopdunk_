@@ -16,7 +16,8 @@ const ProductDetail = () => {
   const { data, loading } = useQuery(GET_PRODUCT_SLUG, {
     variables: { slug: id },
   });
-
+  
+  
   const handleSetSkuImages = (images: string[]) => {
     setImages([...(data?.productSlug.images as string), ...images]);
   };

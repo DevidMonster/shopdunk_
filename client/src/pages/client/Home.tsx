@@ -11,12 +11,12 @@ import { Skeleton } from "antd";
 
 
 const Home = () => {
-  const { data, loading } = useQuery(GET_CATEGORIES)
+  const { data, loading } = useQuery(GET_CATEGORIES)    
   return (
     <div>
       <div className="bg-[#f8f9fa]">
         <div className="max-w-full">
-          <Banner />
+          <Banner dataBanner={data?.categories[0]?.banners} />
         </div>
         <div className="max-w-7xl mx-auto py-16">
           <div className="grid grid-cols-3 gap-5 mb-16">

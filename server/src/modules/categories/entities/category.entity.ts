@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import slugify from 'slugify';
+import { Banner } from 'src/modules/banner/entities/banner.entity';
 import { Product } from 'src/modules/products/entities/product.entity';
 import {
   BeforeInsert,
@@ -49,6 +50,10 @@ export class Category {
   @Field(() => [Product])
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];
+
+  @Field(() => [Banner])
+  @OneToMany(() => Banner, (banner) => banner.category)
+  banners: Banner[];
 
   // @ManyToOne(() => Category, (parent) => parent.children, { nullable: true })
   // @Field(() => Category, { nullable: true })
