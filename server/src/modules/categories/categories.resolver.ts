@@ -4,11 +4,7 @@ import { Category } from './entities/category.entity';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
 import { ResponseCategory } from './dto/response-category';
-import {
-  UseInterceptors,
-  ClassSerializerInterceptor,
-  UseGuards,
-} from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Roles } from 'src/decorators/roles/roles.decorator';
 import { AuthenticationGuard } from 'src/guard/authentication/authentication.guard';
 import { AuthortizationGuard } from 'src/guard/authorization/authorization.guard';
@@ -18,7 +14,6 @@ import { Role } from 'src/types/role.enum';
 export class CategoriesResolver {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Category)
@@ -56,7 +51,6 @@ export class CategoriesResolver {
     return this.categoriesService.findOne(undefined, undefined, parentId);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Category)
@@ -69,7 +63,6 @@ export class CategoriesResolver {
     );
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Roles(Role.Admin)
   @UseGuards(AuthenticationGuard, AuthortizationGuard)
   @Mutation(() => Category)
