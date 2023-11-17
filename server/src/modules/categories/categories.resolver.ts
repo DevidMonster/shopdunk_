@@ -28,10 +28,16 @@ export class CategoriesResolver {
     return this.categoriesService.findAll();
   }
 
+  @Query(() => [Category], { name: 'categoriesNoTree' })
+  findAllNoTree() {
+    return this.categoriesService.findAllNoTree();
+  }
+
   @Query(() => Category, { name: 'category' })
   findOne(@Args('id', { type: () => Int }) id: number) {
     return this.categoriesService.findOne(id, undefined, undefined);
   }
+  
 
   @Query(() => ResponseCategory, { name: 'categorySlug' })
   findOneBySlug(

@@ -1,22 +1,27 @@
 import { gql } from "@apollo/client";
 
 export const GET_CATEGORIES = gql`
-query Categories {
-  categories {
-    id
-    name
-    slug
-    products {
-      description
+  query Categories {
+    categories {
       id
       name
       slug
-      images {
-        id
+      banners {
+        categoryId
         imageUrl
+        redirectUrl
       }
-    }
-    children {
+      products {
+        description
+        id
+        name
+        slug
+        images {
+          id
+          imageUrl
+        }
+      }
+      children {
         id
         name
         slug
@@ -33,6 +38,22 @@ query Categories {
           }
         }
         children {
+          id
+          name
+          slug
+          products {
+            description
+            id
+            price
+            discount
+            name
+            slug
+            images {
+              id
+              imageUrl
+            }
+          }
+          children {
             id
             name
             slug
@@ -49,64 +70,58 @@ query Categories {
               }
             }
             children {
+              id
+              name
+              slug
+              products {
+                description
                 id
+                price
+                discount
                 name
                 slug
-                products {
-                  description
+                images {
                   id
-                  price
-                  discount
-                  name
-                  slug
-                  images {
-                    id
-                    imageUrl
-                  }
+                  imageUrl
                 }
-                children {
-                    id
-                    name
-                    slug
-                    products {
-                      description
-                      id
-                      price
-                      discount
-                      name
-                      slug
-                      images {
-                        id
-                        imageUrl
-                      }
-                    }
-                }
+              }
             }
+          }
         }
+      }
     }
   }
-}
+`;
+
+export const GET_CATEGORIES_NO_TREE = gql`
+  query CategoriesNoTree {
+    categoriesNoTree {
+      id
+      name
+      slug
+    }
+  }
 `;
 
 export const GET_CATEGORIE_PARENT = gql`
-query CategoryParent ($parentId: Int!) { 
-  categoryParent(parentId: $parentId) {
-    id
-    name
-    slug
-    products {
-      description
+  query CategoryParent($parentId: Int!) {
+    categoryParent(parentId: $parentId) {
       id
-      price
-      discount
       name
       slug
-      images {
+      products {
+        description
         id
-        imageUrl
+        price
+        discount
+        name
+        slug
+        images {
+          id
+          imageUrl
+        }
       }
-    }
-    children {
+      children {
         id
         name
         slug
@@ -123,6 +138,22 @@ query CategoryParent ($parentId: Int!) {
           }
         }
         children {
+          id
+          name
+          slug
+          products {
+            description
+            id
+            price
+            discount
+            name
+            slug
+            images {
+              id
+              imageUrl
+            }
+          }
+          children {
             id
             name
             slug
@@ -139,70 +170,66 @@ query CategoryParent ($parentId: Int!) {
               }
             }
             children {
+              id
+              name
+              slug
+              products {
+                description
                 id
+                price
+                discount
                 name
                 slug
-                products {
-                  description
+                images {
                   id
-                  price
-                  discount
-                  name
-                  slug
-                  images {
-                    id
-                    imageUrl
-                  }
+                  imageUrl
                 }
-                children {
-                  id
-                  name
-                  slug
-                  products {
-                    description
-                    id
-                    price
-                    discount
-                    name
-                    slug
-                    images {
-                      id
-                      imageUrl
-                    }
-                  }
-                }
+              }
             }
+          }
         }
+      }
     }
   }
-}
-`
+`;
 
 export const GET_CATEGORIE_SLUG = gql`
-query CategorySlug ($slug: String!, $page: Int!) { 
-  categorySlug(slug: $slug, page: $page) {
-    id
-    name
-    slug
-    currentPage
-    totalPages
-    pageSize
-    products {
-      description
+  query CategorySlug($slug: String!, $page: Int!) {
+    categorySlug(slug: $slug, page: $page) {
       id
-      price
-      discount
       name
       slug
-      images {
+      currentPage
+      totalPages
+      pageSize
+      banners {
+        categoryId
         id
         imageUrl
+        redirectUrl
       }
-    }
-    children {
+      products {
+        description
+        id
+        price
+        discount
+        name
+        slug
+        images {
+          id
+          imageUrl
+        }
+      }
+      children {
         id
         name
         slug
+        banners {
+          categoryId
+          id
+          imageUrl
+          redirectUrl
+        }
         products {
           description
           id
@@ -216,6 +243,22 @@ query CategorySlug ($slug: String!, $page: Int!) {
           }
         }
         children {
+          id
+          name
+          slug
+          products {
+            description
+            id
+            price
+            discount
+            name
+            slug
+            images {
+              id
+              imageUrl
+            }
+          }
+          children {
             id
             name
             slug
@@ -232,64 +275,48 @@ query CategorySlug ($slug: String!, $page: Int!) {
               }
             }
             children {
+              id
+              name
+              slug
+              products {
+                description
                 id
+                price
+                discount
                 name
                 slug
-                products {
-                  description
+                images {
                   id
-                  price
-                  discount
-                  name
-                  slug
-                  images {
-                    id
-                    imageUrl
-                  }
+                  imageUrl
                 }
-                children {
-                  id
-                  name
-                  slug
-                  products {
-                    description
-                    id
-                    price
-                    discount
-                    name
-                    slug
-                    images {
-                      id
-                      imageUrl
-                    }
-                  }
-                }
+              }
             }
+          }
         }
+      }
     }
   }
-}
-`
+`;
 
 export const GET_CATEGORIE = gql`
-query Category ($id: Int!) {
-  category(id: $id) {
-    id
-    name
-    slug
-    products {
-      description
+  query Category($id: Int!) {
+    category(id: $id) {
       id
-      price
-      discount
       name
       slug
-      images {
+      products {
+        description
         id
-        imageUrl
+        price
+        discount
+        name
+        slug
+        images {
+          id
+          imageUrl
+        }
       }
-    }
-    children {
+      children {
         id
         name
         slug
@@ -306,6 +333,22 @@ query Category ($id: Int!) {
           }
         }
         children {
+          id
+          name
+          slug
+          products {
+            description
+            id
+            price
+            discount
+            name
+            slug
+            images {
+              id
+              imageUrl
+            }
+          }
+          children {
             id
             name
             slug
@@ -322,70 +365,54 @@ query Category ($id: Int!) {
               }
             }
             children {
+              id
+              name
+              slug
+              products {
+                description
                 id
+                price
+                discount
                 name
                 slug
-                products {
-                  description
+                images {
                   id
-                  price
-                  discount
-                  name
-                  slug
-                  images {
-                    id
-                    imageUrl
-                  }
+                  imageUrl
                 }
-                children {
-                  id
-                  name
-                  slug
-                  products {
-                    description
-                    id
-                    price
-                    discount
-                    name
-                    slug
-                    images {
-                      id
-                      imageUrl
-                    }
-                  }
-                }
+              }
             }
+          }
         }
+      }
     }
   }
-}
 `;
 
 export const CREATE_CATEGORY = gql`
-mutation CreateCategory ($createCategoryInput: CreateCategoryInput!) {
-  createCategory(createCategoryInput: $createCategoryInput) {
+  mutation CreateCategory($createCategoryInput: CreateCategoryInput!) {
+    createCategory(createCategoryInput: $createCategoryInput) {
       id
       name
       slug
+    }
   }
-}
-`
+`;
 
 export const UPDATE_CATEGORY = gql`
-mutation UpdateCategory($updateCategoryInput: UpdateCategoryInput!) {
-  updateCategory(updateCategoryInput: $updateCategoryInput) {
+  mutation UpdateCategory($updateCategoryInput: UpdateCategoryInput!) {
+    updateCategory(updateCategoryInput: $updateCategoryInput) {
       id
       name
       slug
+    }
   }
-}
-`
+`;
 
 export const DELETE_CATEGORY = gql`
-mutation RemoveCategory ($id: Int!) {
-  removeCategory(id: $id) {
+  mutation RemoveCategory($id: Int!) {
+    removeCategory(id: $id) {
       name
       slug
+    }
   }
-}
-`
+`;

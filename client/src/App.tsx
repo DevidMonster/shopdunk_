@@ -25,6 +25,10 @@ import AddBranch from "./pages/admin/Branch/AddBranch";
 import EditBranch from "./pages/admin/Branch/EditBranch";
 import OrderList from "./pages/admin/Order/OrderList";
 import Voucher from "./pages/admin/Voucher/Voucher";
+import BannerList from "./pages/admin/Banner/BannerList";
+import AddBanner from "./pages/admin/Banner/AddBanner";
+import EditBanner from "./pages/admin/Banner/EditBanner";
+import ListComment from "./pages/admin/Comment/ListComment";
 // import "./App.css";
 
 function App() {
@@ -61,6 +65,10 @@ function App() {
           <Route path="order" element={<OrderList />}></Route>
           <Route path="order/:id" element={<ShoppingCart link="/admin/order"/>}></Route>
           <Route path="voucher" element={<Voucher/>}></Route>
+          <Route path="banner" element={<BannerList/>}></Route>
+          <Route path="banner/add" element={<AddBanner/>}></Route>
+          <Route path="banner/:id" element={<EditBanner/>}></Route>
+          <Route path="comment" element={<ListComment/>}></Route>
         </Route>
         <Route path="*" element={<NotFoundPage/>}></Route>
       </Routes>

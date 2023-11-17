@@ -14,26 +14,37 @@ import { GET_CATEGORIE_SLUG } from "../../api/category";
 import { useEffect, useState } from "react";
 
 const Product = () => {
-  const [ page ] = useSearchParams()
-  const { category } = useParams()
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [currentCategory, setCurrentCategory] = useState<any>({})
-  const { data, loading, refetch } = useQuery(GET_CATEGORIE_SLUG, { variables: { slug: category, page: currentPage } })
-  const navigate = useNavigate()
+  const [page] = useSearchParams();
+  const { category } = useParams();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentCategory, setCurrentCategory] = useState<any>({});
+  const { data, loading, refetch } = useQuery(GET_CATEGORIE_SLUG, {
+    variables: { slug: category, page: currentPage },
+  });
+  const navigate = useNavigate();
 
-  const onChange: PaginationProps['onChange'] = (page) => {
+  const onChange: PaginationProps["onChange"] = (page) => {
     setCurrentPage(page);
-    refetch({ slug: category, page: page })
-    navigate('/'+category+'?page='+page)
+    refetch({ slug: category, page: page });
+    navigate("/" + category + "?page=" + page);
   };
 
   useEffect(() => {
     if (!loading && data?.categorySlug) {
-      setCurrentCategory(data?.categorySlug)
-      setCurrentPage(parseInt(page.get('page')!) || 1)
+      setCurrentCategory(data?.categorySlug);
+      setCurrentPage(parseInt(page.get("page")!) || 1);
     }
-  }, [data, loading, page])
+  }, [data, loading, page]);
+  // const dataBannerParent = data?.categorySlug?.banners
 
+  const dataBanner =  data?.categorySlug?.children?.map((item :any) => {
+    if(item?.banners.length == 0){
+      return null;
+    }
+    if (item?.banners.length != 0) {      
+      return item?.banners[0];
+    }
+  });
   return (
     <div>
       {Object.keys(currentCategory).length > 0 ? (
@@ -51,7 +62,7 @@ const Product = () => {
                     {currentCategory?.name}
                   </div>
                   <div>
-                    <Banner />
+                    <Banner dataBanner={dataBanner} />
                   </div>
                   <div className="my-3">
                     <Category categoryType={currentCategory?.name} />
@@ -65,7 +76,12 @@ const Product = () => {
                       <>
                         <Item items={currentCategory?.products} />
                         <div className="text-center py-10">
-                          <Pagination onChange={onChange} pageSize={currentCategory?.pageSize} defaultCurrent={currentCategory?.currentPage} total={currentCategory?.totalPages} />
+                          <Pagination
+                            onChange={onChange}
+                            pageSize={currentCategory?.pageSize}
+                            defaultCurrent={currentCategory?.currentPage}
+                            total={currentCategory?.totalPages}
+                          />
                         </div>
                       </>
                     )}
@@ -81,9 +97,7 @@ const Product = () => {
               <div className="my-10">
                 <FeedBack somthing="" />
               </div>
-              <div className="pb-10">
-                <Comment />
-              </div>
+              <div className="pb-10">{/* <Comment /> */}</div>
             </div>
           </div>
         </div>

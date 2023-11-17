@@ -30,7 +30,13 @@ export class CategoriesService {
 
   async findAll() {
     return this.categoryRepository.findTrees({
-      relations: ['products', 'products.images'],
+      relations: ['products', 'products.images', 'banners'],
+    });
+  }
+
+  async findAllNoTree() {
+    return this.categoryRepository.find({
+      relations: ['products', 'products.images', 'banners'],
     });
   }
 
@@ -57,13 +63,13 @@ export class CategoriesService {
       whereCloud.parent = { id: parentId };
       const categoriesRoot = await this.categoryRepository.find({
         where: whereCloud,
-        relations: { products: { images: true } },
+        relations: { products: { images: true }, banners: true },
       });
       const categories = categoriesRoot.map(async (root) => {
         const category = await this.categoryRepository.findDescendantsTree(
           root,
           {
-            relations: ['products', 'products.images'],
+            relations: ['products', 'products.images', 'banners'],
           },
         );
 
@@ -82,13 +88,13 @@ export class CategoriesService {
 
     const categoryRoot = await this.categoryRepository.findOne({
       where: whereCloud,
-      relations: { products: { images: true } },
+      relations: { products: { images: true }, banners: true },
     });
 
     const category = await this.categoryRepository.findDescendantsTree(
       categoryRoot,
       {
-        relations: ['products', 'products.images'],
+        relations: ['products', 'products.images', 'banners'],
       },
     );
     const products = [...category.products];

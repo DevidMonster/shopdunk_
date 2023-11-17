@@ -29,6 +29,7 @@ import { OrderDetailsModule } from './order_details/order_details.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { DiscountCodeModule } from './modules/discount_code/discount_code.module';
+import { BannerModule } from './modules/banner/banner.module';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
@@ -80,6 +81,7 @@ import { JwtModule } from '@nestjs/jwt';
     FeedbackModule,
     CommentModule,
     DiscountCodeModule,
+    BannerModule,
   ],
   controllers: [AppController, FirebaseController],
   providers: [AppService, FirebaseResolver, FirebaseService],
