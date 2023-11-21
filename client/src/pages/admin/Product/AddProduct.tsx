@@ -122,7 +122,7 @@ const AddProduct: React.FC = () => {
                 }
             }
             ,
-            refetchQueries: [{ query: GET_PRODUCTS }, { query: GET_CATEGORIES }]
+            refetchQueries: [{ query: GET_PRODUCTS, variables: { q: '' } }, { query: GET_CATEGORIES }]
         })
         setIsLoading(false)
 
