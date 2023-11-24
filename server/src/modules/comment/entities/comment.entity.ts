@@ -2,7 +2,6 @@ import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Product } from 'src/modules/products/entities/product.entity';
 import {
   BeforeInsert,
-  Check,
   Column,
   CreateDateColumn,
   Entity,
@@ -49,6 +48,7 @@ export class Comment {
   parent_comment: Comment;
 
   @TreeLevelColumn()
+  @Column({ default: 0, nullable: true })
   level: number;
 
   @Field(() => Date, { description: 'Thời gian bình luận' })

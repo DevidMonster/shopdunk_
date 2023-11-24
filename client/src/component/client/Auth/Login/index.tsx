@@ -12,11 +12,15 @@ const Login = () => {
   const onFinish = async (values: any) => {
     console.log("Success:", values);
     const { data } = await loginApi(values);
-    if(data?.data) {
+    if (data?.data) {
       dispatch(saveTokenAndUser({ accessToken: data.accessToken, user: data.data }))
       dispatch(setCartName(data.data.email || 'cart'))
       dispatch(setItem())
-      naviagte('/')
+      if (data.data.role === 'admin') {
+        naviagte('/admin')
+      } else {
+        naviagte('/')
+      }
       message.success('login success')
     }
   };
@@ -47,7 +51,7 @@ const Login = () => {
           <div>Email</div>
           <Form.Item
             name="email"
-            rules={[{ required: true, message: "Please input your email!" }, { type: "email", message: 'Invalid email'}]}
+            rules={[{ required: true, message: "Please input your email!" }, { type: "email", message: 'Invalid email' }]}
           >
             <Input className="h-10" />
           </Form.Item>

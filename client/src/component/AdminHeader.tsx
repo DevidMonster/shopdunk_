@@ -1,6 +1,12 @@
 import { DownOutlined, SearchOutlined } from '@ant-design/icons';
-import { Dropdown, Input, Layout, MenuProps } from 'antd';
+import { Button, Dropdown, Input, Layout, MenuProps, Popover } from 'antd';
 import { useState } from 'react';
+import { AiOutlineUser } from 'react-icons/ai';
+import { Link, useNavigate } from 'react-router-dom';
+import { clearToken } from '../api/auth';
+import { deleteTokenAndUser } from '../slice/auth.slice';
+import { setCartName, setItem } from '../slice/cart.slice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { Header } = Layout;
 
@@ -22,7 +28,17 @@ const items: MenuProps['items'] = [
    }
 ];
 const HeaderAdmin = () => {
-   const [triggerDrop, setTriggerDrop] = useState(false);
+   // const [triggerDrop, setTriggerDrop] = useState(false);
+   const user = useSelector((state: { authReducer: { user: any, accessToken: string } }) => state.authReducer.user)
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
+   const handleLogout = async () => {
+      await clearToken()
+      dispatch(deleteTokenAndUser())
+      dispatch(setCartName('cart'))
+      dispatch(setItem())
+      navigate('/')
+   }
    return (
       <Header
          style={{
@@ -41,25 +57,25 @@ const HeaderAdmin = () => {
             <SearchOutlined width={'1.5rem'} height={'1.5rem'} color='rgba(0,0,0,0.2)' />
             <Input className='outline-none border-none' placeholder='Tìm kiếm' />
          </div>
-         <div className='max-w-[50%] flex justify-end items-center gap-3'>
-            <div className='flex justify-around items-center gap-2 border-[1px] border-[rgba(0,0,0,0.1)] p-2 rounded-lg overflow-hidden h-[3rem] w-[50%]'>
-               <img src='https://picsum.photos/100/100' alt='avatar' className='rounded-md object-cover w-[20%]' />
-               <Dropdown
-                  menu={{ items }}
-                  trigger={['click']}
-                  onOpenChange={(open) => {
-                     setTriggerDrop(open);
-                  }}
-               >
-                  <div className='flex-1 flex justify-start gap-2 items-center cursor-pointer p-1 text-center'>
-                     <span className='font-medium text-sm text-[#6b6765] '>Admin</span>
-                     <div className={triggerDrop ? 'round-up' : 'round-down'}>
-                        {' '}
-                        <DownOutlined color='#6b6765' size={1} />
-                     </div>
+         <div className='flex justify-end items-center gap-3 h-[80%]'>
+            {Object.keys(user).length > 0 ? (
+               <Popover arrow={false} content={() => (
+                  <div className="flex flex-col gap-2">
+                     <Button className="text-red-500" onClick={handleLogout}>Đăng xuất</Button>
                   </div>
-               </Dropdown>
-            </div>
+               )}>
+                  <div className='border-[1px] border-[rgba(0,0,0,0.1)] p-2 rounded-lg flex gap-2 items-center justify-between overflow-hidden h-full'>
+                     <div className="w-[30px] h-[30px] border-[1.5px] border-gray-400 rounded-full overflow-hidden">
+                        <img className="w-full h-full" src={user.avatar || 'https://firebasestorage.googleapis.com/v0/b/cloud-app-b7625.appspot.com/o/product_images%2Ft%E1%BA%A3i%20xu%E1%BB%91ng.png?alt=media&token=b03a15d3-3ad1-45ae-a982-75503482d8ec&_gl=1*182p1sq*_ga*MjAxMjA3Nzc0MS4xNjkzOTgzNjYw*_ga_CW55HF8NVT*MTY5ODY0MDU2Ny4xMy4xLjE2OTg2NDA2MzUuNTYuMC4w'}></img>
+                     </div>
+                     <p>{user.userName}</p>
+                  </div>
+               </Popover>
+            ) : (
+               <Link to={'/login'}>
+                  <AiOutlineUser className="text-[white]  text-2xl" />
+               </Link>
+            )}
             {/* <div className='w-[3rem] h-[3rem] flex justify-center items-center rounded-xl p-2 bg-[#dfdede] cursor-pointer'>
                <BellIcon />
             </div>

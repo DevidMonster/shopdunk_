@@ -105,7 +105,7 @@ const LayoutAdmin = () => {
         dispatch(setCartName(data.data.email || "cart"));
       } else {
         message.warning("You are not logged in");
-        navigate("/");
+        navigate("/login");
       }
     } else if (Object.keys(auth.user).length > 0) {
       if (auth.user.role !== "admin") {
