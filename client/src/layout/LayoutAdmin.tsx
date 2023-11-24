@@ -66,11 +66,11 @@ const items: MenuItem[] = [
     getItem(<Link to="/admin/branch">Các chi nhánh</Link>, "130"),
     getItem(<Link to="/admin/branch/add">Tạo chi nhánh</Link>, "140"),
   ]),
-  getItem(
-    <Link to="/admin/comment">Bình luận</Link>,
-    "141",
-    <FaRegComments />
-  ),
+  // getItem(
+  //   <Link to="/admin/comment">Bình luận</Link>,
+  //   "141",
+  //   <FaRegComments />
+  // ),
 
   //  getItem(<Link to='/manage/orders'>Đơn hàng</Link>, 'sub1', <OrderIcon />),
   //  getItem(<Link to='/manage/vouchers'>Mã khuyễn mãi</Link>, 'sub2', <TicketIcon />),
