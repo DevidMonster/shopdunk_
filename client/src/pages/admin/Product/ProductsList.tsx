@@ -18,7 +18,7 @@ const ProductAdmin = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const products = data?.products?.data?.map((item: any, index: number) => ({ ...item, key: index })) || [];
-    
+
     const {
         token: { colorBgContainer }
     } = theme.useToken();
@@ -69,7 +69,7 @@ const ProductAdmin = () => {
                             <Column title='Giá' dataIndex='price' key='price' width={150} />
                             {/* <Column title='Danh mục lớn' dataIndex='category' key='category' width={150} /> */}
                             <Column title='Miêu tả' dataIndex='description' key='description' width={150}
-                                render={(description) => <div style={{WebkitLineClamp: '4', wordBreak: 'break-word', overflowWrap: 'break-word',textOverflow: 'ellipsis', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical'}} dangerouslySetInnerHTML={{ __html: description }}></div>}
+                                render={(description) => <div style={{ WebkitLineClamp: '4', wordBreak: 'break-word', overflowWrap: 'break-word', textOverflow: 'ellipsis', overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical' }} dangerouslySetInnerHTML={{ __html: description }}></div>}
                             />
                             <Column
                                 width={150}
@@ -78,16 +78,16 @@ const ProductAdmin = () => {
                                 dataIndex={'id'}
                                 render={(id) => (
                                     <>
-                                        <Popconfirm 
-                                            title="Are you sure to delete this product?" 
-                                            onCancel={() => message.error('Cancel')} 
+                                        <Popconfirm
+                                            title="Are you sure to delete this product?"
+                                            onCancel={() => message.error('Cancel')}
                                             okButtonProps={{ className: 'bg-blue-400' }}
                                             onConfirm={async () => {
                                                 await deleteProduct({
                                                     variables: {
                                                         id: parseInt(id),
                                                     },
-                                                    refetchQueries: [{ query: GET_PRODUCTS }, { query: GET_CATEGORIES }]
+                                                    refetchQueries: [{ query: GET_PRODUCTS, variables: { q: '' }}, { query: GET_CATEGORIES }]
                                                 })
                                                 message.success('Product deleted successfully')
                                             }}

@@ -48,7 +48,7 @@ const items: MenuItem[] = [
   getItem(<Link to="/admin/banner">Banner</Link>, "56", <FaRegImages />),
   getItem("Sản phẩm cửa hàng", "2", <BsPhone />, [
     getItem(<Link to="/admin/products">Sản phẩm</Link>, "3"),
-    getItem(<Link to="/admin/products/add">Tạo sản phẩm</Link>, "4"),
+    getItem(<Link to="/admin/products_add">Tạo sản phẩm</Link>, "4"),
   ]),
   getItem("Tài khoản", "12", <UsergroupAddOutlined />, [
     getItem(<Link to="/admin/users">Tài khoản</Link>, "13"),
@@ -105,7 +105,7 @@ const LayoutAdmin = () => {
         dispatch(setCartName(data.data.email || "cart"));
       } else {
         message.warning("You are not logged in");
-        navigate("/");
+        navigate("/login");
       }
     } else if (Object.keys(auth.user).length > 0) {
       if (auth.user.role !== "admin") {

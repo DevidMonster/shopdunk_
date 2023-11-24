@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, TreeRepository } from 'typeorm';
 import { Comment } from './entities/comment.entity';
 import { Product } from '../products/entities/product.entity';
-import { log } from 'console';
+
 @Injectable()
 export class CommentService {
   constructor(
@@ -65,7 +65,34 @@ export class CommentService {
       }
     });
     const cmtByProduct = await Promise.all(cmtByProductPromises);
-    return cmtByProduct;
+    const setChildrenEqualLevel2Array = (comments: Comment[]): Comment[] => {
+      const response: Comment[] = [];
+      comments.map((comment: Comment) => {
+        if (comment?.children?.length > 0) {
+          const child: Comment[] = setChildrenEqualLevel2Array(
+            comment.children,
+          );
+          child.map((cmtChild: Comment) => response.push(cmtChild));
+        }
+        response.push(comment);
+      });
+      return response;
+    };
+    const result = cmtByProduct.map((cmt: Comment) => {
+      return {
+        ...cmt,
+        children: cmt.children.map((cmtLevel1: Comment) => {
+          return {
+            ...cmtLevel1,
+            children: setChildrenEqualLevel2Array(cmtLevel1.children).sort(
+              (a: Comment, b: Comment) =>
+                a.createdAt.getTime() - b.createdAt.getTime(),
+            ),
+          };
+        }),
+      };
+    });
+    return result;
   }
 
   update(id: number, updateCommentInput: UpdateCommentInput) {
