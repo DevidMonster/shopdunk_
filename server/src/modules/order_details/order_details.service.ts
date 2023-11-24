@@ -3,7 +3,7 @@ import { CreateOrderDetailInput } from './dto/create-order_detail.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderDetail } from './entities/order_detail.entity';
 import { Repository } from 'typeorm';
-import { Order } from 'src/orders/entities/order.entity';
+import { Order } from 'src/modules/orders/entities/order.entity';
 // import { UpdateOrderDetailInput } from './dto/update-order_detail.input';
 
 @Injectable()

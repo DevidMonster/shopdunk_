@@ -19,7 +19,7 @@ const BannerList = (props: Props) => {
       title: "Ảnh",
       dataIndex: "imageUrl",
       key: "imageUrl",
-      render: (item: any) => <img src={item} alt="" />,
+      render: (item: any) => <img src={item} className="w-[300px]" alt="" />,
     },
     {
       title: "Danh mục của ảnh",

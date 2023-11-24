@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { FindManyOptions, Repository } from 'typeorm';
 import { ProductSkus } from 'src/modules/product_skus/entities/product_skus.entity';
-import { OrderDetailsService } from 'src/order_details/order_details.service';
+import { OrderDetailsService } from 'src/modules/order_details/order_details.service';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()

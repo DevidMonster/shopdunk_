@@ -178,7 +178,7 @@ const EditProduct: React.FC = () => {
                 }
             }
             ,
-            refetchQueries: [{ query: GET_PRODUCTS }, { query: GET_PRODUCT, variables: { id: parseInt(id!) } }, { query: GET_CATEGORIES }]
+            refetchQueries: [{ query: GET_PRODUCTS, variables: { q: '' } }, { query: GET_PRODUCT, variables: { id: parseInt(id!) } }, { query: GET_CATEGORIES }]
         })
         setIsLoading(false)
         if (response?.data) {

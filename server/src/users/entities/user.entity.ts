@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Order } from 'src/orders/entities/order.entity';
+import { Order } from 'src/modules/orders/entities/order.entity';
 import {
   Entity,
   Column,
